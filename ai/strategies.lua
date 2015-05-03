@@ -80,9 +80,11 @@ function Strategies.reset(reason, explanation, extra, wait)
 		separator = ":"
 	end
 	resetMessage = resetMessage..separator.." "..explanation
-	if status.tweeted then
-		Strategies.tweetProgress(resetMessage)
+
+	if Strategies.updates.misty or Strategies.updates.surge then
+		Strategies.tweetProgress(resetMessage.." in")
 	end
+
 	return Strategies.hardReset(reason, resetMessage, extra, wait)
 end
 
@@ -158,9 +160,10 @@ end
 function Strategies.tweetProgress(message, progress)
 	if progress then
 		Strategies.updates[progress] = true
-		message = message.." http://www.twitch.tv/thepokebot"
+		message = message.." Pokémon "..Utils.capitalize(Data.gameName).." http://www.twitch.tv/thepokebot"
 	end
 	Bridge.tweet(message)
+	return true
 end
 
 function Strategies.initialize(var)
@@ -510,7 +513,6 @@ end
 
 Strategies.functions = {
 
-
 	tweetMisty = function()
 		Strategies.setYolo("misty")
 
@@ -535,7 +537,7 @@ Strategies.functions = {
 			pbn = " (PB pace)"
 		end
 		local elt = Utils.elapsedTime()
-		Strategies.tweetProgress("Entering Victory Road at "..elt..pbn.." on our way to the Elite Four", "victory")
+		Strategies.tweetProgress("Entering Victory Road at "..elt..pbn.." on our way to the Elite Four in", "victory")
 		return true
 	end,
 
@@ -581,7 +583,7 @@ Strategies.functions = {
 	end,
 
 	interact = function(data)
-		return interact(data.dir, Data.yellow)
+		return interact(data.dir, data.long)
 	end,
 
 	talk = function(data)
@@ -589,7 +591,7 @@ Strategies.functions = {
 	end,
 
 	take = function(data)
-		return interact(data.dir, Data.yellow)
+		return interact(data.dir, data.long)
 	end,
 
 	confirm = function(data)
@@ -874,23 +876,6 @@ Strategies.functions = {
 			else
 				Input.cancel()
 			end
-		end
-	end,
-
-	waitToPauseFromBattle = function()
-		local main = Memory.value("menu", "main")
-		if main == 128 then
-			if status.canProgress then
-				return true
-			end
-		elseif Battle.isActive() then
-			status.canProgress = false
-			Battle.automate()
-		elseif main == 123 then
-			status.canProgress = true
-			Input.cancel()
-		elseif Textbox.handle() then
-			Input.press("Start", 2)
 		end
 	end,
 
@@ -1231,28 +1216,33 @@ Strategies.functions = {
 		end
 		local moonEncounters = Data.run.encounters_moon
 		if moonEncounters then
-			local catchPokemon = Data.yellow and "sandshrew" or "paras"
-			local capsName = Utils.capitalize(catchPokemon)
-			local parasStatus
+			local cutterStatus
 			local conjunction = "but"
 			local goodEncounters = moonEncounters < 10
+
+			local caughtCutter = Pokemon.inParty("paras", "sandshrew")
 			local catchDescription
-			local caughtCutter = Pokemon.inParty(catchPokemon)
 			if caughtCutter then
-				catchDescription = catchPokemon
+				catchDescription = caughtCutter
 				if goodEncounters then
 					conjunction = "and"
 				end
-				parasStatus = "we caught a "..capsName.."!"
+				cutterStatus = "we caught a "..Utils.capitalize(caughtCutter).."!"
 			else
+				local catchPokemon = Data.yellow and "sandshrew" or "paras"
 				catchDescription = "no_"..catchPokemon
 				if not goodEncounters then
 					conjunction = "and"
 				end
-				parasStatus = "we didn't catch a "..capsName.." :("
+				cutterStatus = "we didn't catch a "
+				if Data.yellow then
+					cutterStatus = cutterStatus.."cutter"
+				else
+					cutterStatus = cutterStatus..Utils.capitalize(catchPokemon).." :("
+				end
 			end
 			Bridge.caught(catchDescription)
-			Bridge.chat(moonEncounters.." Moon encounters, "..conjunction.." "..parasStatus)
+			Bridge.chat(moonEncounters.." Moon encounters, "..conjunction.." "..cutterStatus)
 			Bridge.moonResults(moonEncounters, caughtCutter)
 		end
 
@@ -1817,7 +1807,7 @@ Strategies.functions = {
 		if status.finishTime then
 			if not status.frames then
 				status.frames = 0
-				local victoryMessage = "Beat Pokemon "..Utils.capitalize(Data.gameName).." in "..status.finishTime
+				local victoryMessage = "Beat Pokémon "..Utils.capitalize(Data.gameName).." in "..status.finishTime
 				if not Strategies.overMinute("champion") then
 					victoryMessage = victoryMessage..", a new PB!"
 				end
