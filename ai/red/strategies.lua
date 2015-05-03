@@ -898,20 +898,22 @@ end
 
 -- teachThrash
 
-strategyFunctions.potionForMankey = function()
+strategyFunctions.potionForMankey = function(data)
 	local healForDefense = 16 + (14 - stats.nidoran.defense)
 	local yoloHP = 8
 	if Strategies.initialize() then
 		Strategies.setYolo("mankey")
 		if Pokemon.info("nidoking", "level") >= 23 then
-			return true
-		end
-		local curr_hp = Combat.hp()
-		if Control.yolo and curr_hp < healForDefense and curr_hp >= yoloHP then
-			Bridge.chat("is attempting to stay in range of red-bar by skipping potioning before Mankey...")
+			status.cancel = true
+		else
+			local curr_hp = Combat.hp()
+			if Control.yolo and curr_hp < healForDefense and curr_hp >= yoloHP then
+				Bridge.chat("is attempting to stay in range of red-bar by skipping potioning before Mankey...")
+			end
 		end
 	end
-	return strategyFunctions.potion({hp=healForDefense, yolo=yoloHP})
+
+	return strategyFunctions.potion({hp=healForDefense, yolo=yoloHP, chain=data.chain, close=data.close})
 end
 
 strategyFunctions.redbarMankey = function()

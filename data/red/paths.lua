@@ -57,7 +57,7 @@ local Paths = {
 	-- Pewter City
 	{2, {18,35}, {18,22}, {19,22}, {19,13}, {10,13}, {10,18}, {16,18}, {16,17}},
 	-- Brock
-	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"}, {s="emuSpeed",percent=100}, {4,14}},
+	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"}, {4,14}},
 
 -- 3: BROCK
 
@@ -90,7 +90,7 @@ local Paths = {
 -- 5: MT. MOON
 
 	-- To Cerulean
-	{15, {24,6}, {s="reportMtMoon"}, {c="trackEncounters",area=nil}, {s="split"}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
+	{15, {24,6}, {s="reportMtMoon"}, {s="split"}, {c="trackEncounters",area=nil}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
 	-- Enter Cerulean
 	{3, {0,18}, {c="a",a="Cerulean"}, {14,18}, {s="dodgeCerulean"}, {19,18}, {19,17}},
 	-- Cerulean Center
@@ -106,7 +106,7 @@ local Paths = {
 	-- Rival 2
 	{3, {9,12}, {c="a",a="Cerulean Rival"}, {21,12}, {21,6}, {s="rivalSandAttack"}, {21,-1}},
 	-- Nugget bridge
-	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {s="hornAttackCaterpie"}, {10,32}, {10,29}, {s="potion",hp=12,yolo=10}, {s="talk",dir="Up"}, {11,29}, {11,27}, {s="rareCandyEarly",chain=true}, {s="potion",hp=10,yolo=8,close=true}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash"}, {s="potion",hp=4}, {10,23}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash"}, {s="potionForMankey"}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {s="redbarMankey"}, {10,20}, {10,19}, {s="teachThrash"}, {10,15}, {s="learnThrash"}, {s="swapThrash"}, {s="waitToFight"}, {s="teachThrash"}, {s="split"}, {10,8}, {20,8}},
+	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {s="hornAttackCaterpie"}, {10,32}, {10,29}, {s="potion",hp=12,yolo=10}, {s="talk",dir="Up"}, {11,29}, {11,27}, {s="rareCandyEarly",chain=true}, {s="potion",hp=10,yolo=8,close=true}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash",chain=true}, {s="potion",hp=4,close=true}, {10,23}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash",chain=true}, {s="potionForMankey",close=true}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {s="redbarMankey"}, {10,20}, {10,19}, {s="teachThrash"}, {10,15}, {s="learnThrash"}, {s="swapThrash"}, {s="waitToFight"}, {s="teachThrash"}, {s="split"}, {10,8}, {20,8}},
 
 -- 6: NUGGET BRIDGE
 
@@ -345,6 +345,7 @@ local Paths = {
 	-- Fly home
 	{7, {27,28}, {s="fly",dest="pallet",map=0}},
 	-- Pallet to Cinnabar
+	--TODO combine RC for Carbos
 	{0, {5,6}, {s="item",item="super_repel",chain=true}, {s="item",item="rare_candy",amount=3,poke="nidoking",chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
 	{32, {4,0}, {4,14}, {3,14}, {3,90}},
@@ -373,7 +374,7 @@ local Paths = {
 	-- Cinnabar
 	{8, {11,12}, {s="earthquakeElixer",min=4,chain=true}, {s="bicycle"}, {18,12}, {18,3}},
 	-- Cinnabar Gym
-	{166, {16,17}, {c="a",a="Blaine's Gym"}, {16,14}, {18,14}, {18,10}, {15,10}, {15,8}, {s="confirm",dir="Up"}, {16,8}, {16,7}, {18,7}, {18,1}, {12,1}, {12,2}, {10,2}, {s="confirm",dir="Up",type="B"}, {12,2}, {12,7}, {10,7}, {10,8}, {9,8}, {s="confirm",dir="Up",type="B"}, {9,11}, {12,11}, {12,13}, {10,13}, {10,14}, {9,14}, {s="confirm",dir="Up",type="B"}, {9,16}, {1,16}, {1,14}, {s="confirm",dir="Up"}, {2,14}, {2,13}, {4,13}, {4,9}, {1,9}, {1,8}, {s="confirm",dir="Up",type="B"}, {2,8}, {2,7}, {4,7}, {4,5}, {3,5}, {3,4}, {c="potion",b=false}, {s="waitToFight",dir="Up"}, {s="split"}, {s="waitToReceive"}, {s="skill",move="dig",map=166}},
+	{166, {16,17}, {c="a",a="Blaine's Gym"}, {16,14}, {18,14}, {18,10}, {15,10}, {15,8}, {s="confirm",dir="Up"}, {16,8}, {16,7}, {18,7}, {18,1}, {12,1}, {12,2}, {10,2}, {s="confirm",dir="Up",type="B"}, {12,2}, {12,7}, {10,7}, {10,8}, {9,8}, {s="confirm",dir="Up",type="B"}, {9,11}, {12,11}, {12,13}, {10,13}, {10,14}, {9,14}, {s="confirm",dir="Up",type="B"}, {9,16}, {1,16}, {1,14}, {s="confirm",dir="Up"}, {2,14}, {2,13}, {4,13}, {4,9}, {1,9}, {1,8}, {s="confirm",dir="Up",type="B"}, {2,8}, {2,7}, {4,7}, {4,5}, {3,5}, {3,4}, {c="potion",b=false}, {s="waitToFight",dir="Up"}, {s="split"}, {s="waitToPauseFromBattle"}, {s="skill",move="dig",map=166}},
 
 -- 14: BLAINE
 

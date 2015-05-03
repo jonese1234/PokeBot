@@ -116,6 +116,8 @@ function Inventory.teach(item, poke, replaceIdx)
 			Input.press("A")
 		elseif column == 15 then
 			Menu.select(0, true)
+		elseif Menu.hasTextbox() then
+			Input.press("B")
 		else
 			local teachIndex = 0
 			if poke then

@@ -871,24 +871,10 @@ Strategies.functions = {
 		elseif Battle.isActive() then
 			status.canProgress = false
 			Battle.automate()
-		elseif main == (Data.yellow and 23 or 123) then
-			status.canProgress = true
-			Input.press("B")
-		elseif Textbox.handle() then
-			Input.press("Start", 2)
-		end
-	end,
-
-	waitToReceive = function()
-		local main = Memory.value("menu", "main")
-		if main == 128 then
-			if status.canProgress then
-				return true
-			end
-		elseif main == 32 or main == 123 then
+		elseif main == 123 then
 			status.canProgress = true
 			Input.cancel()
-		else
+		elseif Textbox.handle() then
 			Input.press("Start", 2)
 		end
 	end,
@@ -1270,30 +1256,29 @@ Strategies.functions = {
 	rareCandyEarly = function(data)
 		if Strategies.initialize() then
 			if Pokemon.info("nidoking", "level") ~= 20 then
-				return true
-			end
-			if Data.yellow then
-				p("RCE", Pokemon.getExp())
-			end
-			if Pokemon.getExp() > 5550 then
-				return true
+				status.cancel = true
+			else
+				if Data.yellow then
+					p("RCE", Pokemon.getExp())
+				end
+				status.cancel = Pokemon.getExp() > 5550
 			end
 		end
 		return strategyFunctions.item({item="rare_candy", amount=2, poke="nidoking", chain=data.chain, close=data.close})
 	end,
 
-	teachThrash = function()
+	teachThrash = function(data)
 		if Strategies.initialize() then
 			local nidoLevel = Pokemon.info("nidoking", "level")
 			if nidoLevel < 21 or nidoLevel >= 23 or not Inventory.contains("rare_candy") then
-				status.close = true
+				status.cancel = true
+			else
+				status.updateStats = true
 			end
 		end
-		if not status.close then
-			local replacementMove = Data.yellow and "tackle" or "leer"
-			status.close = strategyFunctions.teach({move="thrash", item="rare_candy", replace=replacementMove})
-			status.updateStats = true
-		elseif Menu.close() then
+
+		local replacementMove = Data.yellow and "tackle" or "leer"
+		if strategyFunctions.teach({move="thrash", item="rare_candy", replace=replacementMove, chain=data.chain, close=data.close}) then
 			if status.updateStats then
 				nidokingStats()
 			end
