@@ -121,17 +121,26 @@ local function nidoranDSum(enabled)
 			end
 			return nidoranDSum()
 		end
-		local walkOutside = (status.pathIndex - 1) % 2 == 1
+		local walkOutside = (status.pathIndex - 1) % 2 == 0
 		if walkOutside then
 			cornerBonk = false
-			if encounterlessSteps > 0 then
-				dx = 3
-				if px == dx then
-					if py == 48 then
-						dy = 49
-					else
-						dy = 58
-					end
+			if dy ~= 48 then
+				dy = 48
+			elseif encounterlessSteps <= 1 then
+				if px < 3 then
+					dx = 3
+				end
+			elseif encounterlessSteps == 2 then
+				if px == 4 then
+					dx = 3
+				else
+					dx = 4
+				end
+			else
+				if px == 3 then
+					dx = 2
+				else
+					dx = 3
 				end
 			end
 		end
@@ -154,10 +163,10 @@ local function nidoranDSum(enabled)
 				status.bonkWait = not status.bonkWait
 				return
 			end
-			if encounterlessSteps < 2 then
+			if encounterlessSteps < 2 or dx ~= 3 then
 				dx = 3
 			else
-				dy = 49
+				dx = 4
 			end
 		else
 			status.bonkWait = nil
