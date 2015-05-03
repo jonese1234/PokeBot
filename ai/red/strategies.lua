@@ -1691,8 +1691,6 @@ end
 
 -- 13: ERIKA
 
--- waitToReceive
-
 -- 14: BLAINE
 
 -- 15: SABRINA

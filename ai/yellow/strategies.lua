@@ -764,13 +764,13 @@ strategyFunctions.fightGiovanni = function()
 	end
 end
 
-strategyFunctions.useViridianEther = function()
+strategyFunctions.useViridianEther = function(data)
 	if Strategies.initialize() then
 		if not Strategies.vaporeon or not Inventory.contains("ether", "max_ether") then
 			return true
 		end
 	end
-	return strategyFunctions.ether({chain=true})
+	return strategyFunctions.ether({chain=data.chain, close=data.close})
 end
 
 strategyFunctions.fightViridianRival = function()
