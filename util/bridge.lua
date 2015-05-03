@@ -1,5 +1,7 @@
 local Bridge = {}
 
+local Data = require "data.data"
+
 local Utils = require "util.utils"
 
 local json = require "external.json"
@@ -48,6 +50,7 @@ function Bridge.init()
 			client:settimeout(0.005)
 			client:setoption("keepalive", true)
 			print("Connected to Java!");
+			send("init,"..Data.gameName)
 			return true
 		else
 			print("Error connecting to Java!");

@@ -26,9 +26,9 @@ end
 function Player.interact(direction, extended)
 	if Player.face(direction) then
 		local speed = extended and 3 or 2
-		if Data.yellow and instant then
+		if extended and Data.yellow then
 			fast = not fast
-			speed = fast and 1 or 2
+			speed = fast and 2 or 3
 		end
 		Input.press("A", speed)
 		return true

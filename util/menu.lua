@@ -4,6 +4,7 @@ local Data = require "data.data"
 
 local Input = require "util.input"
 local Memory = require "util.memory"
+local Utils = require "util.utils"
 
 local yellow = Data.yellow
 
@@ -199,7 +200,7 @@ function Menu.hasBeenOpened()
 	if mainMenu > 7 then
 		return true
 	end
-	if (Menu.isOpened() or Menu.onPokemonSelect()) and (mainMenu == 0 or mainMenu == 2 or mainMenu == 4 or mainMenu == 6) then
+	if (Menu.isOpened() or Menu.onPokemonSelect()) and Utils.match(mainMenu, {0, 2, 4, 6, 7}) then
 		return true
 	end
 end

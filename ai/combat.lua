@@ -414,10 +414,12 @@ function Combat.nonKill()
 	for idx,move in ipairs(ours.moves) do
 		if not move.pp or move.pp > 0 then
 			local __, maxDmg = calcDamage(move, ours, enemy, true)
-			local threshold = maxDmg * 0.975
-			if threshold and threshold < enemy.hp and threshold > bestDmg then
-				ret = move
-				bestDmg = threshold
+			if maxDmg > 0 then
+				local threshold = maxDmg * 0.975
+				if threshold and threshold < enemy.hp and threshold > bestDmg then
+					ret = move
+					bestDmg = threshold
+				end
 			end
 		end
 	end

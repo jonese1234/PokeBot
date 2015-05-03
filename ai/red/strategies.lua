@@ -269,23 +269,6 @@ strategyFunctions.tweetAfterBrock = function()
 	return true
 end
 
-strategyFunctions.tweetMisty = function()
-	Strategies.setYolo("misty")
-
-	if not Strategies.updates.brock and not Control.yolo then
-		local timeLimit = Strategies.getTimeRequirement("misty")
-		if not Strategies.overMinute(timeLimit) then
-			local pbn = ""
-			if not Strategies.overMinute(timeLimit - 1) then
-				pbn = " (PB pace)"
-			end
-			local elt = Utils.elapsedTime()
-			Strategies.tweetProgress("Got a run going, just beat Misty "..elt.." in"..pbn, "misty")
-		end
-	end
-	return true
-end
-
 strategyFunctions.tweetSurge = function()
 	Control.preferredPotion = "super"
 

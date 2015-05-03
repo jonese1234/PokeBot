@@ -129,7 +129,7 @@ function Strategies.resetTime(timeLimit, explanation, custom)
 end
 
 function Strategies.setYolo(name, forced)
-	if not forced and not RESET_FOR_TIME then
+	if not forced and (Data.yellow or not RESET_FOR_TIME) then
 		return false
 	end
 	local shouldYolo
@@ -304,6 +304,9 @@ local function dodgeSideways(options)
 end
 
 function Strategies.completedMenuFor(data)
+	if status.cancel then
+		return true
+	end
 	local count = Inventory.count(data.item)
 	if count == 0 or (status.startCount and count + (data.amount or 1) <= status.startCount) then
 		return true
@@ -313,27 +316,23 @@ end
 
 function Strategies.closeMenuFor(data)
 	if (not status.menuOpened and not data.close) or data.chain then
+		if Menu.onPokemonSelect() or Menu.hasTextbox() then
+			Input.press("B")
+			return false
+		end
 		return true
 	end
 	return Menu.close()
 end
 
 function Strategies.useItem(data)
-	local main = Memory.value("menu", "main")
 	if not status.startCount then
 		status.startCount = Inventory.count(data.item)
-		if status.startCount == 0 then
-			if Strategies.closeMenuFor(data) then
-				return true
-			end
-			return false
-		end
 	end
 	if Strategies.completedMenuFor(data) then
-		if Strategies.closeMenuFor(data) then
-			return true
-		end
-	elseif Menu.pause() then
+		return Strategies.closeMenuFor(data)
+	end
+	if Menu.pause() then
 		status.menuOpened = true
 		Inventory.use(data.item, data.poke)
 	end
@@ -511,6 +510,24 @@ end
 
 Strategies.functions = {
 
+
+	tweetMisty = function()
+		Strategies.setYolo("misty")
+
+		if not Strategies.updates.brock and not Control.yolo then
+			local timeLimit = Strategies.getTimeRequirement("misty")
+			if not Strategies.overMinute(timeLimit) then
+				local pbn = ""
+				if not Data.yellow and not Strategies.overMinute(timeLimit - 1) then
+					pbn = " (PB pace)"
+				end
+				local elt = Utils.elapsedTime()
+				Strategies.tweetProgress("Got a run going, just beat Misty "..elt.." in"..pbn, "misty")
+			end
+		end
+		return true
+	end,
+
 	tweetVictoryRoad = function()
 		local elt = Utils.elapsedTime()
 		local pbn = ""
@@ -564,7 +581,7 @@ Strategies.functions = {
 	end,
 
 	interact = function(data)
-		return interact(data.dir, false)
+		return interact(data.dir, Data.yellow)
 	end,
 
 	talk = function(data)
@@ -572,7 +589,7 @@ Strategies.functions = {
 	end,
 
 	take = function(data)
-		return interact(data.dir, false)
+		return interact(data.dir, Data.yellow)
 	end,
 
 	confirm = function(data)
@@ -591,11 +608,8 @@ Strategies.functions = {
 
 	item = function(data)
 		if Battle.handleWild() then
-			if data.full and not Inventory.isFull() then
-				if Strategies.closeMenuFor(data) then
-					return true
-				end
-				return false
+			if status.cancel or data.full and not Inventory.isFull() then
+				return Strategies.closeMenuFor(data)
 			end
 			if not status.checked and data.item ~= "carbos" and not Inventory.contains(data.item) then
 				print("No "..data.item.." available!")
@@ -606,54 +620,56 @@ Strategies.functions = {
 	end,
 
 	potion = function(data)
-		local curr_hp = Combat.hp()
-		if curr_hp == 0 then
-			return false
-		end
-		local toHP
-		if Control.yolo and data.yolo ~= nil then
-			toHP = data.yolo
-		else
-			toHP = data.hp
-		end
-		if type(toHP) == "string" then
-			toHP = Combat.healthFor(toHP)
-		end
-		toHP = math.min(toHP, Combat.maxHP())
-		local toHeal = toHP - curr_hp
-		if toHeal > 0 then
-			local toPotion
-			if data.forced then
-				toPotion = Inventory.contains(data.forced)
-			else
-				local p_first, p_second, p_third
-				if toHeal > 50 then
-					if data.full then
-						p_first = "full_restore"
-					else
-						p_first = "super_potion"
-					end
-					p_second, p_third = "super_potion", "potion"
-				else
-					if toHeal > 20 then
-						p_first, p_second = "super_potion", "potion"
-					else
-						p_first, p_second = "potion", "super_potion"
-					end
-					if data.full then
-						p_third = "full_restore"
-					end
-				end
-				toPotion = Inventory.contains(p_first, p_second, p_third)
-			end
-			if toPotion then
-				if Menu.pause() then
-					Inventory.use(toPotion)
-					status.menuOpened = true
-				end
+		if not status.cancel then
+			local curr_hp = Combat.hp()
+			if curr_hp == 0 then
 				return false
 			end
-			--TODO report wanted potion
+			local toHP
+			if Control.yolo and data.yolo ~= nil then
+				toHP = data.yolo
+			else
+				toHP = data.hp
+			end
+			if type(toHP) == "string" then
+				toHP = Combat.healthFor(toHP)
+			end
+			toHP = math.min(toHP, Combat.maxHP())
+			local toHeal = toHP - curr_hp
+			if toHeal > 0 then
+				local toPotion
+				if data.forced then
+					toPotion = Inventory.contains(data.forced)
+				else
+					local p_first, p_second, p_third
+					if toHeal > 50 then
+						if data.full then
+							p_first = "full_restore"
+						else
+							p_first = "super_potion"
+						end
+						p_second, p_third = "super_potion", "potion"
+					else
+						if toHeal > 20 then
+							p_first, p_second = "super_potion", "potion"
+						else
+							p_first, p_second = "potion", "super_potion"
+						end
+						if data.full then
+							p_third = "full_restore"
+						end
+					end
+					toPotion = Inventory.contains(p_first, p_second, p_third)
+				end
+				if toPotion then
+					if Menu.pause() then
+						Inventory.use(toPotion)
+						status.menuOpened = true
+					end
+					return false
+				end
+				--TODO report wanted potion
+			end
 		end
 		if Strategies.closeMenuFor(data) then
 			return true
@@ -661,42 +677,45 @@ Strategies.functions = {
 	end,
 
 	teach = function(data)
-		if data.full and not Inventory.isFull() then
-			return true
+		if Strategies.initialize() then
+			status.cancel = data.full and not Inventory.isFull()
 		end
+
 		local itemName
 		if data.item then
 			itemName = data.item
 		else
 			itemName = data.move
 		end
-		if Pokemon.hasMove(data.move) then
-			local main = Memory.value("menu", "main")
-			if main == 128 then
-				if data.chain then
+		if not status.cancel then
+			if Pokemon.hasMove(data.move) then
+				if data.chain and Memory.value("menu", "main") == 128 then
+					p("128", data.move)
 					return true
 				end
-				Input.press("B")
-			elseif Menu.close() then
-				return true
-			end
-		else
-			if Strategies.initialize("triedTeaching") then
-				if not Inventory.contains(itemName) then
-					return Strategies.reset("error", "Unable to teach move "..itemName.." to "..data.poke, nil, true)
+				status.cancel = true
+			else
+				if Strategies.initialize("triedTeaching") then
+					if not Inventory.contains(itemName) then
+
+						return Strategies.reset("error", "Unable to teach move "..itemName..(data.poke and " to "..data.poke or ""), nil, true)
+					end
+				end
+				local replacement
+				if data.replace then
+					replacement = Pokemon.moveIndex(data.replace, data.poke) - 1
+				else
+					replacement = 0
+				end
+				if Inventory.teach(itemName, data.poke, replacement) then
+					status.menuOpened = true
+				else
+					Menu.pause()
 				end
 			end
-			local replacement
-			if data.replace then
-				replacement = Pokemon.moveIndex(data.replace, data.poke) - 1
-			else
-				replacement = 0
-			end
-			if Inventory.teach(itemName, data.poke, replacement) then
-				status.menuOpened = true
-			else
-				Menu.pause()
-			end
+		end
+		if status.cancel then
+			return Strategies.closeMenuFor(data)
 		end
 	end,
 
@@ -716,9 +735,7 @@ Strategies.functions = {
 			if Pokemon.use(data.move) then
 				status.tries = status.tries + 1
 			elseif Data.yellow and Menu.hasTextbox() then
-				if Textbox.handle() then
-					return true
-				end
+				Textbox.handle()
 			else
 				Menu.pause()
 			end
@@ -789,30 +806,33 @@ Strategies.functions = {
 		end
 
 		if swapComplete then
-			if Strategies.closeMenuFor(data) then
-				return true
-			end
-		else
-			local main = Memory.value("menu", "main")
-			if main == 128 then
-				if Menu.getCol() ~= 5 then
-					Menu.select(2, true)
+			return Strategies.closeMenuFor(data)
+		end
+
+		local main = Memory.value("menu", "main")
+		if main == 128 then
+			if Menu.getCol() ~= 5 then
+				Menu.select(2, true)
+			else
+				local selection = Memory.value("menu", "selection_mode")
+				if selection == 0 then
+					if Menu.select(status.firstIndex, "accelerate", true, nil, true) then
+						Input.press("Select")
+					end
 				else
-					local selection = Memory.value("menu", "selection_mode")
-					if selection == 0 then
-						if Menu.select(status.firstIndex, "accelerate", true, nil, true) then
-							Input.press("Select")
-						end
-					else
-						if Menu.select(status.lastIndex, "accelerate", true, nil, true) then
-							Input.press("Select")
-						end
+					if Menu.select(status.lastIndex, "accelerate", true, nil, true) then
+						Input.press("Select")
 					end
 				end
-			else
-				Menu.pause()
 			end
+		else
+			Menu.pause()
 		end
+	end,
+
+	acquire = function(data)
+		Bridge.caught(data.poke)
+		return true
 	end,
 
 	swapMove = function(data)
@@ -822,11 +842,6 @@ Strategies.functions = {
 	wait = function()
 		print("Please save state")
 		Input.press("Start", 999999999)
-	end,
-
-	emuSpeed = function(data)
-		-- client.speedmode = data.percent
-		return true
 	end,
 
 	waitToTalk = function()
@@ -970,7 +985,7 @@ Strategies.functions = {
 		if Pokemon.index(nidx, "level") < 8 then
 			return false
 		end
-		if status.tries < 300 then
+		if status.tries < (Data.yellow and 30 or 300) then
 			status.tries = status.tries + 1
 			return false
 		end
@@ -980,12 +995,13 @@ Strategies.functions = {
 		local spd = Pokemon.index(nidx, "speed")
 		local scl = Pokemon.index(nidx, "special")
 		local attDV, defDV, spdDV, sclDV = Pokemon.getDVs("nidoran")
+		local level4 = not Data.yellow and stats.nidoran.level4
 		stats.nidoran = {
 			attack = att,
 			defense = def,
 			speed = spd,
 			special = scl,
-			level4 = stats.nidoran.level4,
+			level4 = level4,
 			rating = 0,
 			attackDV = attDV,
 			defenseDV = defDV,
@@ -996,7 +1012,7 @@ Strategies.functions = {
 		Bridge.chat("is checking Nidoran's stats at level 8... "..att.." attack, "..def.." defense, "..spd.." speed, "..scl.." special.")
 
 		local resetsForStats = att < 15 or spd < 14 or scl < 12
-		if not resetsForStats and RESET_FOR_TIME then
+		if not resetsForStats and not Data.yellow and RESET_FOR_TIME then
 			resetsForStats = att == 15 and spd == 14
 		end
 
@@ -1061,11 +1077,15 @@ Strategies.functions = {
 		end
 		local message
 		if Data.yellow then
-			message = "caught"
+			message = "got"
 		else
 			message = "beat Brock with"
 		end
-		message = message.." a"..superlative.." Nidoran"..exclaim.." Caught at level "..(stats.nidoran.level4 and "4" or "3").."."
+		message = message.." a"..superlative.." Nidoran"..exclaim
+
+		if not Data.yellow then
+			message = message.." Caught at level "..(stats.nidoran.level4 and "4" or "3").."."
+		end
 
 		if BEAST_MODE then
 			p("", true)
@@ -1358,7 +1378,7 @@ Strategies.functions = {
 			end
 			Input.press("Left", 0)
 		else
-			Input.press("A", 0)
+			Input.press("A", 2)
 			status.canProgress = true
 		end
 	end,
@@ -1850,8 +1870,8 @@ function Strategies.execute(data)
 		status = {tries=0}
 		Strategies.status = status
 		Strategies.completeGameStrategy()
-		if Data.yellow then
-			-- print(data.s)
+		if Data.yellow and INTERNAL and not STREAMING_MODE then
+			print(data.s)
 		end
 		if resetting then
 			return nil

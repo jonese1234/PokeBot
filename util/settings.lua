@@ -78,7 +78,7 @@ end
 function Settings.choosePlayerNames()
 	local name
 	if Memory.value("player", "name2") == 80 then
-		name = "E"
+		name = Data.yellow and "G" or "E"
 	else
 		name = "B"
 	end

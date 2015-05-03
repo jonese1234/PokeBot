@@ -47,7 +47,7 @@ local controlFunctions = {
 	end,
 
 	encounters = function(data)
-		if RESET_FOR_TIME then
+		if RESET_FOR_TIME and not Data.yellow then
 			local limit = data.limit
 			if limit and BEAST_MODE then
 				limit = limit - math.ceil(limit * 0.3)
@@ -159,7 +159,8 @@ local controlFunctions = {
 	-- YELLOW
 
 	catchNidoranYellow = function()
-		shouldCatch = {{name="nidoran",levels={6}}}
+		-- shouldCatch = {{name="nidoran",levels={6}}} --TODO DSum
+		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",hp=15,requireHit=true}}
 	end,
 
 	moonExpYellow = function()
@@ -230,6 +231,9 @@ function Control.canCatch(partySize)
 end
 
 function Control.shouldCatch(partySize)
+	if Memory.value("game", "battle") ~= 1 then
+		return false
+	end
 	if maxEncounters and encounters > maxEncounters then
 		local extraCount = extraEncounter and Pokemon.inParty(extraEncounter)
 		if not extraCount or encounters > maxEncounters + 1 then
@@ -258,13 +262,17 @@ function Control.shouldCatch(partySize)
 	for i,poke in ipairs(shouldCatch) do
 		if oid == Pokemon.getID(poke.name) and not Pokemon.inParty(poke.name, poke.alt) then
 			if not poke.levels or Utils.match(opponentLevel, poke.levels) then
-				local penultimate = poke.hp and Memory.double("battle", "opponent_hp") > poke.hp
+				local overHP = poke.hp and Memory.double("battle", "opponent_hp") > poke.hp
+				local penultimate = overHP
 				if penultimate then
 					penultimate = Combat.nonKill()
 				end
 				if penultimate then
 					require("action.battle").fight(penultimate.midx)
 				else
+					if overHP and poke.requireHit then
+						return false
+					end
 					Inventory.use("pokeball", nil, true)
 				end
 				return true

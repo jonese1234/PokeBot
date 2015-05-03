@@ -15,6 +15,7 @@ local pokeIDs = {
 	voltorb = 6,
 	nidoking = 7,
 	ivysaur = 9,
+	exeggutor = 10,
 	gengar = 14,
 	nidoranf = 15,
 	nidoqueen = 16,
@@ -256,7 +257,7 @@ end
 function Pokemon.updateParty()
 	local partySize = Memory.value("player", "party_size")
 	if partySize ~= previousPartySize then
-		local poke = Pokemon.inParty("oddish", "paras", "spearow", "pidgey", "nidoran", "squirtle")
+		local poke = Pokemon.inParty("charmander", "sandshrew", "oddish", "paras", "spearow", "pidgey", "nidoran", "squirtle")
 		if poke then
 			Bridge.caught(poke)
 			previousPartySize = partySize
