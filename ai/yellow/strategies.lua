@@ -129,18 +129,16 @@ local function nidoranDSum(enabled)
 		if walkOutside then
 			cornerBonk = false
 			if dy ~= 48 then
-				dy = 48
+				if px == 3 then
+					dy = 48
+				else
+					dx = 3
+				end
 			elseif encounterlessSteps <= 1 then
 				if px < 3 then
 					dx = 3
 				end
-			elseif encounterlessSteps == 2 then
-				if px == 4 then
-					dx = 3
-				else
-					dx = 4
-				end
-			else
+			elseif encounterlessSteps >= 2 then
 				if px == 3 then
 					dx = 2
 				else
@@ -156,13 +154,15 @@ local function nidoranDSum(enabled)
 		elseif px >= 4 and py == 48 then
 			if encounterlessSteps == 0 then
 				if not status.bonkWait then
-					local direction
+					local direction, duration
 					if Player.isFacing("Up") then
 						direction = "Left"
+						duration = 2
 					else
 						direction = "Up"
+						duration = 3
 					end
-					Input.press(direction, direction == "Up" and 3 or 2)
+					Input.press(direction, duration)
 				end
 				status.bonkWait = not status.bonkWait
 				return
@@ -296,8 +296,8 @@ strategyFunctions.catchNidoran = function()
 	end
 	if Battle.isActive() then
 		status.path = nil
-		local isNidoran = Pokemon.isOpponent("nidoran")
-		if isNidoran and Memory.value("battle", "opponent_level") == 6 then
+		local catchableNidoran = Pokemon.isOpponent("nidoran") and Memory.value("battle", "opponent_level") == 6
+		if catchableNidoran then
 			if Strategies.initialize() then
 				Bridge.pollForName()
 			end
@@ -305,18 +305,14 @@ strategyFunctions.catchNidoran = function()
 		if Memory.value("battle", "menu") == 94 then
 			local pokeballs = Inventory.count("pokeball")
 			local caught = Memory.value("player", "party_size") > 1
-			if pokeballs < (caught and 1 or 2) then
+			if pokeballs < (caught and 1 or 2) + (not catchableNidoran and 1 or 0) then
 				return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
 			end
 		end
 		if Memory.value("menu", "text_input") == 240 then
 			Textbox.name()
 		elseif Menu.hasTextbox() then
-			if isNidoran then
-				Input.press("A")
-			else
-				Input.cancel()
-			end
+			Input.press(catchableNidoran and "A" or "B")
 		else
 			Battle.handle()
 		end
