@@ -25,6 +25,30 @@ local Opponents = {
 		}
 	},
 
+	ErikaTangela = {
+		type2 = "grass",
+		type1 = "grass",
+		def = 78,
+		id = 30,
+		spec = 69,
+		hp = 83,
+		speed = 45,
+		level = 30,
+		att = 43,
+
+		moves = {
+			{
+				name = "Mega-Drain",
+				accuracy = 100,
+				power = 40,
+				id = 72,
+				special = true,
+				max_pp = 10,
+				move_type = "grass",
+			}
+		}
+	},
+
 	RivalGyarados = {
 		type1 = "water",
 		type2 = "flying",
