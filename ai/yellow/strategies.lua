@@ -46,6 +46,10 @@ Strategies.timeRequirements = {
 		return timeLimit
 	end,
 
+	misty = function() --TWEET
+		return 43
+	end,
+
 	trash = function()
 		return 60
 	end,
@@ -209,7 +213,13 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 	local currentMap = Memory.value("game", "map")
 	local sufficientPP = Pokemon.pp(0, "horn_attack") > pp
 	if Strategies.initialize("reported") then
-		print(Pokemon.pp(0, "horn_attack").." / "..pp.." horn attacks")
+		local centerAction
+		if sufficientPP then
+			centerAction = "Skipping"
+		else
+			centerAction = "Taking"
+		end
+		Bridge.chat(centerAction.." the Center with "..Pokemon.pp(0, "horn_attack").." of "..pp.." Horn Attacks")
 	end
 	if currentMap == startMap then
 		if not sufficientPP then
@@ -236,6 +246,9 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 				return depositPikachu()
 			end
 		else
+			if Strategies.initialize("deposited") then
+				Bridge.caught("deposited")
+			end
 			if px ~= 3 then
 				if Menu.close() then
 					px = 3
@@ -264,6 +277,11 @@ end
 
 -- STRATEGIES
 
+strategyFunctions.gotPikachu = function()
+	Bridge.caught("pikachu")
+	return true
+end
+
 -- dodgePalletBoy
 
 strategyFunctions.shopViridianPokeballs = function()
@@ -276,17 +294,19 @@ strategyFunctions.catchNidoran = function()
 	if not Control.canCatch() then
 		return true
 	end
-	local pokeballs = Inventory.count("pokeball")
-	local caught = Memory.value("player", "party_size") > 1
-	if pokeballs < (caught and 1 or 2) then
-		return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
-	end
 	if Battle.isActive() then
 		status.path = nil
 		local isNidoran = Pokemon.isOpponent("nidoran")
 		if isNidoran and Memory.value("battle", "opponent_level") == 6 then
 			if Strategies.initialize() then
 				Bridge.pollForName()
+			end
+		end
+		if Memory.value("battle", "menu") == 94 then
+			local pokeballs = Inventory.count("pokeball")
+			local caught = Memory.value("player", "party_size") > 1
+			if pokeballs < (caught and 1 or 2) then
+				return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
 			end
 		end
 		if Memory.value("menu", "text_input") == 240 then
@@ -312,6 +332,9 @@ strategyFunctions.catchNidoran = function()
 				dy = 47
 			else
 				Bridge.caught("nidoran")
+				if INTERNAL then
+					p(Pokemon.getDVs("nidoran"))
+				end
 				return true
 			end
 			Walk.step(dx, dy)
@@ -426,6 +449,9 @@ strategyFunctions.acquireCharmander = function()
 	end
 	local px, py = Player.position()
 	if acquiredCharmander then
+		if Strategies.initialize("aquired") then
+			Bridge.caught("charmander")
+		end
 		if py ~= 8 then
 			py = 8
 		else
@@ -447,9 +473,9 @@ end
 -- jingleSkip
 
 strategyFunctions.shopVermilionMart = function()
-	if Strategies.initialize() then
-		Strategies.setYolo("vermilion")
-	end
+	-- if Strategies.initialize() then
+	-- 	Strategies.setYolo("vermilion")
+	-- end
 	local supers = Strategies.vaporeon and 7 or 8
 	return Shop.transaction {
 		sell = sellArray,
@@ -464,9 +490,9 @@ strategyFunctions.trashcans = function()
 		status.direction = 1
 	end
 	local trashPath = {
-	-- 	{next	location,	check,	mid,	pair,	finish,	end}		{waypoints}
+	-- 	{next,	loc,	check,		mid,	pair,	finish,	end}		{waypoints}
 		{nd=2,	{1,12},	"Up",				{3,12},	"Up",	{3,12}},	{{4,12}},
-		{nd=3,	{4,11},	"Right",	{4,6},	{1,6},	"Down",	{1,6}},
+		{nd=4,	{4,11},	"Right",	{4,6},	{1,6},	"Down",	{1,6}},
 		{nd=1,	{4,9},	"Left",				{4,7},	"Left",	{4,7}},
 		{nd=1,	{4,7},	"Right",	{4,6},	{1,6},	"Down",	{1,6}},		{{4,6}},
 		{nd=0,	{1,6},	"Down",				{3,6},	"Down", {3,6}},		{{4,6}}, {{4,8}},
@@ -705,8 +731,6 @@ end
 
 -- cinnabarCarbos
 
--- waitToReceive
-
 strategyFunctions.fightGiovanni = function()
 	if Strategies.trainerBattle() then
 		if Strategies.initialize() then
@@ -933,29 +957,6 @@ end
 function Strategies.initGame(midGame)
 	if midGame then
 		-- Strategies.setYolo("", true)
-		if Pokemon.inParty("nidoking") then
-			local attDV, defDV, spdDV, sclDV = Pokemon.getDVs("nidoking")
-			p(attDV, defDV, spdDV, sclDV)
-			stats.nidoran = {
-				attack = 55,
-				defense = 45,
-				speed = 50,
-				special = 45,
-				level4 = true,
-				attackDV = attDV,
-				defenseDV = defDV,
-				speedDV = spdDV,
-				specialDV = sclDV,
-			}
-		else
-			stats.nidoran = {
-				attack = 16,
-				defense = 12,
-				speed = 15,
-				special = 13,
-				level4 = true,
-			}
-		end
 	end
 	Control.preferredPotion = "super"
 end
