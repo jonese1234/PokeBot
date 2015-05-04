@@ -121,7 +121,9 @@ local function nidoranDSum(enabled)
 				print("done")
 			else
 				status.pathIndex = status.pathIndex + 1
-				p(status.pathIndex, (status.pathIndex - 1) % 2)
+				if INTERNAL and not STREAMING_MODE then
+					p(status.pathIndex, (status.pathIndex - 1) % 2)
+				end
 			end
 			return nidoranDSum()
 		end
@@ -298,15 +300,21 @@ strategyFunctions.catchNidoran = function()
 		status.path = nil
 		local catchableNidoran = Pokemon.isOpponent("nidoran") and Memory.value("battle", "opponent_level") == 6
 		if catchableNidoran then
-			if Strategies.initialize() then
+			if Strategies.initialize("naming") then
 				Bridge.pollForName()
 			end
 		end
 		if Memory.value("battle", "menu") == 94 then
-			local pokeballs = Inventory.count("pokeball")
-			local caught = Memory.value("player", "party_size") > 1
-			if pokeballs < (caught and 1 or 2) + (not catchableNidoran and 1 or 0) then
-				return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
+			local partySize = Memory.value("player", "party_size")
+			if partySize < 3 then
+				local pokeballs = Inventory.count("pokeball")
+				local pokeballsRequired = partySize == 2 and 1 or 2
+				if not catchableNidoran and not Pokemon.inParty("nidoran") then
+					pokeballsRequired = pokeballsRequired + 1
+				end
+				if pokeballs < pokeballsRequired then
+					return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
+				end
 			end
 		end
 		if Memory.value("menu", "text_input") == 240 then
@@ -432,6 +440,7 @@ strategyFunctions.acquireCharmander = function()
 		if Pokemon.inParty("sandshrew", "paras") then
 			return true
 		end
+		Bridge.chat("couldn't catch a cutter in Mt. Moon. Getting a free Charmander to teach Cut.")
 	end
 	local acquiredCharmander = Pokemon.inParty("charmander")
 	if Textbox.isActive() then

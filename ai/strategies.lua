@@ -449,6 +449,7 @@ local function nidokingStats()
 	}
 
 	Combat.factorPP(false)
+	Combat.setDisableThrash(false)
 
 	p(attDV, defDV, spdDV, sclDV)
 	print(statDesc)
@@ -970,7 +971,7 @@ Strategies.functions = {
 		if Pokemon.index(nidx, "level") < 8 then
 			return false
 		end
-		if status.tries < (Data.yellow and 30 or 300) then
+		if status.tries < (Data.yellow and 20 or 300) then
 			status.tries = status.tries + 1
 			return false
 		end
@@ -1053,7 +1054,7 @@ Strategies.functions = {
 			else
 				superlative = " good"
 			end
-		elseif statDiff <= 3 then
+		elseif statDiff <= (Data.yellow and 4 or 3) then
 			superlative = "n okay"
 			exclaim = "."
 		else
@@ -1062,7 +1063,7 @@ Strategies.functions = {
 		end
 		local message
 		if Data.yellow then
-			message = "got"
+			message = "caught"
 		else
 			message = "beat Brock with"
 		end
