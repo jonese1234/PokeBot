@@ -131,7 +131,7 @@ function Strategies.resetTime(timeLimit, explanation, custom)
 end
 
 function Strategies.setYolo(name, forced)
-	if not forced and (Data.yellow or not RESET_FOR_TIME) then
+	if not forced and not RESET_FOR_TIME then
 		return false
 	end
 	local shouldYolo
@@ -160,7 +160,7 @@ end
 function Strategies.tweetProgress(message, progress)
 	if progress then
 		Strategies.updates[progress] = true
-		message = message.." Pokémon "..Utils.capitalize(Data.gameName).." http://www.twitch.tv/thepokebot"
+		message = message.." Pokemon "..Utils.capitalize(Data.gameName).." http://www.twitch.tv/thepokebot"
 	end
 	Bridge.tweet(message)
 	return true
@@ -971,7 +971,7 @@ Strategies.functions = {
 		if Pokemon.index(nidx, "level") < 8 then
 			return false
 		end
-		if status.tries < (Data.yellow and 20 or 300) then
+		if status.tries < (Data.yellow and 10 or 300) then
 			status.tries = status.tries + 1
 			return false
 		end
@@ -998,7 +998,8 @@ Strategies.functions = {
 		Bridge.chat("is checking Nidoran's stats at level 8... "..att.." attack, "..def.." defense, "..spd.." speed, "..scl.." special.")
 
 		local resetsForStats = att < 15 or spd < 14 or scl < 12
-		if not resetsForStats and not Data.yellow and RESET_FOR_TIME then
+		local restrictiveStats = not Data.yellow and RESET_FOR_TIME
+		if not resetsForStats and restrictiveStats then
 			resetsForStats = att == 15 and spd == 14
 		end
 
@@ -1013,7 +1014,7 @@ Strategies.functions = {
 					"worst possible stats.",
 				}
 			else
-				if att == 15 and spd == 14 then
+				if restrictiveStats and att == 15 and spd == 14 then
 					nidoranStatus = Utils.append(nidoranStatus, "unrunnable attack/speed combination", ", ")
 				else
 					if att < 15 then
@@ -1038,7 +1039,7 @@ Strategies.functions = {
 		if def < 12 then
 			statDiff = statDiff + 1
 		end
-		if not stats.nidoran.level4 then
+		if not Data.yellow and not stats.nidoran.level4 then
 			statDiff = statDiff + 1
 		end
 		stats.nidoran.rating = statDiff
@@ -1054,7 +1055,7 @@ Strategies.functions = {
 			else
 				superlative = " good"
 			end
-		elseif statDiff <= (Data.yellow and 4 or 3) then
+		elseif statDiff <= (restrictiveStats and 3 or 4) then
 			superlative = "n okay"
 			exclaim = "."
 		else
@@ -1808,7 +1809,7 @@ Strategies.functions = {
 		if status.finishTime then
 			if not status.frames then
 				status.frames = 0
-				local victoryMessage = "Beat Pokémon "..Utils.capitalize(Data.gameName).." in "..status.finishTime
+				local victoryMessage = "Beat Pokemon "..Utils.capitalize(Data.gameName).." in "..status.finishTime
 				if not Strategies.overMinute("champion") then
 					victoryMessage = victoryMessage..", a new PB!"
 				end
