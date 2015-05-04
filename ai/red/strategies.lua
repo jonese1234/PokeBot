@@ -365,19 +365,21 @@ strategyFunctions.catchNidoran = function()
 	if not Control.canCatch() then
 		return true
 	end
-	local opponent = Battle.opponent()
-	local catchableNidoran = opponent == "nidoran" and Memory.value("battle", "opponent_level") > 2
-	local pokeballs = Inventory.count("pokeball")
-	if pokeballs < (catchableNidoran and 4 or 5) - (Pokemon.inParty("nidoran","spearow") and 1 or 0) then
-		return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
-	end
-
 	if Battle.isActive() then
+		local opponent = Battle.opponent()
+		local catchableNidoran = opponent == "nidoran" and Memory.value("battle", "opponent_level") > 2
 		if catchableNidoran then
 			if Strategies.initialize("polled") then
 				Bridge.pollForName()
 			end
 		end
+		if Memory.value("battle", "menu") == 94 then
+			local pokeballs = Inventory.count("pokeball")
+			if pokeballs < (catchableNidoran and 4 or 5) - (Pokemon.inParty("nidoran","spearow") and 1 or 0) then
+				return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
+			end
+		end
+
 		status.path = nil
 		if Memory.value("menu", "text_input") == 240 then
 			Textbox.name()
