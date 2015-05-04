@@ -32,38 +32,42 @@ Strategies.vaporeon = false
 Strategies.timeRequirements = {
 
 	nidoran = function()
-		return 15
+		local timeLimit = 9
+		if Pokemon.inParty("pidgey") then
+			timeLimit = timeLimit + 0.5
+		end
+		return timeLimit
 	end,
 
 	mt_moon = function()
-		local timeLimit = 35
+		local timeLimit = 32
 		if stats.nidoran.attack > 15 and stats.nidoran.speed > 14 then
 			timeLimit = timeLimit + 0.25
 		end
-		if Pokemon.inParty("sandshrew") then
+		if Pokemon.inParty("paras", "sandshrew") then
 			timeLimit = timeLimit + 0.25
 		end
 		return timeLimit
 	end,
 
 	misty = function() --TWEET
-		return 43
+		return 44
 	end,
 
 	trash = function()
-		return 60
+		return 53
 	end,
 
 	safari_carbos = function()
-		return 90
+		return 100
 	end,
 
 	victory_road = function() --PB
-		return 110
+		return 104
 	end,
 
 	champion = function() --PB
-		return 125
+		return 95
 	end,
 
 }
