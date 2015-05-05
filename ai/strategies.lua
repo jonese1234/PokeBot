@@ -1754,7 +1754,7 @@ Strategies.functions = {
 			if Strategies.maxEtherSkip then
 				return true
 			end
-			if Inventory.count("ether") + Inventory.count("elixer") >= 2 then
+			if Inventory.ppRestoreCount() >= 2 then
 				return true
 			end
 		end
@@ -1763,7 +1763,7 @@ Strategies.functions = {
 
 	grabMaxEther = function()
 		if Strategies.initialize() then
-			if Strategies.maxEtherSkip and (Inventory.count("ether") + Inventory.count("elixer") >= 2) then
+			if Strategies.maxEtherSkip and Inventory.ppRestoreCount() >= 2 then
 				return true
 			end
 			if Inventory.isFull() then

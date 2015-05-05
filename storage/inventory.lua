@@ -88,6 +88,10 @@ function Inventory.contains(...)
 	end
 end
 
+function Inventory.ppRestoreCount()
+	return Inventory.count("ether") + Inventory.count("max_ether") + Inventory.count("elixer")
+end
+
 -- Actions
 
 function Inventory.teach(item, poke, replaceIdx)
