@@ -160,7 +160,7 @@ local controlFunctions = {
 
 	catchNidoranYellow = function()
 		-- shouldCatch = {{name="nidoran",levels={6}}} --TODO DSum
-		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",hp=15,requireHit=true}}
+		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",requireHit=true}}
 	end,
 
 	moonExpYellow = function()
@@ -263,7 +263,12 @@ function Control.shouldCatch(partySize)
 		if oid == Pokemon.getID(poke.name) and not Pokemon.inParty(poke.name, poke.alt) then
 			if not poke.levels or Utils.match(opponentLevel, poke.levels) then
 				local overHP = poke.hp and Memory.double("battle", "opponent_hp") > poke.hp
-				local penultimate = overHP
+				local penultimate
+				if poke.requireHit then
+					penultimate = not Battle.opponentDamaged()
+				else
+					penultimate = overHP
+				end
 				if penultimate then
 					penultimate = Combat.nonKill()
 				end
@@ -322,8 +327,7 @@ function Control.encounter(battleState)
 		elseif not Control.missed then
 			local turnMarker = Memory.value("battle", "our_turn")
 			if turnMarker == 100 or turnMarker == 128 then
-				local isMiss = Memory.value("battle", "miss") == 1
-				if isMiss then
+				if Memory.value("battle", "miss") == 1 then
 					if not Control.ignoreMiss and Battle.accurateAttack and not Combat.sandAttacked() then
 						local exclaim = Strategies.deepRun and ";_; " or ""
 						Bridge.chat("gen 1 missed "..exclaim.."(1 in 256 chance)")
