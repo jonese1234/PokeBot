@@ -603,8 +603,8 @@ strategyFunctions.fightBrock = function()
 						-- Bubble
 					elseif onixHP == status.canProgress then
 						if turnsToKill == 2 and Control.yolo then
-							if onixHP == Memory.double("battle", "opponent_max_hp") and Strategies.initialize("biding") then
-								Bridge.chat("got first-turn Bided. Too far behind to wait it out, so attempting to finish off Onix before it hits (1 in 2 chance).")
+							if onixHP == Memory.double("battle", "opponent_max_hp") then
+								Strategies.chat("biding", "got first-turn Bided. Too far behind to wait it out, so attempting to finish off Onix before it hits (1 in 2 chance).")
 							end
 						else
 							if turnsToDie <= 2 and Combat.hp() < Combat.maxHP() - 5 and Inventory.contains("potion") then
@@ -612,17 +612,15 @@ strategyFunctions.fightBrock = function()
 								return false
 							end
 							if turnsToDie == 1 then
-								if turnsElapsed == 0 and onixHP == Memory.double("battle", "opponent_max_hp") and Strategies.initialize("biding") then
-									Bridge.chat("is in range to die to a Tackle. Attempting to finish off Onix before Bide hits (1 in 2 chance).")
+								if turnsElapsed == 0 and onixHP == Memory.double("battle", "opponent_max_hp") then
+									Strategies.chat("biding", "is in range to die to a Tackle. Attempting to finish off Onix before Bide hits (1 in 2 chance).")
 								end
 							else
 								forced = "tail_whip"
 							end
 						end
 					else
-						if Strategies.initialize("biding") then
-							Bridge.chat("got Bided the same turn as Bubble. It'll need to last 3 turns (1 in 2 chance) for us to finish him before it hits...")
-						end
+						Strategies.chat("biding", "got Bided the same turn as Bubble. It'll need to last 3 turns (1 in 2 chance) for us to finish him before it hits...")
 					end
 					Control.ignoreMiss = forced ~= nil
 					Battle.fight(forced)
@@ -748,9 +746,7 @@ strategyFunctions.shortsKid = function()
 		end
 		local potions = Inventory.count("potion")
 		if potions <= 7 then
-			if Strategies.initialize("looper") then
-				Bridge.chat("Stuck in a heal loop, we're just going to have to risk it.")
-			end
+			Strategies.chat("looper", "Stuck in a heal loop, we're just going to have to risk it.")
 			disablePotion = true
 		elseif potions <= 8 then
 			disablePotion = not Strategies.damaged(2)
@@ -802,8 +798,8 @@ strategyFunctions.rivalSandAttack = function(data)
 	if Strategies.trainerBattle() then
 		if Battle.redeployNidoking() then
 			local sacrifice = Battle.deployed()
-			if sacrifice and Strategies.initialize("sacrificed") then
-				Bridge.chat("got Sand-Attacked... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
+			if sacrifice then
+				Strategies.chat("sacrificed", "got Sand-Attacked... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
 			end
 			return false
 		end
@@ -937,9 +933,7 @@ end
 strategyFunctions.thrashGeodude = function()
 	if Strategies.trainerBattle() then
 		if Pokemon.isDeployed("squirtle") then
-			if Strategies.initialize("sacrificed") then
-				Bridge.chat(" Thrash didn't finish the kill :( swapping to Squirtle for safety.")
-			end
+			Strategies.chat("sacrificed", " Thrash didn't finish the kill :( swapping to Squirtle for safety.")
 		elseif Pokemon.isOpponent("geodude") and Battle.opponentAlive() and Combat.isConfused() then
 			if Menu.onBattleSelect() and Strategies.initialize("shouldSacrifice") then
 				if not Control.yolo or Combat.inRedBar() then
@@ -1575,9 +1569,8 @@ strategyFunctions.potionBeforeHypno = function()
 
 	local healTarget
 	if healthUnderRedBar >= 0 then
-		if Strategies.initialize("warned") then
-			Bridge.chat("is attempting to carry red-bar through Koga. Hypno has a 1 in 4 chance to end the run with Confusion here...")
-		end
+		Strategies.chat("warned", "is attempting to carry red-bar through Koga. Hypno has a 1 in 4 chance to end the run with Confusion here...")
+
 		healTarget = "HypnoHeadbutt"
 		if useRareCandy then
 			useRareCandy = healthUnderRedBar > 2
@@ -1626,9 +1619,7 @@ strategyFunctions.fightKoga = function()
 				local drillHp = (Pokemon.index(0, "level") >= 41) and 12 or 9
 				if curr_hp > 0 and curr_hp < drillHp and Battle.pp("horn_drill") > 0 then
 					forced = "horn_drill"
-					if Strategies.initialize("drilling") then
-						Bridge.chat("is at low enough HP to try Horn Drill on Weezing")
-					end
+					Strategies.chat("drilling", "is at low enough HP to try Horn Drill on Weezing")
 					Control.ignoreMiss = true
 				elseif Battle.opponentDamaged(2) then
 					Inventory.use("pokeflute", nil, true)
@@ -1900,9 +1891,7 @@ strategyFunctions.lorelei = function()
 		if opponentName == "dewgong" then
 			local sacrifice = Pokemon.getSacrifice("pidgey", "spearow", "squirtle", "paras", "oddish")
 			if sacrifice and Battle.sacrifice(sacrifice) then
-				if Strategies.initialize("sacrificed") then
-					Bridge.chat(" Swapping out "..Utils.capitalize(sacrifice).." to tank Aurora Beam into turn 2 Rest. Only a problem if it misses...")
-				end
+				Strategies.chat("sacrificed", " Swapping out "..Utils.capitalize(sacrifice).." to tank Aurora Beam into turn 2 Rest. Only a problem if it misses...")
 				return false
 			end
 		elseif opponentName == "jinx" then

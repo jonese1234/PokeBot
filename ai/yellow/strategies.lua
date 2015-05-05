@@ -742,9 +742,7 @@ end
 
 strategyFunctions.fightGiovanni = function()
 	if Strategies.trainerBattle() then
-		if Strategies.initialize() then
-			Bridge.chat(" Giovanni can end the run here with Dugtrio's high chance to critical...")
-		end
+		Strategies.chat("critical", " Giovanni can end the run here with Dugtrio's high chance to critical...")
 		if Strategies.prepare("x_speed") then
 			local forced
 			local prepareAccuracy
@@ -854,9 +852,7 @@ strategyFunctions.lorelei = function()
 		local opponentName = Battle.opponent()
 		if opponentName == "dewgong" then
 			if Memory.double("battle", "our_speed") < 121 then
-				if Strategies.initialize("speedFall") then
-					Bridge.chat("got speed fall from Dewgong D: Attempting to recover with X Speed...")
-				end
+				Strategies.chat("speedfall", "got speed fall from Dewgong D: Attempting to recover with X Speed...")
 				if not Strategies.prepare("x_speed") then
 					return false
 				end

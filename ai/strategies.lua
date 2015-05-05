@@ -166,13 +166,19 @@ function Strategies.tweetProgress(message, progress)
 	return true
 end
 
-function Strategies.initialize(var)
-	if not var then
-		var = "initialized"
+function Strategies.initialize(once)
+	if not once then
+		once = "initialized"
 	end
-	if not status[var] then
-		status[var] = true
+	if not status[once] then
+		status[once] = true
 		return true
+	end
+end
+
+function Strategies.chat(once, message)
+	if Strategies.initialize(once) then
+		Bridge.chat(message)
 	end
 end
 
@@ -1508,9 +1514,8 @@ Strategies.functions = {
 				if not backupPokemon then
 					return Strategies.death()
 				end
-				if Strategies.initialize("died") then
-					Bridge.chat(" Rock Slide missed BibleThump Trying to finish them off with Dig...")
-				end
+				Strategies.chat("died", " Rock Slide missed BibleThump Trying to finish them off with Dig...")
+
 				if Menu.onPokemonSelect() then
 					Pokemon.select(backupPokemon)
 				else
