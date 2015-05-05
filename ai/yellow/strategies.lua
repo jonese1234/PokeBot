@@ -83,7 +83,7 @@ local function nidoranDSum(enabled)
 			if opponentLevel == 3 then
 				status.path = {0, 1, 11, 2, 11}
 			elseif opponentLevel == 4 then
-				status.path = {9, 2, 11, 2, 11}
+				status.path = {7, 2, 11, 2, 11}
 			end
 		elseif opponentName == "pidgey" then
 			if opponentLevel == 3 then
@@ -99,14 +99,14 @@ local function nidoranDSum(enabled)
 			end
 		elseif opponentName == "nidoranf" then
 			if opponentLevel == 4 then
-				status.path = {1, 2, 11, 2, 11}
+				status.path = {4, 2, 11, 2, 11}
 			elseif opponentLevel == 6 then
 				status.path = {1, 2, 11, 2, 11}
 			end
 		end
-		if status.path then
+		if status.path then --TODO
 			status.pathIndex = 1
-			status.startTime = Utils.frames() + 118
+			status.startTime = Utils.frames()
 		else
 			status.path = 0
 		end
@@ -122,12 +122,8 @@ local function nidoranDSum(enabled)
 			status.startTime = currentTime
 			if status.pathIndex >= #status.path then
 				status.path = 0
-				print("done")
 			else
 				status.pathIndex = status.pathIndex + 1
-				if INTERNAL and not STREAMING_MODE then
-					p(status.pathIndex, (status.pathIndex - 1) % 2)
-				end
 			end
 			return nidoranDSum()
 		end
@@ -353,7 +349,10 @@ strategyFunctions.catchNidoran = function()
 			if Strategies.resetTime(resetLimit, resetMessage) then
 				return true
 			end
-			local enableDSum = Control.escaped and not Strategies.overMinute(resetLimit - 0.25)
+			local enableDSum = Control.escaped
+			if enableDSum then
+				enableDSum = not RESET_FOR_TIME or not Strategies.overMinute(resetLimit - 0.25)
+			end
 			nidoranDSum(enableDSum)
 		end
 	end
@@ -612,7 +611,7 @@ strategyFunctions.shopBuffs = function()
 	return Shop.transaction {
 		direction = "Right",
 		sell = {{name="nugget"}},
-		buy = {{name="x_accuracy", index=0, amount=xAccs}, {name="x_attack", index=3, amount=3}, {name="x_speed", index=5, amount=xSpeeds}, {name="x_special", index=6, amount=5}},
+		buy = {{name="x_accuracy", index=0, amount=xAccs}, {name="x_speed", index=5, amount=xSpeeds}, {name="x_attack", index=3, amount=3}, {name="x_special", index=6, amount=5}},
 	}
 end
 
