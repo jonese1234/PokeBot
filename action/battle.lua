@@ -163,6 +163,13 @@ function Battle.opponentAlive()
 	return Memory.double("battle", "opponent_hp") > 0
 end
 
+function Battle.opponentDamaged(factor)
+	if not factor then
+		factor = 1
+	end
+	return Memory.double("battle", "opponent_hp") * factor < Memory.double("battle", "opponent_max_hp")
+end
+
 -- HANDLE
 
 function Battle.run()

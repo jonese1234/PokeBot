@@ -216,13 +216,6 @@ function Strategies.trainerBattle()
 	end
 end
 
-function Strategies.opponentDamaged(factor)
-	if not factor then
-		factor = 1
-	end
-	return Memory.double("battle", "opponent_hp") * factor < Memory.double("battle", "opponent_max_hp")
-end
-
 local function interact(direction, extended)
 	if Battle.handleWild() then
 		if Battle.isActive() then
@@ -244,7 +237,7 @@ end
 function Strategies.buffTo(buff, defLevel)
 	if Strategies.trainerBattle() then
 		local forced
-		if not Strategies.opponentDamaged() then
+		if not Battle.opponentDamaged() then
 			if defLevel and Memory.double("battle", "opponent_defense") > defLevel then
 				forced = buff
 			end

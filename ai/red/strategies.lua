@@ -333,9 +333,9 @@ strategyFunctions.fightBulbasaur = function()
 			local growled
 			local attackBaseline = BEAST_MODE and 2 or 0
 			if attack <= 2 + attackBaseline then
-				growled = not Strategies.opponentDamaged(3)
+				growled = not Battle.opponentDamaged(3)
 			elseif attack <= 3 + attackBaseline then
-				growled = not Strategies.opponentDamaged(1.9)
+				growled = not Battle.opponentDamaged(1.9)
 			end
 			if growled then
 				return Strategies.reset("time", "Growled to death.", attack.." "..Memory.double("battle", "opponent_hp"))
@@ -727,7 +727,7 @@ strategyFunctions.shortsKid = function()
 				status.wrappedAt = curr_hp
 			end
 			local wrapDamage = status.wrappedAt - curr_hp
-			if wrapDamage > 0 and wrapDamage < 7 and curr_hp < 14 and not Strategies.opponentDamaged() then
+			if wrapDamage > 0 and wrapDamage < 7 and curr_hp < 14 and not Battle.opponentDamaged() then
 				Inventory.use("potion", nil, true)
 				return false
 			end
@@ -833,7 +833,7 @@ strategyFunctions.rivalSandAttack = function(data)
 		if opponent == "pidgeotto" then
 			disableThrash = true
 		elseif opponent == "raticate" then
-			disableThrash = Strategies.opponentDamaged() or (not Control.yolo and Combat.hp() < 32) -- RISK
+			disableThrash = Battle.opponentDamaged() or (not Control.yolo and Combat.hp() < 32) -- RISK
 		elseif opponent == "kadabra" then
 			disableThrash = hasHornAttack and not Control.yolo and Combat.hp() < 11
 		elseif opponent == "ivysaur" then
@@ -851,7 +851,7 @@ strategyFunctions.rivalSandAttack = function(data)
 					return false
 				end
 			end
-			disableThrash = hasHornAttack and Strategies.opponentDamaged()
+			disableThrash = hasHornAttack and Battle.opponentDamaged()
 		end
 		Combat.setDisableThrash(disableThrash)
 
@@ -870,7 +870,7 @@ strategyFunctions.hornAttackCaterpie = function()
 	end
 	if Strategies.trainerBattle() then
 		local forced
-		if not Strategies.opponentDamaged() then
+		if not Battle.opponentDamaged() then
 			forced = "horn_attack"
 		end
 		Battle.automate(forced)
@@ -1254,7 +1254,7 @@ strategyFunctions.fightSurge = function()
 			local __, enemyTurns = Combat.enemyAttack()
 			if not enemyTurns or enemyTurns > 2 then
 				forced = "bubblebeam"
-			elseif enemyTurns == 2 and not Strategies.opponentDamaged() then
+			elseif enemyTurns == 2 and not Battle.opponentDamaged() then
 				local curr_hp, red_hp = Combat.hp(), Combat.redHP()
 				local afterHit = curr_hp - 20
 				if afterHit > 5 and afterHit <= red_hp - 3 then
@@ -1555,7 +1555,7 @@ strategyFunctions.fightSilphGiovanni = function()
 				else
 					forced = "ice_beam"
 				end
-			elseif not Strategies.opponentDamaged() then
+			elseif not Battle.opponentDamaged() then
 				forced = "horn_drill"
 			end
 		end
@@ -1630,7 +1630,7 @@ strategyFunctions.fightKoga = function()
 						Bridge.chat("is at low enough HP to try Horn Drill on Weezing")
 					end
 					Control.ignoreMiss = true
-				elseif Strategies.opponentDamaged(2) then
+				elseif Battle.opponentDamaged(2) then
 					Inventory.use("pokeflute", nil, true)
 					return false
 				else
@@ -1676,7 +1676,7 @@ strategyFunctions.fightErika = function()
 			local curr_hp, red_hp = Combat.hp(), Combat.redHP()
 			local razorDamage = 34
 			if curr_hp > razorDamage and curr_hp - razorDamage < red_hp then
-				if Strategies.opponentDamaged() then
+				if Battle.opponentDamaged() then
 					forced = "thunderbolt"
 				elseif stats.nidoran.special < 45 then
 					forced = "ice_beam"
@@ -1792,7 +1792,7 @@ strategyFunctions.viridianRival = function()
 			if Pokemon.isOpponent("pidgeot") then
 				forced = "thunderbolt"
 			elseif riskGiovanni then
-				if Pokemon.isOpponent("rhyhorn") or Strategies.opponentDamaged() then
+				if Pokemon.isOpponent("rhyhorn") or Battle.opponentDamaged() then
 					forced = "ice_beam"
 				elseif Pokemon.isOpponent("gyarados") then
 					forced = "thunderbolt"
