@@ -933,8 +933,27 @@ end
 
 strategyFunctions.blue = function()
 	if Strategies.trainerBattle() then
-		local xItem
-		if Pokemon.isOpponent("exeggutor") then
+		local forced, xItem, potionEnabled
+		if Pokemon.isOpponent("alakazam") then
+			local __, turnsToDie = Combat.enemyAttack()
+			if turnsToDie == 1 then
+				local ourSpeed, theirSpeed = Memory.double("battle", "our_speed"), Memory.double("battle", "opponent_speed")
+				local speedMessage
+				if ourSpeed == theirSpeed then
+					speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
+				elseif ourSpeed < theirSpeed then
+					potionEnabled = Inventory.contains("full_restore")
+					if potionEnabled then
+						speedMessage = "Attempting to wait out a non-damage turn."
+					else
+						speedMessage = "No Full Restores left, we'll need to get lucky."
+					end
+				end
+				if speedMessage then
+					Strategies.chat("outsped", " Bad speed. "..speedMessage)
+				end
+			end
+		elseif Pokemon.isOpponent("exeggutor") then
 			if Combat.isSleeping() then
 				local sleepHeal
 				if not Combat.inRedBar() and Inventory.contains("full_restore") then
@@ -949,8 +968,12 @@ strategyFunctions.blue = function()
 		else
 			xItem = "x_special"
 		end
+		Control.battlePotion(potionEnabled)
 		if Strategies.prepare(xItem) then
-			Battle.automate()
+			if Combat.xAccuracy() then
+				forced = "horn_drill"
+			end
+			Battle.automate(forced)
 		end
 	elseif status.foughtTrainer then
 		return true
