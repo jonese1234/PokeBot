@@ -1151,10 +1151,11 @@ Strategies.functions = {
 		local caught = Pokemon.inParty("pidgey", "spearow")
 		if Battle.isActive() then
 			if Memory.double("battle", "our_hp") == 0 then
-				if Pokemon.info("squirtle", "hp") == 0 then
+				local sacrifice = Pokemon.getSacrifice("squirtle", "pikachu")
+				if not sacrifice then
 					Control.canDie(false)
 				elseif Menu.onPokemonSelect() then
-					Pokemon.select("squirtle")
+					Pokemon.select(sacrifice)
 				else
 					Input.press("A")
 				end
@@ -1442,18 +1443,18 @@ Strategies.functions = {
 	redbarCubone = function()
 		if Strategies.trainerBattle() then
 			local forced
-			if Pokemon.isOpponent("cubone") then
+			if not Data.yellow and Pokemon.isOpponent("cubone") then --TODO risk Yellow
 				local enemyMove, enemyTurns = Combat.enemyAttack()
 				if enemyTurns then
 					local curr_hp, red_hp = Combat.hp(), Combat.redHP()
 					local clubDmg = enemyMove.damage
 					local afterHit = curr_hp - clubDmg
 					local acceptableHealth = Control.yolo and -1 or 1
-					if afterHit >= acceptableHealth and afterHit < red_hp - 2 then
+					if afterHit >= acceptableHealth and afterHit < red_hp - 3 then
 						forced = "thunderbolt"
 					else
 						afterHit = afterHit - clubDmg
-						if afterHit > 1 and afterHit < red_hp - 4 then
+						if afterHit > 1 and afterHit < red_hp - 6 then
 							forced = "thunderbolt"
 						end
 					end
@@ -1952,9 +1953,9 @@ function Strategies.execute(data)
 		status = {tries=0}
 		Strategies.status = status
 		Strategies.completeGameStrategy()
-		if Data.yellow and INTERNAL and not STREAMING_MODE then
-			print(data.s)
-		end
+		-- if Data.yellow and INTERNAL and not STREAMING_MODE then
+		-- 	print(data.s)
+		-- end
 		if resetting then
 			return nil
 		end
