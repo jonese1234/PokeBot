@@ -427,6 +427,33 @@ function Strategies.prepare(...)
 	end
 end
 
+function Strategies.getsSilphCarbosSpecially()
+	return Data.yellow and stats.nidoran.speedDV >= 11
+end
+
+function Strategies.needsCarbosAtLeast(count)
+	local speedDV = stats.nidoran.speedDV
+	local carbosRequired = 0
+	if Data.yellow then
+		if speedDV <= 8 then
+			carbosRequired = 3
+		elseif speedDV <= 10 then
+			carbosRequired = 2
+		else
+			carbosRequired = 1
+		end
+	else
+		if speedDV <= 6 then
+			carbosRequired = 3
+		elseif speedDV <= 7 then
+			carbosRequired = 2
+		elseif speedDV <= 9 then
+			carbosRequired = 1
+		end
+	end
+	return count <= carbosRequired
+end
+
 local function nidokingStats()
 	local att = Pokemon.index(0, "attack")
 	local def = Pokemon.index(0, "defense")
@@ -1346,7 +1373,7 @@ Strategies.functions = {
 	lassEther = function()
 		if Strategies.initialize() then
 			if Data.yellow then
-				if not Strategies.vaporeon or not Strategies.needs1Carbos() then
+				if not Strategies.vaporeon or not Strategies.getsSilphCarbosSpecially() then
 					return true
 				end
 				if Inventory.contains("pokeball") and Inventory.contains("potion") then
@@ -1553,6 +1580,21 @@ Strategies.functions = {
 		end
 	end,
 
+	silphCarbos = function()
+		if Strategies.initialize() then
+			local skipCarbos = not Strategies.needsCarbosAtLeast(2)
+			if not skipCarbos then
+				Bridge.chat(" This Nidoking has bad speed, so we need the extra Carbos here.")
+			elseif Strategies.getsSilphCarbosSpecially() then
+				skipCarbos = false
+			end
+			if skipCarbos then
+				return true
+			end
+		end
+		return strategyFunctions.interact({dir="Left"})
+	end,
+
 	playPokeFlute = function()
 		if Battle.isActive() then
 			return true
@@ -1607,8 +1649,7 @@ Strategies.functions = {
 			Strategies.setYolo("safari_carbos")
 			status.carbos = Inventory.count("carbos")
 
-			local minDV = Data.yellow and 9 or 7
-			if stats.nidoran.speedDV >= minDV then
+			if not Strategies.needsCarbosAtLeast(3) then
 				return true
 			end
 			Bridge.chat(" This Nidoking has bad speed, so we'll need to go out of our way for the extra Carbos here.")
@@ -1681,7 +1722,7 @@ Strategies.functions = {
 
 	cinnabarCarbos = function()
 		local minDV = Data.yellow and 11 or 10
-		local skipsCarbos = stats.nidoran.speedDV >= minDV
+		local skipsCarbos = not Strategies.needsCarbosAtLeast(Data.yellow and 2 or 1)
 		if Strategies.initialize() then
 			status.startCount = Inventory.count("carbos")
 			if not skipsCarbos then

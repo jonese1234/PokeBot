@@ -282,10 +282,6 @@ function Strategies.requiresE4Center()
 	return Combat.hp() < 100
 end
 
-function Strategies.needs1Carbos()
-	return stats.nidoran.speedDV >= 11
-end
-
 -- STRATEGIES
 
 strategyFunctions.gotPikachu = function()
