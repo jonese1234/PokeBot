@@ -196,7 +196,12 @@ local function depositPikachu()
 		if Memory.value("battle", "menu") ~= 19 then
 			local menuColumn = Menu.getCol()
 			if menuColumn == 5 then
-				Menu.select(Pokemon.indexOf("pikachu"))
+				if Menu.select(Pokemon.indexOf("pikachu")) then
+					Strategies.chat("pika", Utils.random {
+						" PIKA PIIKA",
+						" Goodbye, Pikachu BibleThump",
+					})
+				end
 			elseif menuColumn == 10 then
 				Input.press("A")
 			elseif pc == 3 then
@@ -221,11 +226,11 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 	if Strategies.initialize("reported") then
 		local centerAction
 		if sufficientPP then
-			centerAction = "Skipping"
+			centerAction = "skipping"
 		else
-			centerAction = "Taking"
+			centerAction = "taking"
 		end
-		Bridge.chat(centerAction.." the Center with "..Pokemon.pp(0, "horn_attack").." of "..pp.." Horn Attacks")
+		Bridge.chat("is "..centerAction.." the Center with "..Pokemon.pp(0, "horn_attack").." Horn Attacks ("..(pp+1).." required)")
 	end
 	if currentMap == startMap then
 		if not sufficientPP then
