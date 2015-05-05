@@ -445,7 +445,7 @@ strategyFunctions.acquireCharmander = function()
 		if Pokemon.inParty("sandshrew", "paras") then
 			return true
 		end
-		Bridge.chat("couldn't catch a cutter in Mt. Moon. Getting a free Charmander to teach Cut.")
+		Bridge.chat("couldn't catch a Paras/Sandshrew in Mt. Moon. Getting a free Charmander to teach Cut.")
 	end
 	local acquiredCharmander = Pokemon.inParty("charmander")
 	if Textbox.isActive() then

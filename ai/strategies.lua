@@ -81,8 +81,8 @@ function Strategies.reset(reason, explanation, extra, wait)
 	end
 	resetMessage = resetMessage..separator.." "..explanation
 
-	if Strategies.updates.misty or Strategies.updates.surge then
-		Strategies.tweetProgress(resetMessage.." in")
+	if not Data.yellow and (Strategies.updates.misty or Strategies.updates.surge) and Strategies.deepRun then
+		Strategies.tweetProgress(Utils.capitalize(resetMessage))
 	end
 
 	return Strategies.hardReset(reason, resetMessage, extra, wait)
@@ -93,15 +93,15 @@ function Strategies.death(extra)
 	if Control.missed then
 		explanation = "Missed"
 		reason = "miss"
-	elseif Combat.isConfused() then
-		explanation = "Confusion'd"
-		reason = "confusion"
 	elseif Control.criticaled then
 		explanation = "Critical'd"
 		reason = "critical"
 	elseif Combat.sandAttacked() then
 		explanation = "Sand-Attack'd"
 		reason = "accuracy"
+	elseif Combat.isConfused() then
+		explanation = "Confusion'd"
+		reason = "confusion"
 	elseif Control.yolo then
 		explanation = "Yolo strats"
 		reason = "yolo"
@@ -183,6 +183,9 @@ function Strategies.chat(once, message)
 end
 
 function Strategies.canHealFor(damage)
+	if type(damage) == "string" then
+		damage = Combat.healthFor(damage)
+	end
 	local curr_hp, max_hp = Combat.hp(), Combat.maxHP()
 	if max_hp - curr_hp > 3 then
 		local healChecks = {"full_restore", "super_potion", "potion"}
@@ -543,7 +546,7 @@ Strategies.functions = {
 	tweetMisty = function()
 		Strategies.setYolo("misty")
 
-		if not Strategies.updates.brock and not Control.yolo then
+		if not Strategies.updates.brock and not Control.yolo and (not Combat.inRedBar() or Inventory.contains("potion")) then
 			local timeLimit = Strategies.getTimeRequirement("misty")
 			if not Strategies.overMinute(timeLimit) then
 				local pbn = ""
@@ -719,24 +722,27 @@ Strategies.functions = {
 		if not status.cancel then
 			if Pokemon.hasMove(data.move) then
 				if data.chain and Memory.value("menu", "main") == 128 then
-					p("128", data.move)
 					return true
 				end
 				status.cancel = true
 			else
+				local teachTo = data.poke
 				if Strategies.initialize("triedTeaching") then
 					if not Inventory.contains(itemName) then
-
-						return Strategies.reset("error", "Unable to teach move "..itemName..(data.poke and " to "..data.poke or ""), nil, true)
+						local errorMessage = "Unable to teach move "..itemName
+						if teachTo and type(teachTo) == "string" then
+							errorMessage = errorMessage.." to "..teachTo
+						end
+						return Strategies.reset("error", errorMessage, nil, true)
 					end
 				end
 				local replacement
 				if data.replace then
-					replacement = Pokemon.moveIndex(data.replace, data.poke) - 1
+					replacement = Pokemon.moveIndex(data.replace, teachTo) - 1
 				else
 					replacement = 0
 				end
-				if Inventory.teach(itemName, data.poke, replacement) then
+				if Inventory.teach(itemName, teachTo, replacement) then
 					status.menuOpened = true
 				else
 					Menu.pause()
@@ -997,7 +1003,7 @@ Strategies.functions = {
 		if Pokemon.index(nidx, "level") < 8 then
 			return false
 		end
-		if status.tries < (Data.yellow and 10 or 300) then
+		if not Data.yellow and status.tries < 300 then
 			status.tries = status.tries + 1
 			return false
 		end
@@ -1081,7 +1087,7 @@ Strategies.functions = {
 			else
 				superlative = " good"
 			end
-		elseif statDiff <= (restrictiveStats and 3 or 4) then
+		elseif statDiff <= ((restrictiveStats or Data.yellow) and 3 or 4) then
 			superlative = "n okay"
 			exclaim = "."
 		else
@@ -1096,7 +1102,9 @@ Strategies.functions = {
 		end
 		message = message.." a"..superlative.." Nidoran"..exclaim
 
-		if not Data.yellow then
+		if Data.yellow then
+			message = message.." On "..(Strategies.vaporeon and "Vaporeon" or "Flareon").." strats."
+		else
 			message = message.." Caught at level "..(stats.nidoran.level4 and "4" or "3").."."
 		end
 
