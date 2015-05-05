@@ -1709,8 +1709,11 @@ Strategies.functions = {
 	end,
 
 	checkEther = function()
-		-- TODO don't skip center if not in redbar
-		Strategies.maxEtherSkip = not Strategies.requiresE4Center()
+		if Data.yellow then
+			Strategies.maxEtherSkip = Strategies.requiresE4Center()
+		else -- TODO don't skip center if not in redbar?
+			Strategies.maxEtherSkip = not Strategies.requiresE4Center()
+		end
 		if not Strategies.maxEtherSkip then
 			Bridge.chat("is grabbing the Max Ether to skip the Elite 4 Center.")
 		end
@@ -1785,6 +1788,46 @@ Strategies.functions = {
 		if Memory.value("player", "moving") == 0 then
 			Player.interact("Right")
 		end
+	end,
+
+	potionBeforeLorelei = function()
+		if Strategies.initialize() then
+			if Strategies.requiresE4Center() then
+				return true
+			end
+			if not Strategies.canHealFor("LoreleiDewgong") then
+				return true
+			end
+			Bridge.chat("is healing before Lorelei to skip the Elite 4 Center...")
+		end
+		return strategyFunctions.potion({hp=Combat.healthFor("LoreleiDewgong")})
+	end,
+
+	centerSkip = function()
+		if Strategies.initialize() then
+			Strategies.setYolo("e4center")
+			if not Strategies.requiresE4Center() then
+				local message
+				if Data.yellow then
+					message = " has enough HP to skip the Center. "..Utils.random {
+						"Let's do this!",
+						"Let's go!",
+						"What could go wrong?",
+						"No crits!",
+					}
+				else
+					message = "is skipping the Center and attempting to red-bar "
+					if Strategies.hasHealthFor("LoreleiDewgong") then
+						message = message.."off Lorelei..."
+					else
+						message = message.."the Elite 4!"
+					end
+				end
+				Bridge.chat(message)
+				return true
+			end
+		end
+		return strategyFunctions.confirm({dir="Up"})
 	end,
 
 	prepareForLance = function()

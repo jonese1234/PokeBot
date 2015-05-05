@@ -645,15 +645,16 @@ end
 
 -- silphElevator
 
-strategyFunctions.silphCarbos = function(data)
-	if not Strategies.needs1Carbos() then
-		if Strategies.closeMenuFor(data) then
-			return true
-		end
-	else
+-- silphCarbos
+
+strategyFunctions.useSilphCarbos = function(data)
+	if Strategies.getsSilphCarbosSpecially() then --TODO inventory count
 		data.item = "carbos"
 		data.poke = "nidoking"
 		return strategyFunctions.item(data)
+	end
+	if Strategies.closeMenuFor(data) then
+		return true
 	end
 end
 
@@ -827,21 +828,10 @@ strategyFunctions.depositPokemon = function()
 	end
 end
 
-strategyFunctions.centerSkip = function()
-	if Strategies.initialize() then
-		Strategies.setYolo("e4center")
-		Control.preferredPotion = "full"
-
-		if false then --TODO
-			local message = "is skipping the Elite 4 Center!"
-			Bridge.chat(message)
-			return true
-		end
-	end
-	return strategyFunctions.confirm({dir="Up"})
-end
+-- centerSkip
 
 strategyFunctions.shopE4 = function()
+	Control.preferredPotion = "full"
 	return Shop.transaction {
 		buy = {{name="full_restore", index=2, amount=3}}
 	}

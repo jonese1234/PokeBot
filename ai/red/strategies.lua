@@ -1419,15 +1419,7 @@ strategyFunctions.fightSilphMachoke = function()
 	end
 end
 
-strategyFunctions.silphCarbos = function()
-	if Strategies.initialize() then
-		if stats.nidoran.speedDV >= 8 then
-			return true
-		end
-		Bridge.chat(" This Nidoking has bad speed, so we need the extra Carbos here.")
-	end
-	return strategyFunctions.interact({dir="Left"})
-end
+-- silphCarbos
 
 strategyFunctions.swapXSpecials = function()
 	local destination = Inventory.contains("ether") and 5 or 6
@@ -1808,24 +1800,7 @@ end
 
 -- push
 
-strategyFunctions.potionBeforeLorelei = function()
-	if Strategies.initialize() then
-		if Strategies.requiresE4Center() then
-			return true
-		end
-		local canPotion
-		if Inventory.contains("potion") and Strategies.hasHealthFor("LoreleiDewgong", 20) then
-			canPotion = true
-		elseif Inventory.contains("super_potion") and Strategies.hasHealthFor("LoreleiDewgong", 50) then
-			canPotion = true
-		end
-		if not canPotion then
-			return true
-		end
-		Bridge.chat("is healing before Lorelei to skip the Elite 4 Center...")
-	end
-	return strategyFunctions.potion({hp=Combat.healthFor("LoreleiDewgong")})
-end
+-- potionBeforeLorelei
 
 strategyFunctions.depositPokemon = function()
 	local toSize
@@ -1864,22 +1839,7 @@ strategyFunctions.depositPokemon = function()
 	end
 end
 
-strategyFunctions.centerSkip = function()
-	if Strategies.initialize() then
-		Strategies.setYolo("e4center")
-		if not Strategies.requiresE4Center() then
-			local message = "is skipping the Center and attempting to red-bar "
-			if Strategies.hasHealthFor("LoreleiDewgong") then
-				message = message.."off Lorelei..."
-			else
-				message = message.."the Elite 4!"
-			end
-			Bridge.chat(message)
-			return true
-		end
-	end
-	return strategyFunctions.confirm({dir="Up"})
-end
+-- centerSkip
 
 strategyFunctions.lorelei = function()
 	if Strategies.trainerBattle() then
