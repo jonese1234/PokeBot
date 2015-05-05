@@ -59,6 +59,12 @@ local function isDisabled(move)
 end
 Combat.isDisabled = isDisabled
 
+local function xAccuracy()
+	local skipAccuracyCheck = 0x1
+	return bit.band(Memory.value("battle", "x_accuracy"), skipAccuracyCheck) == skipAccuracyCheck
+end
+Combat.xAccuracy = xAccuracy
+
 local function calcDamage(move, attacker, defender, rng)
 	if move.fixed then
 		return move.fixed, move.fixed
@@ -67,7 +73,7 @@ local function calcDamage(move, attacker, defender, rng)
 		return 0, 0
 	end
 	if move.power > 9000 then
-		if Memory.value("battle", "x_accuracy") == 1 and defender.speed < attacker.speed then
+		if xAccuracy() and defender.speed < attacker.speed then
 			return 9001, 9001
 		end
 		return 0, 0
@@ -382,6 +388,10 @@ function Combat.inKillRange(draw)
 	if ours.hp <= hpReq then
 		local outsped = enemyAttack.outspeed
 		if outsped and outsped ~= true then
+			if Memory.value("battle", "critical") == 1 then
+				hpReq = hpReq * 2
+				p("WB crit!", hpReq)
+			end
 			outsped = Memory.value("battle", "attack_turns") > 0
 		end
 		if outsped or isConfused or turnsToKill > 1 or ours.speed <= enemy.speed or isSleeping() then

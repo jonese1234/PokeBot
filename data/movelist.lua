@@ -179,6 +179,7 @@ local moves = {
 		id = 20,
 		move_type = 'normal',
 		special = false,
+		outspeed = "turns",
 		power = 15,
 		max_pp = 20,
 		accuracy = 85,
