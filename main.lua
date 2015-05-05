@@ -63,7 +63,7 @@ end
 
 -- EXECUTE
 
-p("Welcome to PokeBot "..Data.gameName.." version "..VERSION, true)
+p("Welcome to PokeBot "..Utils.capitalize(Data.gameName).." version "..VERSION, true)
 
 Control.init()
 

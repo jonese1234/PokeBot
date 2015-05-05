@@ -69,7 +69,6 @@ function Data.reset(reason, areaName, map, px, py, stats)
 			report.starter_special = ss.specialDV
 		end
 
-
 		report.version = Data.versionNumber
 		report.reset_area = areaName
 		report.reset_map = map
