@@ -55,22 +55,22 @@ Strategies.timeRequirements = {
 		if BEAST_MODE then
 			return 1.99
 		end
-		return 2.225
+		return 2.22
 	end,
 
 	nidoran = function() --RESET
 		if BEAST_MODE then
 			return 6
 		end
-		return 6.45 + timeSaveFor("spearow")
+		return 6.4 + timeSaveFor("spearow")
 	end,
 
 	old_man = function()
-		return 6.8 + timeSaveFor("spearow")
+		return 6.75 + timeSaveFor("spearow")
 	end,
 
 	forest = function()
-		return 9.4 + timeSaveFor("spearow")
+		return 9.33 + timeSaveFor("spearow")
 	end,
 
 	brock = function()
@@ -88,7 +88,7 @@ Strategies.timeRequirements = {
 			return 24.75
 		end
 
-		local timeLimit = 25.5 + timeSaveFor("paras")
+		local timeLimit = 25.25 + timeSaveFor("paras")
 		if Pokemon.info("nidoking", "level") >= 18 then
 			timeLimit = timeLimit + 0.33
 		elseif Pokemon.getExp() > 3730 then
@@ -112,7 +112,7 @@ Strategies.timeRequirements = {
 	end,
 
 	misty = function() --PB
-		return 38 + timeForStats() + timeSaveFor("paras")
+		return 37.75 + timeForStats() + timeSaveFor("paras")
 	end,
 
 	vermilion = function()
@@ -123,27 +123,27 @@ Strategies.timeRequirements = {
 		if BEAST_MODE then
 			return 45.75
 		end
-		return 46.5 + timeForStats()
+		return 46.25 + timeForStats()
 	end,
 
 	safari_carbos = function()
-		return 68.5 + timeForStats()
+		return 68.25 + timeForStats()
 	end,
 
 	victory_road = function() --PB
-		return 97.9
+		return 96.67
 	end,
 
 	e4center = function()
-		return 101.25
+		return 99.75
 	end,
 
 	blue = function()
-		return 107.5
+		return 106.25
 	end,
 
 	champion = function() --PB
-		return 110.22
+		return 109.133
 	end,
 
 }
@@ -263,7 +263,7 @@ local strategyFunctions = Strategies.functions
 strategyFunctions.tweetAfterBrock = function()
 	if stats.nidoran.rating < 2 then
 		if not Strategies.overMinute("shorts") then
-			Strategies.tweetProgress("On pace after Brock with a great Nidoran", "brock")
+			Strategies.tweetProgress("On pace after Brock with a great Nidoran in", "brock")
 		end
 	end
 	return true
