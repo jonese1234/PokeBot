@@ -712,6 +712,10 @@ strategyFunctions.fightKoga = function()
 					end
 				end
 			end
+			if Combat.isSleeping() then
+				Inventory.use("pokeflute", nil, true)
+				return false
+			end
 			Battle.automate(forced)
 		end
 	elseif status.foughtTrainer then
