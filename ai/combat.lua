@@ -51,6 +51,10 @@ local lastHP, lastExp
 
 local floor = math.floor
 
+local function checkBit(address, value)
+	return bit.band(address, value) == value
+end
+
 local function isDisabled(move)
 	if type(move) == "string" then
 		move = Pokemon.moveID(move)
@@ -306,21 +310,28 @@ Combat.activePokemon = activePokemon
 -- STATUS
 
 local function checkStatus(target, value)
-	return bit.band(Pokemon.info(target, "status"), value) == value
+	return checkBit(Pokemon.info(target, "status"), value)
 end
 
 function Combat.isPoisoned(target)
 	return checkStatus(target, 0x8)
 end
 
+function Combat.hasParalyzeStatus(target)
+	return Memory.value("battle", "paralyzed") > 0
+end
+
+function Combat.isFrozen(target)
+	return checkStatus(target, 0x20)
+end
+
 function Combat.isParalyzed(target)
 	return checkStatus(target, 0x40)
 end
 
-local function isSleeping()
-	return Memory.raw(0x116F) > 1
+function Combat.isSleeping(target)
+	return Memory.raw(0x116F) > 0 and not Combat.isParalyzed(target)
 end
-Combat.isSleeping = isSleeping
 
 local function isConfused()
 	return Memory.raw(0x106B) > 0
@@ -365,7 +376,7 @@ end
 
 function Combat.healthFor(opponent)
 	local ours, enemy = activePokemon(opponent)
-	local enemyAttack, turnsToDie = calcBestHit(enemy, ours, false)
+	local enemyAttack = calcBestHit(enemy, ours, false)
 	return enemyAttack.damage
 end
 
@@ -394,7 +405,7 @@ function Combat.inKillRange(draw)
 			end
 			outsped = Memory.value("battle", "attack_turns") > 0
 		end
-		if outsped or isConfused or turnsToKill > 1 or ours.speed <= enemy.speed or isSleeping() then
+		if outsped or isConfused or turnsToKill > 1 or ours.speed <= enemy.speed or Pokemon.info(target, "status") > 0 then
 			return ours, hpReq
 		end
 	end
