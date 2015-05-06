@@ -21,8 +21,8 @@ local Opponents = {
 				special = false,
 				outspeed = true,
 				move_type = "normal",
-			}
-		}
+			},
+		},
 	},
 
 	ErikaTangela = {
@@ -45,8 +45,8 @@ local Opponents = {
 				special = true,
 				max_pp = 10,
 				move_type = "grass",
-			}
-		}
+			},
+		},
 	},
 
 	RivalGyarados = {
@@ -68,12 +68,12 @@ local Opponents = {
 				special = true,
 				max_pp = 5,
 				move_type = "water",
-			}
+			},
 		},
 		boost = {
 			stat = "spec",
 			mp = 1.5
-		}
+		},
 	},
 
 	HypnoHeadbutt = {
@@ -96,7 +96,7 @@ local Opponents = {
 				max_pp = 15,
 				move_type = "normal",
 			}
-		}
+		},
 	},
 
 	HypnoConfusion = {
@@ -118,8 +118,8 @@ local Opponents = {
 				special = true,
 				max_pp = 25,
 				move_type = "psychic",
-			}
-		}
+			},
+		},
 	},
 
 	KogaWeezing = {
@@ -141,8 +141,8 @@ local Opponents = {
 				special = false,
 				max_pp = 5,
 				move_type = "normal",
-			}
-		}
+			},
+		},
 	},
 
 	GiovanniRhyhorn = {
@@ -165,8 +165,8 @@ local Opponents = {
 				special = false,
 				max_pp = 20,
 				damage = 21,
-			}
-		}
+			},
+		},
 	},
 
 	LoreleiDewgong = {
@@ -188,12 +188,12 @@ local Opponents = {
 				special = true,
 				max_pp = 20,
 				move_type = "ice",
-			}
+			},
 		},
 		boost = {
 			stat = "spec",
 			mp = 2 / 3
-		}
+		},
 	},
 
 	LanceGyarados = {
@@ -215,12 +215,12 @@ local Opponents = {
 				special = true,
 				max_pp = 5,
 				move_type = "water",
-			}
+			},
 		},
 		boost = {
 			stat = "spec",
 			mp = 1.5
-		}
+		},
 	},
 
 	BluePidgeot = {
@@ -242,8 +242,8 @@ local Opponents = {
 				special = false,
 				max_pp = 35,
 				move_type = "flying",
-			}
-		}
+			},
+		},
 	},
 
 	BlueSky = {
@@ -265,8 +265,8 @@ local Opponents = {
 				special = false,
 				max_pp = 5,
 				move_type = "flying",
-			}
-		}
+			},
+		},
 	},
 
 -- YELLOW
@@ -291,8 +291,12 @@ local Opponents = {
 				special = false,
 				pp = 6,
 				move_type = "ground",
-			}
-		}
+			},
+		},
+		boost = {
+			stat = "def",
+			mp = 7 / 8
+		},
 	},
 
 }
