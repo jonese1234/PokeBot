@@ -115,6 +115,7 @@ local function nidoranDSum(enabled)
 	local dx, dy = px, py
 	local cornerBonk = true
 	local encounterlessSteps = Memory.value("game", "encounterless")
+	local pikachuX = Memory.value("player", "pikachu_x") - 4
 	if enabled and status.path ~= 0 then
 		local duration = status.path[status.pathIndex]
 		local currentTime = Utils.frames()
@@ -125,7 +126,7 @@ local function nidoranDSum(enabled)
 			else
 				status.pathIndex = status.pathIndex + 1
 			end
-			return nidoranDSum()
+			return nidoranDSum(enabled)
 		end
 		local walkOutside = (status.pathIndex - 1) % 2 == 0
 		if walkOutside then
@@ -139,8 +140,16 @@ local function nidoranDSum(enabled)
 			elseif encounterlessSteps <= 1 then
 				if px < 3 then
 					dx = 3
+				elseif pikachuX > px then
+					dx = 2
 				end
-			elseif encounterlessSteps >= 2 then
+			elseif encounterlessSteps == 2 then
+				if px == 4 then
+					dx = 3
+				else
+					dx = 4
+				end
+			elseif encounterlessSteps > 2 then
 				if px == 3 then
 					dx = 2
 				else
@@ -150,7 +159,6 @@ local function nidoranDSum(enabled)
 		end
 	end
 	if cornerBonk then
-		local pikachuX = Memory.value("player", "pikachu_x") - 4
 		if px == 4 and py == 48 and pikachuX >= px then
 			dx = px + 1
 		elseif px >= 4 and py == 48 then
@@ -169,7 +177,9 @@ local function nidoranDSum(enabled)
 				status.bonkWait = not status.bonkWait
 				return
 			end
-			if encounterlessSteps < 2 or dx ~= 3 then
+			if encounterlessSteps == 1 and dx <= 6 then
+				dx = px + 1
+			elseif dx ~= 3 then
 				dx = 3
 			else
 				dx = 4
@@ -183,7 +193,7 @@ local function nidoranDSum(enabled)
 			end
 		end
 	end
-	Walk.step(dx, dy)
+	Walk.step(dx, dy, true)
 end
 
 local function depositPikachu()

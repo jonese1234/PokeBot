@@ -29,7 +29,7 @@ local function sendButton(button, ab)
 	setForFrame = button
 end
 
-function Input.press(button, frames)
+function Input.press(button, frames, walk)
 	if setForFrame then
 		print("ERR: Reassigning "..setForFrame.." to "..button)
 		return
@@ -48,6 +48,17 @@ function Input.press(button, frames)
 	end
 	bCancel = button ~= "B"
 	sendButton(button)
+
+	if walk then
+		local cancel
+		if bCancel then
+			cancel = "B"
+		else
+			cancel = "A"
+		end
+		local inputTable = {[button]=true, [cancel]=true}
+		joypad.set(inputTable)
+	end
 end
 
 function Input.cancel(accept)
