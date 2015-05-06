@@ -856,7 +856,7 @@ strategyFunctions.lorelei = function()
 		local opponentName = Battle.opponent()
 		if opponentName == "dewgong" then
 			if Memory.double("battle", "our_speed") < 121 then
-				Strategies.chat("speedfall", "got speed fall from Dewgong D: Attempting to recover with X Speed...")
+				Strategies.chat("speedfall", "got speed fall from Dewgong D: Attempting to recover with X Speed, we need a  Rest...")
 				if not Strategies.prepare("x_speed") then
 					return false
 				end
@@ -870,8 +870,21 @@ strategyFunctions.lorelei = function()
 	end
 end
 
+strategyFunctions.potionBeforeBruno = function()
+	local potionHP = 55
+	if Inventory.count("full_restore") > 1 and Strategies.damaged(2) then
+		potionHP = 200
+	end
+	return strategyFunctions.potion({hp=potionHP, full=true})
+end
+
 strategyFunctions.bruno = function()
 	if Strategies.trainerBattle() then
+		if Combat.hasParalyzeStatus() and Inventory.contains("full_restore") then
+			Inventory.use("full_restore", nil, true)
+			return false
+		end
+
 		local forced
 		local opponentName = Battle.opponent()
 		if opponentName == "onix" then
@@ -889,10 +902,16 @@ end
 
 strategyFunctions.agatha = function()
 	if Strategies.trainerBattle() then
-		if Combat.isSleeping() then
+		if Combat.isParalyzed() then
+			if Inventory.contains("full_restore") then
+				Inventory.use("full_restore", nil, true)
+				return false
+			end
+		elseif Combat.isSleeping() then
 			Inventory.use("pokeflute", nil, true)
 			return false
 		end
+
 		if Pokemon.isOpponent("gengar") then
 			if Memory.double("battle", "our_speed") < 147 then
 				if Inventory.count("x_speed") > 1 then
