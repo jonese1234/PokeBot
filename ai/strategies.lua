@@ -1440,36 +1440,6 @@ Strategies.functions = {
 		return true
 	end,
 
-	redbarCubone = function()
-		if Strategies.trainerBattle() then
-			local forced
-			if not Data.yellow and Pokemon.isOpponent("cubone") then --TODO risk Yellow
-				local enemyMove, enemyTurns = Combat.enemyAttack()
-				if enemyTurns then
-					local curr_hp, red_hp = Combat.hp(), Combat.redHP()
-					local clubDmg = enemyMove.damage
-					local afterHit = curr_hp - clubDmg
-					local acceptableHealth = Control.yolo and -1 or 1
-					if afterHit >= acceptableHealth and afterHit < red_hp - 3 then
-						forced = "thunderbolt"
-					else
-						afterHit = afterHit - clubDmg
-						if afterHit > 1 and afterHit < red_hp - 6 then
-							forced = "thunderbolt"
-						end
-					end
-					if forced and Strategies.initialize() then
-						Bridge.chat("is using Thunderbolt to attempt to redbar off Cubone.")
-					end
-				end
-				Control.ignoreMiss = forced ~= nil
-			end
-			Battle.automate(forced)
-		elseif status.foughtTrainer then
-			return true
-		end
-	end,
-
 	announceOddish = function()
 		if Strategies.trainerBattle() then
 			if Pokemon.isOpponent("oddish") then

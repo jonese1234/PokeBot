@@ -601,7 +601,7 @@ end
 
 -- announceFourTurn
 
--- redbarCubone
+-- announceOddish
 
 strategyFunctions.deptElevator = function()
 	if Menu.isOpened() then
