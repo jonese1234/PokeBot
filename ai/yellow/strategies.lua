@@ -285,7 +285,10 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 end
 
 function Strategies.requiresE4Center()
-	return Combat.hp() < 100
+	if Control.areaName == "Elite Four" then
+		return not Strategies.hasHealthFor("LoreleiDewgong")
+	end
+	return not Strategies.canHealFor("LoreleiDewgong", true)
 end
 
 -- STRATEGIES

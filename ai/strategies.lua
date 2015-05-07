@@ -182,13 +182,19 @@ function Strategies.chat(once, message)
 	end
 end
 
-function Strategies.canHealFor(damage)
+function Strategies.canHealFor(damage, allowAlreadyHealed, disableFullRestore)
 	if type(damage) == "string" then
 		damage = Combat.healthFor(damage)
 	end
 	local curr_hp, max_hp = Combat.hp(), Combat.maxHP()
+	if allowAlreadyHealed and curr_hp > damage then
+		return true
+	end
 	if max_hp - curr_hp > 3 then
-		local healChecks = {"full_restore", "super_potion", "potion"}
+		local healChecks = {"super_potion", "potion"}
+		if not disableFullRestore then
+			table.insert(healChecks, 1, "full_restore")
+		end
 		for idx,potion in ipairs(healChecks) do
 			if Inventory.contains(potion) and Utils.canPotionWith(potion, damage, curr_hp, max_hp) then
 				return potion
@@ -313,7 +319,7 @@ function Strategies.completedMenuFor(data)
 		return true
 	end
 	local count = Inventory.count(data.item)
-	if count == 0 or (status.startCount and count + (data.amount or 1) <= status.startCount) then
+	if count == 0 or (not data.all and status.startCount and count < status.startCount) then
 		return true
 	end
 	return false
