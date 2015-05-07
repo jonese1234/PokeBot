@@ -1762,7 +1762,9 @@ Strategies.functions = {
 				end
 			end
 			if status.item == "elixer" then
-				return Strategies.useItem({item="elixer", poke="nidoking", chain=data.chain, close=data.close})
+				data.item = "elixer"
+				data.poke = "nidoking"
+				return Strategies.useItem(data)
 			end
 			if Memory.value("menu", "main") == 144 and Menu.getCol() == 5 then
 				if Menu.hasTextbox() then
@@ -1810,17 +1812,19 @@ Strategies.functions = {
 		end
 	end,
 
-	potionBeforeLorelei = function()
+	potionBeforeLorelei = function(data)
 		if Strategies.initialize() then
 			if Strategies.requiresE4Center() then
 				return true
 			end
-			if not Strategies.canHealFor("LoreleiDewgong") then
+			if not Strategies.canHealFor("LoreleiDewgong", true) then
 				return true
 			end
 			Bridge.chat("is healing before Lorelei to skip the Elite 4 Center...")
 		end
-		return strategyFunctions.potion({hp=Combat.healthFor("LoreleiDewgong")})
+
+		data.hp = Combat.healthFor("LoreleiDewgong")
+		return strategyFunctions.potion(data)
 	end,
 
 	centerSkip = function()
