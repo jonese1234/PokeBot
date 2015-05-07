@@ -1284,7 +1284,7 @@ end
 
 strategyFunctions.undergroundElixer = function()
 	if Strategies.initialize() then
-		if Inventory.contains("elixer") and Inventory.contains("ether") then
+		if Inventory.containsAll("elixer", "ether") then
 			return true
 		end
 	end

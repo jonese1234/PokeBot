@@ -88,6 +88,15 @@ function Inventory.contains(...)
 	end
 end
 
+function Inventory.containsAll(...)
+	for i,name in ipairs(arg) do
+		if not Inventory.contains(name) then
+			return false
+		end
+	end
+	return true
+end
+
 function Inventory.ppRestoreCount()
 	return Inventory.count("ether") + Inventory.count("max_ether") + Inventory.count("elixer")
 end

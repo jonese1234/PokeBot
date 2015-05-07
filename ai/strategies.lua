@@ -1385,11 +1385,11 @@ Strategies.functions = {
 				if not Strategies.vaporeon or not Strategies.getsSilphCarbosSpecially() then
 					return true
 				end
-				if Inventory.contains("pokeball") and Inventory.contains("potion") then
+				if Inventory.containsAll("pokeball", "potion") then
 					return true
 				end
 			else
-				if Inventory.contains("antidote") and Inventory.contains("elixer") then
+				if Inventory.containsAll("antidote", "elixer") then
 					return true
 				end
 			end
