@@ -473,7 +473,7 @@ function Combat.updateHP(curr_hp)
 		lastHP = curr_hp
 		local baseExp = Pokemon.getExpForLevelFromCurrent(0)
 		local expForCurrentLevel = Pokemon.getExp() - baseExp
-		local nextLevelExp = Pokemon.getExpForLevelFromCurrent(1) - baseExp
+		local nextLevelExp = math.max(Pokemon.getExpForLevelFromCurrent(1) - baseExp, 1)
 		Bridge.hp(curr_hp, max_hp, expForCurrentLevel, nextLevelExp, Pokemon.index(0, "level"))
 	end
 end
