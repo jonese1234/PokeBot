@@ -292,6 +292,7 @@ end
 
 strategyFunctions.gotPikachu = function()
 	Bridge.caught("pikachu")
+	Pokemon.updateParty()
 	return true
 end
 
