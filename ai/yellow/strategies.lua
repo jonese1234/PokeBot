@@ -874,12 +874,14 @@ strategyFunctions.lorelei = function()
 	end
 end
 
-strategyFunctions.potionBeforeBruno = function()
+strategyFunctions.potionBeforeBruno = function(data)
 	local potionHP = 55
 	if Inventory.count("full_restore") > 1 and Strategies.damaged(2) then
 		potionHP = 200
 	end
-	return strategyFunctions.potion({hp=potionHP, full=true})
+	data.hp = potionHP
+	data.full = true
+	return strategyFunctions.potion(data)
 end
 
 strategyFunctions.bruno = function()

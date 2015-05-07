@@ -113,7 +113,7 @@ local Paths = {
 	-- To Bill's
 	{36, {0,8}, {9,8}, {9,6}, {9,6}, {8,6}, {8,5}, {s="talk",dir="Up"}, {s="thrashGeodude"}, {10,5}, {s="hikerElixer"}, {10,4}, {13,4}, {13,6}, {15,6}, {15,4}, {17,4}, {17,7}, {18,7}, {s="talk",dir="Down"}, {20,7}, {20,8}, {22,8}, {22,6}, {23,6}, {s="potion",hp=5,yolo=0}, {35,6}, {35,4}, {36,4}, {s="talk",dir="Right"}, {36,5}, {38,5}, {38,4}, {s="lassEther"}, {45,4}, {45,3}},
 	-- Save Bill
-	{88, {2,7}, {2,5}, {5,5}, {s="confirm",dir="Right"}, {1,5}, {s="interact",dir="Up"}, {4,5}, {s="talk",dir="Up"}, {s="waitToTalk"}, {s="potionBeforeMisty",goldeen=true,chain=true}, {s="item",item="escape_rope"}},
+	{88, {2,7}, {2,5}, {5,5}, {s="confirm",dir="Right"}, {1,5}, {s="interact",dir="Up"}, {4,5}, {s="talkToBill"}, {s="waitToTalk"}, {s="potionBeforeMisty",goldeen=true,chain=true}, {s="item",item="escape_rope"}},
 	-- To Misty
 	{3, {19,18}, {19,20}, {30,20}, {30,19}},
 	-- Misty
@@ -346,7 +346,7 @@ local Paths = {
 	{7, {27,28}, {s="fly",dest="pallet",map=0}},
 	-- Pallet to Cinnabar
 	--TODO combine RC for Carbos
-	{0, {5,6}, {s="item",item="super_repel",chain=true}, {s="item",item="rare_candy",amount=3,poke="nidoking",chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
+	{0, {5,6}, {s="item",item="super_repel",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
 	{32, {4,0}, {4,14}, {3,14}, {3,90}},
 	-- Enter Cinnabar Mansion
@@ -361,7 +361,7 @@ local Paths = {
 	{165, {16,14}, {16,16}, {13,16}, {13,20}, {s="cinnabarCarbos"}, {21,23}},
 	-- B1
 	--TODO menu cancel for RC
-	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",amount=2,poke="nidoking",close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
+	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",all=true,poke="nidoking",close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
 	-- Celadon once again
 	{6, {41,10}, {s="bicycle"}, {41,13}, {36,13}, {36,23}, {25,23}, {25,30}, {35,30}, {35,31}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {35,34}, {5,34}, {5,29}, {12,29}, {12,27}},
 	-- Erika
@@ -421,7 +421,7 @@ local Paths = {
 	-- F3
 	{198, {23,7}, {23,6}, {22,6}, {22,4}, {s="skill",move="strength"}, {22,2}, {23,2}, {23,1}, {7,1}, {7,0}, {6,0}, {6,1}, {7,1}, {7,2}, {3,2}, {3,1}, {2,1}, {2,4}, {1,4}, {1,5}, {2,5}, {2,4}, {4,4}, {4,2}, {7,2}, {7,1}, {20,1}, {20,6}, {17,6}, {17,4}, {9,4}, {9,10}, {5,10}, {5,8}, {1,8}, {1,15}, {11,15}, {11,16}, {20,16}, {20,15}, {23,15}},
 	-- F2
-	{194, {22,16}, {s="waitToPause"}, {s="skill",move="strength"}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei"}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
+	{194, {22,16}, {s="waitToPause"}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei",chain=true}, {s="skill",move="strength"}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
 	-- F3
 	{198, {27,15}, {27,8}, {26,8}},
 	-- F2 Exit

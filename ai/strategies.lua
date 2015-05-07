@@ -715,8 +715,10 @@ Strategies.functions = {
 	end,
 
 	teach = function(data)
-		if Strategies.initialize() then
-			status.cancel = data.full and not Inventory.isFull()
+		if Strategies.initialize("teaching") then
+			if not status.cancel then
+				status.cancel = data.full and not Inventory.isFull()
+			end
 		end
 
 		local itemName
@@ -1317,21 +1319,27 @@ Strategies.functions = {
 				status.cancel = Pokemon.getExp() > 5550
 			end
 		end
-		return strategyFunctions.item({item="rare_candy", amount=2, poke="nidoking", chain=data.chain, close=data.close})
+		data.poke = "nidoking"
+		data.item = "rare_candy"
+		data.all = true
+		return strategyFunctions.item(data)
 	end,
 
 	teachThrash = function(data)
 		if Strategies.initialize() then
-			local nidoLevel = Pokemon.info("nidoking", "level")
-			if nidoLevel < 21 or nidoLevel >= 23 or not Inventory.contains("rare_candy") then
+			if Pokemon.info("nidoking", "level") ~= 21 or not Inventory.contains("rare_candy") then
 				status.cancel = true
 			else
 				status.updateStats = true
 			end
 		end
 
-		local replacementMove = Data.yellow and "tackle" or "leer"
-		if strategyFunctions.teach({move="thrash", item="rare_candy", replace=replacementMove, chain=data.chain, close=data.close}) then
+		data.move = "thrash"
+		data.poke = "nidoking"
+		data.item = "rare_candy"
+		data.replace = Data.yellow and "tackle" or "leer"
+		data.all = true
+		if strategyFunctions.teach(data) then
 			if status.updateStats then
 				nidokingStats()
 			end
@@ -1400,7 +1408,14 @@ Strategies.functions = {
 				end
 			end
 		end
-		return strategyFunctions.interact({dir="Up"})
+		return interact("Up")
+	end,
+
+	talkToBill = function()
+		if Textbox.isActive() then
+			return true
+		end
+		return interact("Up")
 	end,
 
 	jingleSkip = function()
