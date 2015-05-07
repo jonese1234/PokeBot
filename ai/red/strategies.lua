@@ -376,7 +376,7 @@ strategyFunctions.catchNidoran = function()
 		if Memory.value("battle", "menu") == 94 then
 			local pokeballs = Inventory.count("pokeball")
 			if pokeballs < (catchableNidoran and 4 or 5) - (Pokemon.inParty("nidoran","spearow") and 1 or 0) then
-				return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
+				return Strategies.reset("pokeballs", "Ran too low on Pokeballs", pokeballs)
 			end
 		end
 

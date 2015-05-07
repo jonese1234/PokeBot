@@ -224,7 +224,7 @@ function Control.canCatch(partySize)
 		if Data.yellow and Pokemon.inParty("nidoran", "nidorino", "nidoking") and Pokemon.inParty("pidgey", "spearow") then
 			return false
 		end
-		Strategies.reset("pokeballs", "Not enough PokeBalls", pokeballs)
+		Strategies.reset("pokeballs", "Ran too low on Pokeballs", pokeballs)
 		return false
 	end
 	return true

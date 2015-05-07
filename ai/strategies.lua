@@ -1829,10 +1829,10 @@ Strategies.functions = {
 			if not Strategies.requiresE4Center() then
 				local message
 				if Data.yellow then
-					message = " has enough HP to skip the Center. "..Utils.random {
+					message = "has enough HP to skip the Center. "..Utils.random {
 						"Let's do this!",
 						"Let's go!",
-						"What could go wrong?",
+						"What could go wrong now?",
 						"No crits!",
 					}
 				else
@@ -1846,6 +1846,7 @@ Strategies.functions = {
 				Bridge.chat(message)
 				return true
 			end
+			Bridge.chat("is taking the Center to heal for Lorelei.")
 		end
 		return strategyFunctions.confirm({dir="Up"})
 	end,
