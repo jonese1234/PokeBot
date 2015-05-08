@@ -228,25 +228,47 @@ end
 local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 	local px, py = Player.position()
 	local currentMap = Memory.value("game", "map")
-	local sufficientPP = Pokemon.pp(0, "horn_attack") > pp
+	local hornAttacks = Pokemon.pp(0, "horn_attack")
+	local completedCenter
+	if pp then
+		completedCenter = hornAttacks > pp
+	else
+		completedCenter = hornAttacks == 25
+
+		if not completedCenter and Strategies.warpToCerulean then
+			completedCenter = Combat.hp() + Inventory.count("potion") * 20 >= 70
+		end
+	end
 	if Strategies.initialize("reported") then
 		local centerAction
-		if sufficientPP then
+		if completedCenter then
 			centerAction = "skipping"
 		else
 			centerAction = "taking"
 		end
-		Bridge.chat("is "..centerAction.." the Center with "..Pokemon.pp(0, "horn_attack").." Horn Attacks ("..(pp+1).." required)")
+		local centerReason
+		if pp then
+			centerReason = "with "..Utils.pluralize(Pokemon.pp(0, "horn_attack"), "Horn Attack").." ("..(pp+1).." required)."
+		elseif not Strategies.warpToCerulean then
+			centerReason = "to set our warp point to Cerulean."
+		else
+			centerReason = "to heal before Misty."
+		end
+		Bridge.chat("is "..centerAction.." the Center "..centerReason)
+
+		if completedCenter and Strategies.warpToCerulean then
+			return true
+		end
 	end
 	if currentMap == startMap then
-		if not sufficientPP then
+		if not completedCenter then
 			if px ~= entranceX then
 				px = entranceX
 			else
 				py = entranceY
 			end
 		else
-			if px == finishX then
+			if not finishX or px == finishX then
 				return true
 			end
 			px = finishX
@@ -270,7 +292,7 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 				if Menu.close() then
 					px = 3
 				end
-			elseif sufficientPP then
+			elseif completedCenter then
 				if Textbox.handle() then
 					py = 8
 				end
@@ -429,26 +451,35 @@ strategyFunctions.centerMoon = function()
 end
 
 strategyFunctions.centerCerulean = function(data)
-	local ppRequired = 10
-	if data.first then
-		local hasSufficientPP = Pokemon.pp(0, "horn_attack") > ppRequired
+	local ppRequired, finishX
+	local firstTrip = not data.second
+
+	if firstTrip then
+		ppRequired = 10
+		finishX = 8
+
+		local hornAttacks = Pokemon.pp(0, "horn_attack")
+		local hasSufficientPP = hornAttacks > ppRequired
+
 		if Strategies.initialize() then
 			Combat.factorPP(hasSufficientPP)
+			Strategies.warpToCerulean = not hasSufficientPP
 		end
-		local currentMap = Memory.value("game", "map")
-		if currentMap == 3 then
+
+		if Memory.value("game", "map") == 3 then
 			if hasSufficientPP then
 				local px, py = Player.position()
-				if py > 8 then
+				if px > 8 then
 					return strategyFunctions.dodgeCerulean({left=true})
 				end
-			end
-			if not strategyFunctions.dodgeCerulean({}) then
+			elseif not strategyFunctions.dodgeCerulean({}) then
 				return false
 			end
 		end
+	else
+		finishX = 22
 	end
-	return takeCenter(ppRequired, 3, 19, 17, 19)
+	return takeCenter(ppRequired, 3, 19, 17, finishX)
 end
 
 -- reportMtMoon
