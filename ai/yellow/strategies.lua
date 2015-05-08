@@ -559,7 +559,6 @@ strategyFunctions.shopVermilionMart = function()
 	-- end
 	local supers = Strategies.vaporeon and 7 or 8
 	return Shop.transaction {
-		sell = sellArray,
 		buy = {{name="super_potion",index=1,amount=supers}, {name="repel",index=5,amount=3}}
 	}
 end
@@ -680,9 +679,16 @@ strategyFunctions.shopBuffs = function()
 	local xAccs = Strategies.vaporeon and 11 or 10
 	local xSpeeds = Strategies.vaporeon and 6 or 7
 
+	local sellArray = {{name="nugget"}}
+	if Inventory.containsAll("pokeball", "potion") then --TODO , "ether"
+		if INTERNAL and Strategies.initialize("pokeball") then
+			print("Selling Pokeballs to make up inventory space")
+		end
+		table.insert(sellArray, {name="pokeball"})
+	end
 	return Shop.transaction {
 		direction = "Right",
-		sell = {{name="nugget"}},
+		sell = sellArray,
 		buy = {{name="x_accuracy", index=0, amount=xAccs}, {name="x_speed", index=5, amount=xSpeeds}, {name="x_attack", index=3, amount=3}, {name="x_special", index=6, amount=5}},
 	}
 end
