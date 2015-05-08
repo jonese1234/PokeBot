@@ -446,17 +446,17 @@ strategyFunctions.fightBrock = function()
 	end
 	if Strategies.trainerBattle() then
 		local __, turnsToKill, turnsToDie = Combat.bestMove()
-		if turnsToDie and turnsToDie < 2 and Inventory.contains("potion") then
-			Inventory.use("potion", "nidoran", true)
-		else
-			local bideTurns = Memory.value("battle", "opponent_bide")
-			if bideTurns > 0 then
-				local onixHP = Memory.double("battle", "opponent_hp")
-				if status.tries == 0 then
-					status.tries = onixHP
-					status.startBide = bideTurns
-				end
-				if turnsToKill then
+		if turnsToKill then
+			if turnsToDie < 2 and Inventory.contains("potion") then
+				Inventory.use("potion", "nidoran", true)
+			else
+				local bideTurns = Memory.value("battle", "opponent_bide")
+				if bideTurns > 0 then
+					local onixHP = Memory.double("battle", "opponent_hp")
+					if status.tries == 0 then
+						status.tries = onixHP
+						status.startBide = bideTurns
+					end
 					local forced
 					if turnsToKill < 2 or status.startBide - bideTurns > 1 then
 					-- elseif turnsToKill < 3 and status.startBide == bideTurns then
@@ -465,12 +465,16 @@ strategyFunctions.fightBrock = function()
 					end
 					Battle.fight(forced)
 				else
-					Input.cancel()
+					status.tries = 0
+					if turnsToKill > 3 then
+						strategyFunctions.leer({{"onix", 13}})
+					else
+						Battle.automate()
+					end
 				end
-			else
-				status.tries = 0
-				strategyFunctions.leer({{"onix", 13}})
 			end
+		else
+			Input.cancel()
 		end
 	elseif status.foughtTrainer then
 		return true
