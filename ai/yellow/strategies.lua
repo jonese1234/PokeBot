@@ -205,7 +205,11 @@ local function depositPikachu()
 				if Menu.select(Pokemon.indexOf("pikachu")) then
 					Strategies.chat("pika", Utils.random {
 						" PIKA PIIKA",
+						" NNOOO PIKAAA",
 						" Goodbye, Pikachu BibleThump",
+						" RIP in PC, Pikachu.",
+						" I don't know how else to say this, but Nido and I are going steady now. Goodbye, Pikachu.",
+						" You're cute, Pikachu. But this is a speedrun, and frankly you're getting in my way.",
 					})
 				end
 			elseif menuColumn == 10 then
@@ -361,7 +365,7 @@ strategyFunctions.catchNidoran = function()
 					pokeballsRequired = pokeballsRequired + 1
 				end
 				if pokeballs < pokeballsRequired then
-					return Strategies.reset("pokeballs", "Ran too low on PokeBalls", pokeballs)
+					return Strategies.reset("pokeballs", "Ran too low on Pokeballs", pokeballs)
 				end
 			end
 		end
@@ -471,6 +475,17 @@ strategyFunctions.fightBrock = function()
 	elseif status.foughtTrainer then
 		return true
 	end
+end
+
+strategyFunctions.reload = function(data)
+	local message = "is reloading the "
+	if data.area == "route3" then
+		message = message.."route to save time by bypassing a difficult trainer."
+	elseif data.area == "giovanni" then
+		message = message.."Gym to move the trainer and head straight to Giovanni as fast as possible."
+	end
+	Bridge.chat(message)
+	return true
 end
 
 strategyFunctions.centerMoon = function()
