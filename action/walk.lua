@@ -47,12 +47,12 @@ function dir(px, py, dx, dy)
 end
 Walk.dir = dir
 
-function step(dx, dy)
+function step(dx, dy, through)
 	local px, py = Player.position()
 	if px == dx and py == dy then
 		return true
 	end
-	Input.press(dir(px, py, dx, dy), 0)
+	Input.press(dir(px, py, dx, dy), 0, through)
 end
 Walk.step = step
 

@@ -401,7 +401,6 @@ function Combat.inKillRange(draw)
 		if outsped and outsped ~= true then
 			if Memory.value("battle", "critical") == 1 then
 				hpReq = hpReq * 2
-				p("WB crit!", hpReq)
 			end
 			outsped = Memory.value("battle", "attack_turns") > 0
 		end

@@ -158,8 +158,8 @@ function Bridge.moonGuesses(enabled)
 	send("moon,"..(enabled and "on" or "off"))
 end
 
-function Bridge.moonResults(encounters, paras)
-	send("moonresults,"..encounters..","..(paras and "paras" or "none"))
+function Bridge.moonResults(encounters, cutter)
+	send("moonresults,"..encounters..","..(cutter and "cutter" or "none"))
 end
 
 function Bridge.trashGuesses(enabled)

@@ -26,6 +26,7 @@ local stats = Strategies.stats
 local strategyFunctions = Strategies.functions
 
 Strategies.vaporeon = false
+Strategies.warpToCerulean = false
 
 -- TIME CONSTRAINTS
 
@@ -106,7 +107,7 @@ local function nidoranDSum(enabled)
 		end
 		if status.path then --TODO
 			status.pathIndex = 1
-			status.startTime = Utils.frames()
+			status.startTime = Utils.frames() + 5
 		else
 			status.path = 0
 		end
@@ -264,6 +265,7 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 			return true
 		end
 	end
+
 	if currentMap == startMap then
 		if not completedCenter then
 			if px ~= entranceX then
