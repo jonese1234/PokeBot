@@ -321,6 +321,17 @@ strategyFunctions.gotPikachu = function()
 	return true
 end
 
+strategyFunctions.fightEevee = function()
+	if Strategies.trainerBattle() then
+		if Combat.hp() == 0 and Strategies.initialize("died") then
+			Strategies.vaporeon = true
+		end
+		Battle.automate()
+	elseif status.foughtTrainer then
+		return true
+	end
+end
+
 -- dodgePalletBoy
 
 strategyFunctions.shopViridianPokeballs = function()
@@ -406,6 +417,22 @@ end
 
 strategyFunctions.centerViridian = function()
 	return takeCenter(15, 2, 13, 25, 18)
+end
+
+strategyFunctions.battleSandshrew = function()
+	if Strategies.trainerBattle() then
+		if Pokemon.isOpponent("sandshrew") then
+			local enemyMove, enemyTurns = Combat.enemyAttack()
+			if enemyMove then
+				local damage = math.floor(enemyMove.damage * 1.8)
+				if Combat.hp() < damage and Inventory.contains("potion") then
+					Inventory.use("potion", "nidoran", true)
+					return false
+				end
+			end
+		end
+	end
+	return strategyFunctions.leer {{"sandshrew", 14}}
 end
 
 strategyFunctions.fightBrock = function()
