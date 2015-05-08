@@ -1665,13 +1665,11 @@ Strategies.functions = {
 
 	tossInSafari = function()
 		if Inventory.count() <= (Inventory.contains("full_restore") and 18 or 17) then
-			if Strategies.closeMenuFor({close=true}) then
-				return true
-			end
-			return false
+			return Strategies.closeMenuFor({close=true})
 		end
 		if Inventory.contains("carbos") then
-			return strategyFunctions.item({item="carbos",poke="nidoking",close=true})
+			strategyFunctions.item({item="carbos",poke="nidoking",all=true})
+			return false
 		end
 		return Strategies.tossItem("antidote", "tm34", "pokeball")
 	end,
@@ -1846,14 +1844,7 @@ Strategies.functions = {
 			Strategies.setYolo("e4center")
 			if not Strategies.requiresE4Center() then
 				local message
-				if Data.yellow then
-					message = "has enough HP to skip the Center. "..Utils.random {
-						"Let's do this!",
-						"Let's go!",
-						"What could go wrong now?",
-						"No crits!",
-					}
-				else
+				if not Data.yellow then
 					message = "is skipping the Center and attempting to red-bar "
 					if Strategies.hasHealthFor("LoreleiDewgong") then
 						message = message.."off Lorelei..."
