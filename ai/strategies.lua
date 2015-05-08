@@ -35,7 +35,10 @@ local strategyFunctions
 -- RISK/RESET
 
 function Strategies.getTimeRequirement(name)
-	return Strategies.timeRequirements[name]()
+	local timeCalculation = Strategies.timeRequirements[name]
+	if timeCalculation then
+		return timeCalculation()
+	end
 end
 
 function Strategies.hardReset(reason, message, extra, wait)
@@ -116,7 +119,7 @@ function Strategies.overMinute(min)
 	if type(min) == "string" then
 		min = Strategies.getTimeRequirement(min)
 	end
-	return Utils.igt() > (min * 60)
+	return min and Utils.igt() > (min * 60)
 end
 
 function Strategies.resetTime(timeLimit, explanation, custom)
@@ -131,16 +134,11 @@ function Strategies.resetTime(timeLimit, explanation, custom)
 end
 
 function Strategies.setYolo(name, forced)
-	if not forced and not RESET_FOR_TIME then
+	local minimumTime = Strategies.getTimeRequirement(name)
+	if not minimumTime or (not forced and not RESET_FOR_TIME) then
 		return false
 	end
-	local shouldYolo
-	if BEAST_MODE then
-		shouldYolo = true
-	else
-		local minimumTime = Strategies.getTimeRequirement(name)
-		shouldYolo = Strategies.overMinute(minimumTime)
-	end
+	local shouldYolo = BEAST_MODE or Strategies.overMinute(minimumTime)
 	if Control.yolo ~= shouldYolo then
 		Control.yolo = shouldYolo
 		Control.setYolo(shouldYolo)
@@ -319,10 +317,7 @@ function Strategies.completedMenuFor(data)
 		return true
 	end
 	local count = Inventory.count(data.item)
-	if count == 0 or (not data.all and status.startCount and count < status.startCount) then
-		return true
-	end
-	return false
+	return count == 0 or (not data.all and status.startCount and count < status.startCount)
 end
 
 function Strategies.closeMenuFor(data)
@@ -495,12 +490,6 @@ function Strategies.completeCans()
 	local px, py = Player.position()
 	if px == 4 and py == 6 then
 		local trashcanTries = status.tries + 1
-
-		local timeLimit = Strategies.getTimeRequirement("trash") + 1
-		if Combat.inRedBar() then
-			timeLimit = timeLimit + 0.5
-		end
-
 		local prefix
 		local suffix = "!"
 		if trashcanTries <= 1 then
@@ -522,6 +511,10 @@ function Strategies.completeCans()
 
 		Bridge.trashResults(trashcanTries)
 
+		local timeLimit = Strategies.getTimeRequirement("trash") + 1
+		if Combat.inRedBar() then
+			timeLimit = timeLimit + 0.5
+		end
 		if Strategies.resetTime(timeLimit, "complete Trashcans") then
 			return true
 		end
@@ -1153,9 +1146,6 @@ Strategies.functions = {
 			Bridge.moonGuesses(true)
 			Control.canDie(true)
 		end
-		if not Control.canCatch() then
-			return true
-		end
 		local caught = Pokemon.inParty("pidgey", "spearow")
 		if Battle.isActive() then
 			if Memory.double("battle", "our_hp") == 0 then
@@ -1183,6 +1173,9 @@ Strategies.functions = {
 				end
 				birdPath = {{32,startY}, {32,11}, {34,11}}
 			elseif px == 37 then
+				if not Control.canCatch() then
+					return true
+				end
 				if py == 10 then
 					py = 11
 				else
