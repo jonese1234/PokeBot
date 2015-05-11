@@ -148,11 +148,11 @@ local Paths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="swap",item=2,dest="potion",chain=true}, {s="potion",hp=25,yolo=19,chain=true}, {s="teach",move="bubblebeam",replace="tackle",close=true}, {37,8}, {s="rivalSandAttack"}, {37,5}, {36,5}, {36,4}},
+	{96, {2,4}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="swap",item=2,dest="potion",chain=true}, {s="potion",hp=25,yolo=19,chain=true}, {s="teach",move="bubblebeam",replace="tackle",close=true}, {37,8}, {s="rivalSandAttack"}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {0,4}, {4,4}, {4,3}, {s="talk",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out
-	{96, {36,4}, {s="guessTrashcans",enabled=true}, {36,12}, {3,12}, {3,11}, {2,11}, {2,4}},
+	{96, {36,4}, {s="guess",game="trash",enabled=true}, {36,12}, {3,12}, {3,11}, {2,11}, {2,4}},
 	-- First deck out
 	{95, {2,6}, {2,7}, {26,7}, {26,-1}},
 	-- Departure
@@ -160,7 +160,7 @@ local Paths = {
 	-- To Surge
 	{5, {18,29}, {18,26}, {30,26}, {30,14}, {15,14}, {15,17}, {s="potionBeforeSurge"}, {s="swap",item="repel",dest=0,chain=true}, {s="teach",move="cut",poke={"oddish","paras"},chain=true}, {s="teach",move="dig",poke={"paras","squirtle"},chain=true}, {s="skill",move="cut",done=0x0D4D}, {15,20}, {12,20}, {12,19}},
 	-- Trashcans
-	{92, {4,17}, {c="a",a="Surge's Gym"}, {4,16}, {2,16}, {2,11}, {s="guessTrashcans",enabled=false}, {s="trashcans"}, {4,6}, {4,3}, {5,3}, {5,2}, {s="talk",dir="Up"}, {s="fightSurge"}, {s="split"}, {s="tweetSurge"}, {4,2}, {4,13}, {5,13}, {5,18}},
+	{92, {4,17}, {c="a",a="Surge's Gym"}, {4,16}, {2,16}, {2,11}, {s="guess",game="trash",enabled=false}, {s="trashcans"}, {4,6}, {4,3}, {5,3}, {5,2}, {s="talk",dir="Up"}, {s="fightSurge"}, {s="split"}, {s="tweetSurge"}, {4,2}, {4,13}, {5,13}, {5,18}},
 
 -- 8: SURGE
 
@@ -181,7 +181,7 @@ local Paths = {
 	-- Rock Tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {s="redbarCubone"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel"}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1
@@ -334,7 +334,7 @@ local Paths = {
 	-- To Koga
 	{7, {19,28}, {c="a",a="Koga's Gym"}, {5,28}, {5,27}},
 	-- Koga
-	{157, {4,17}, {9,17}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="earthquakeElixer",min=2,chain=true}, {s="potionBeforeHypno"}, {1,3}, {2,3}, {2,5}, {1,5}, {c="potion",b=false}, {1,7}, {s="fightHypno"}, {1,9}, {2,9}, {s="earthquakeElixer",min=4}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
+	{157, {4,17}, {4,16}, {9,16}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="earthquakeElixer",min=2,chain=true}, {s="potionBeforeHypno"}, {1,3}, {2,3}, {2,5}, {1,5}, {c="potion",b=false}, {1,7}, {s="fightHypno"}, {1,9}, {2,9}, {s="earthquakeElixer",min=4}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
 
 -- 12: KOGA
 

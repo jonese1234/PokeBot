@@ -10,7 +10,7 @@ local Paths = {
 	{40, {5,3}, {c="a",a="Pallet Rival"}, {s="allowDeath",on=true}, {5,4}, {7,4}, {s="confirm",dir="Up",type="A"}, {5,3}, {s="confirm",dir="Up",type="B"}, {s="acquire",poke="pikachu"}, {5,6}, {s="fightEevee"}, {5,12}},
 	-- Let's try this escape again
 	{0, {12,12}, {c="a",a="Pallet Town"}, {s="allowDeath",on=false}, {c="encounters",limit=6}, {c="trackEncounters",area="route1"}, {9,12}, {9,2}, {10,2}, {10,-1}},
-	-- First encounters
+	-- First encounter
 	{12, {10,35}, {10,30}, {8,30}, {8,24}, {12,24}, {12,20}, {9,20}, {9,14}, {14,14}, {s="dodgePalletBoy"}, {14,2}, {11,2}, {11,-1}},
 	-- To the Mart
 	{1, {21,35}, {21,30}, {19,30}, {19,20}, {29,20}, {29,19}},
@@ -33,16 +33,16 @@ local Paths = {
 	-- Viridian Mart redux
 	{42, {3,7}, {3,5}, {2,5}, {s="shopViridianPokeballs"}, {2,6}, {3,6}, {3,8}},
 	-- To the North
-	{1, {29,20}, {19,20}, {19,9}, {19,2}, {17,2}, {17,-1}},
+	{1, {29,20}, {c="encounters",limit=nil}, {19,20}, {19,9}, {19,2}, {17,2}, {17,-1}},
 	-- Nidoran Get
-	{13, {7,71}, {c="a",a="Nidoran grass"}, {c="encounters",limit=nil}, {7,57}, {c="trackEncounters",area="nidoran"}, {4,57}, {4,52}, {c="catchNidoranYellow"}, {s="catchNidoran"}, {8,47}, {s="split"}, {8,45}, {s="swapNidoran"}, {8,44}, {3,44}, {3,43}},
+	{13, {7,71}, {c="a",a="Nidoran grass"}, {7,57}, {c="trackEncounters",area="nidoran"}, {4,57}, {4,52}, {c="catchNidoranYellow"}, {s="catchNidoran"}, {8,47}, {s="split"}, {8,45}, {s="swapNidoran"}, {8,44}, {3,44}, {3,43}},
 
 -- 1: NIDORAN
 
 	-- Forest Entrance
 	{50, {4,7}, {c="a",a="Viridian Forest"}, {c="catchFlier"}, {c="potion",b=true}, {c="pp",on=true}, {4,1}, {5,1}, {5,0}},
 	-- Viridian Forest
-	{51, {16,47}, {c="trackEncounters",area="forest"}, {16,44}, {18,44}, {18,42}, {26,42}, {27,34}, {27,33}, {s="leerCaterpies"}, {s="checkNidoranStats"}, {s="potion",hp=15}, {27,32}, {31,32}, {31,18}, {25,18}, {25,12}, {26,12}, {26,9}, {17,9}, {17,16}, {15,16}, {s="potion",hp=15}, {13,16}, {s="interact",dir="Down"}, {s="leer",{"caterpie",9},{"metapod",11}}, {s="potion",hp=10}, {13,3}, {6,3}, {6,22}, {2,22}, {2,19}, {s="potion",hp=10}, {s="interact",dir="Up"}, {s="leer",{"caterpie",9}}, {1,19}, {1,16}, {1,-1}},
+	{51, {16,47}, {c="trackEncounters",area="forest"}, {16,44}, {18,44}, {18,42}, {26,42}, {27,34}, {27,33}, {s="leerCaterpies"}, {s="checkNidoranStats"}, {s="potion",hp=7}, {27,32}, {31,32}, {31,18}, {25,18}, {25,12}, {26,12}, {26,9}, {17,9}, {17,16}, {15,16}, {s="potion",hp=12}, {13,16}, {s="interact",dir="Down"}, {s="leer",{"caterpie",9},{"metapod",11}}, {s="potion",hp=7}, {13,3}, {6,3}, {6,22}, {2,22}, {2,19}, {s="potion",hp=10}, {s="interact",dir="Up"}, {s="leer",{"caterpie",9}}, {1,19}, {1,16}, {1,-1}},
 	-- Forest exit
 	{47, {4,7}, {4,1}, {5,1}, {5,0}},
 	-- Road to Pewter City
@@ -68,12 +68,11 @@ local Paths = {
 -- 3: ROUTE 3
 
 	-- Mt. Moon F1
-	{59, {14,35}, {c="startMtMoon"}, {c="trackEncounters",area="moon"}, {c="catchCutterYellow"}, {c="pp",on=true}, {14,22}, {21,22}, {21,15}, {24,15}, {24,27}, {25,27}, {25,31}, {25,32}, {33,32}, {33,31}, {34,31}, {s="interact",dir="Right"}, {34,3}, {16,3}, {16,17}, {2,17}, {2,3}, {s="interact",dir="Up",long=true}, {5,3}, {5,5}},
+	{59, {14,35}, {c="startMtMoon"}, {c="trackEncounters",area="moon"}, {c="catchCutterYellow"}, {c="pp",on=true}, {c="moon1Exp"}, {14,22}, {21,22}, {21,15}, {24,15}, {24,27}, {25,27}, {25,31}, {25,32}, {33,32}, {33,31}, {34,31}, {s="take",dir="Right"}, {34,3}, {16,3}, {16,17}, {2,17}, {2,3}, {s="take",dir="Up"}, {5,3}, {5,5}},
 	-- Mt. Moon B2
 	{60, {5,5}, {5,17}, {21,17}},
 	-- Mt. Moon B3
-	--TODO exp
-	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,exp=2700}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {11,31}, {11,16}, {12,16}, {12,11}, {s="potion",hp=5,chain=true}, {s="evolveNidoking"}, {12,9}, {s="talk",dir="Up"}, {13,9}, {13,7}, {s="confirm",dir="Up",long=false}, {13,5}, {12,5}, {12,4}, {3,4}, {3,7}, {5,7}},
+	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,exp=2700}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {11,31}, {11,16}, {12,16}, {12,10}, {s="potion",hp=5,chain=true}, {s="evolveNidoking"}, {12,9}, {s="talk",dir="Up"}, {s="fightKoffing",min=5}, {c="moon2Exp"}, {13,9}, {13,7}, {s="confirm",dir="Up"}, {13,5}, {12,5}, {12,4}, {3,4}, {3,5}, {3,4}, {s="fightKoffing",min=2}, {c="moon2Exp"}, {3,7}, {5,7}},
 	-- Mt. Moon escape
 	{60, {23,3}, {27,3}},
 
@@ -90,7 +89,7 @@ local Paths = {
 	-- Out the house
 	{230, {2,1}, {2,8}},
 	-- Rival 2
-	{3, {9,12}, {c="a",a="Cerulean Rival"}, {21,12}, {21,6}, {21,-1}},
+	{3, {9,12}, {c="a",a="Cerulean Rival"}, {21,12}, {21,6}, {s="rivalSandAttack"}, {21,-1}},
 	-- Nugget bridge
 	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {10,32}, {10,30}, {s="teachThrash",chain=true}, {s="rareCandyEarly",close=true}, {10,29}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,29}, {11,27}, {s="teachThrash"}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash"}, {10,23}, {s="talk",dir="Up"}, {s="learnThrash"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash"}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,20}, {10,16}, {s="teachThrash"}, {10,15}, {s="swapThrash"}, {s="waitToFight"}, {s="split"}, {10,8}, {s="acquireCharmander"}, {20,8}},
 
@@ -126,7 +125,7 @@ local Paths = {
 	-- Underground exit
 	{74, {4,4}, {3,8}},
 	-- No Oddish
-	{17, {17,14}, {c="a",a="Vermilion City"}, {17,25}, {15,25}, {15,27}, {15,28}, {11,28}, {11,29}, {s="potion",hp=15,yolo=10}, {s="waitToFight",dir="Down"}, {10,29}, {10,30}, {s="potion",hp=15,yolo=10}, {10,31}, {9,31}, {9,36}},
+	{17, {17,14}, {c="a",a="Vermilion City"}, {17,25}, {15,25}, {15,27}, {15,28}, {11,28}, {11,29}, {s="potion",hp=15,yolo=10}, {s="potion",hp=5,full=true}, {s="waitToFight",dir="Down"}, {10,29}, {10,30}, {s="potion",hp=15,yolo=10}, {10,31}, {9,31}, {9,36}},
 	-- Enter Vermilion
 	{5, {19,0}, {c="disableCatch"}, {19,6}, {21,6}, {21,14}, {23,14}, {23,13}},
 	-- Vermilion mart
@@ -138,7 +137,7 @@ local Paths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=23,yolo=16,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {37,5}, {36,5}, {36,4}},
+	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=23,yolo=16,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {c="thrash",disable=false}, {0,4}, {4,4}, {4,3}, {s="interact",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out
@@ -146,7 +145,7 @@ local Paths = {
 	-- First deck out
 	{95, {2,6}, {2,7}, {26,7}, {26,-1}},
 	-- Departure
-	{94, {14,2}, {s="epicCutscene"}, {s="guessTrashcans",enabled=true}},
+	{94, {14,2}, {s="epicCutscene"}, {s="guess",game="trash",enabled=true}},
 	-- To the Fan Club
 	{5, {18,29}, {18,26}, {30,26}, {30,14}, {15,14}, {9,14}, {9,13}},
 	-- Bicycle cert
@@ -154,7 +153,7 @@ local Paths = {
 	-- To Surge
 	{5, {9,14}, {9,15}, {15,15}, {15,17}, {s="swap",item="repel",dest=0,chain=true}, {s="potion",hp=70,yolo=60,chain=true}, {s="teach",move="cut",poke={"charmander","sandshrew","paras"},chain=true}, {s="teach",move="dig",poke={"charmander","sandshrew","paras"},chain=true}, {s="skill",move="cut",done=0x0D4D}, {15,20}, {12,20}, {12,19}},
 	-- Trashcans
-	{92, {4,17}, {c="a",a="Surge's Gym"}, {4,15}, {1,15}, {1,12}, {s="guessTrashcans",enabled=false}, {s="trashcans"}, {4,6}, {4,3}, {5,3}, {5,2}, {s="interact",dir="Up"}, {s="waitToFight"}, {s="split"}, {4,2}, {4,13}, {5,13}, {5,18}},
+	{92, {4,17}, {c="a",a="Surge's Gym"}, {4,15}, {1,15}, {1,12}, {s="guess",game="trash",enabled=false}, {s="trashcans"}, {4,6}, {4,3}, {5,3}, {5,2}, {s="interact",dir="Up"}, {s="waitToFight"}, {s="split"}, {4,2}, {4,13}, {5,13}, {5,18}},
 
 -- 8: SURGE
 
@@ -171,13 +170,14 @@ local Paths = {
 	-- Bicycle out of Cerulean
 	{3, {13,25}, {s="waitToPause"}, {13,26}, {s="swap",item="bicycle",dest=1,chain=true}, {s="teach",move="thunderbolt",replace="double_kick",chain=true}, {s="bicycle"}, {19,26}, {19,27}, {s="skill",move="cut",done=0x0D4D}, {19,29}, {36,29}, {36,16}, {40,16}},
 	-- TPP's Bane
+	--TODO HA after Confusion
 	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="announceFourTurn"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
 	-- To the cave
 	{21, {0,8}, {3,8}, {3,10}, {13,10}, {13,15}, {14,15}, {14,26}, {3,26}, {3,18}, {7,18}, {s="item",item="repel"}, {8,18}, {8,17}},
 	-- Rock tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel"}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1
@@ -287,9 +287,9 @@ local Paths = {
 	-- Warp down
 	{208, {3,15}, {3,14}, {18,14}, {18,9}, {s="interact",dir="Left"}, {14,9}, {14,11}, {11,11}},
 	-- Rival 5
-	{212, {5,3}, {c="a",a="Silph Rival"}, {4,3}, {4,2}, {3,2}, {c="potion",b=false}, {s="silphRival"}, {3,5}, {2,5}, {s="confirm",dir="Left",type="B"}, {s="acquire",poke="lapras"}, {2,7}, {c="potion",b=true,yolo=true}, {5,7}},
+	{212, {5,3}, {c="a",a="Silph Rival"}, {4,3}, {4,2}, {3,2}, {c="potion",b=false}, {s="silphRival"}, {3,5}, {2,5}, {s="confirm",dir="Left",type="B"}, {s="acquire",poke="lapras"}, {2,7}, {5,7}},
 	-- Giovanni
-	{235, {3,2}, {c="a",a="Silph Giovanni"}, {3,14}, {5,14}, {s="potion",hp=70,yolo=50}, {6,14}, {s="interact",dir="Up"}, {6,13}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=235}},
+	{235, {3,2}, {c="a",a="Silph Giovanni"}, {3,14}, {5,14}, {s="potion",hp=64,yolo=44}, {6,14}, {s="interact",dir="Up"}, {6,13}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=235}},
 
 -- 11: SILPH CO.
 
@@ -337,7 +337,7 @@ local Paths = {
 	-- To Koga
 	{7, {19,28}, {c="a",a="Koga's Gym"}, {5,28}, {5,27}},
 	-- Koga
-	{157, {4,17}, {9,17}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp=60,yolo=25}, {1,3}, {2,3}, {2,5}, {1,5}, {1,7}, {1,9}, {2,9}, {s="potion",hp=80,yolo=70}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
+	{157, {4,17}, {4,16}, {9,16}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp=60,yolo=25}, {1,3}, {2,3}, {2,5}, {1,5}, {1,7}, {1,9}, {2,9}, {s="potion",hp=80,yolo=70}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
 
 -- 12: KOGA
 
@@ -356,14 +356,10 @@ local Paths = {
 
 	-- Fly home
 	{6, {41,10}, {s="fly",dest="pallet",map=0}},
-	-- Pallet Town
-	{0, {5,6}, {5,5}},
 	-- Welcome home
-	{37, {2,7}, {2,6}, {5,6}, {5,5}, {s="talk",dir="Up"}, {5,6}, {3,6}, {3,8}},
-	-- Set Surf
-	{0, {5,6}, {s="item",item="super_repel",chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
+	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
-	{32, {4,0}, {4,14}, {3,14}, {3,90}},
+	{32, {4,0}, {c="potion",b=true,yolo=true}, {4,14}, {3,14}, {3,90}},
 	-- Enter Cinnabar Mansion
 	{8, {3,0}, {c="a",a="Cinnabar Mansion"}, {3,4}, {6,4}, {6,3}},
 	-- F1
@@ -376,7 +372,7 @@ local Paths = {
 	{165, {16,14}, {16,15}, {13,15}, {13,20}, {s="cinnabarCarbos"}, {21,23}},
 	-- B1
 	--TODO menu cancel for RC
-	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel"}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="item",item="rare_candy",poke="nidoking",all=true,close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
+	{216, {23,22}, {23,16}, {s="item",item="super_repel"}, {23,15}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="item",item="rare_candy",poke="nidoking",all=true,close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
 	-- Celadon -> Cinnabar
 	{6, {41,10}, {s="fly",dest="cinnabar",map=8}},
 	-- Cinnabar
@@ -400,7 +396,7 @@ local Paths = {
 -- 16: GIOVANNI
 
 	-- Leave Viridian
-	{1, {32,8}, {s="item",item="super_repel",chain=true}, {s="potion",hp=80,yolo=70,chain=true}, {s="useViridianEther",chain=true}, {s="item",item="carbos",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {32,12}, {17,12}, {17,16}, {16,16}, {16,17}, {-1,17}},
+	{1, {32,8}, {s="item",item="super_repel",chain=true}, {s="potion",hp=80,yolo=70,full=true,chain=true}, {s="useViridianEther",chain=true}, {s="item",item="carbos",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {32,12}, {17,12}, {17,16}, {16,16}, {16,17}, {-1,17}},
 	-- To Pokemon League
 	{33, {39,9}, {c="a",a="Viridian Rival"}, {35,9}, {35,12}, {31,12}, {31,5}, {29,5}, {s="fightViridianRival"}, {16,5}, {16,12}, {5,12}, {5,10}, {11,10}, {11,6}, {8,6}, {8,5}},
 	-- Pokemon League 1
@@ -418,7 +414,7 @@ local Paths = {
 	-- F3
 	{198, {27,15}, {27,8}, {26,8}},
 	-- F2 Exit
-	{194, {27,7}, {30,7}},
+	{194, {27,7}, {s="guess",game="elite4",enabled=true}, {30,7}},
 	-- Victory end
 	{34, {14,32}, {18,32}, {18,20}, {14,20}, {14,10}, {13,10}, {13,6}, {10,6}, {10,-1}},
 	-- Elite Four entrance
@@ -429,7 +425,7 @@ local Paths = {
 -- 17: LORELEI
 
 	-- Lorelei
-	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {4,2}, {s="talk",dir="Right"}, {s="lorelei"}, {s="split"}, {4,0}},
+	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {s="guess",game="elite4",enabled=false}, {4,2}, {s="talk",dir="Right"}, {s="lorelei"}, {s="split"}, {4,0}},
 	-- Bruno
 	{246, {4,5}, {c="a",a="Bruno"}, {s="swap",item="x_special",dest="bicycle",chain=true}, {s="potionBeforeBruno",chain=true}, {s="item",item="elixer",poke="nidoking",close=true}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
 	-- Agatha
