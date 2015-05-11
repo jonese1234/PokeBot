@@ -27,21 +27,21 @@ if Data.yellow then
 else
 	desired.text_speed = 1
 	desired.battle_animation = 10
-	-- desired.battle_style =
+	desired.battle_style = 10
 end
 
 local function isEnabled(name)
 	if Data.yellow then
 		local matching = {
 			text_speed = 0xF,
-			battle_animation = 128,
-			battle_style = 64
+			battle_animation = 0x80,
+			battle_style = 0x40
 		}
 		local settingMask = Memory.value("setting", "yellow_bitmask", true)
 		return bit.band(settingMask, matching[name]) == desired[name]
-	else
-		return Memory.value("setting", name) == desired[name]
 	end
+
+	return Memory.value("setting", name) == desired[name]
 end
 
 -- PUBLIC
@@ -60,9 +60,11 @@ end
 
 function Settings.startNewAdventure(startWait)
 	local startMenu, withBattleStyle
+	if Data.gameName ~= "red" then
+		withBattleStyle = "battle_style"
+	end
 	if Data.yellow then
 		startMenu = Memory.raw(0x0F95) == 0
-		withBattleStyle = "battle_style"
 	else
 		startMenu = Memory.value("player", "name") ~= 0
 	end
@@ -78,7 +80,11 @@ end
 function Settings.choosePlayerNames()
 	local name
 	if Memory.value("player", "name2") == 80 then
-		name = Data.yellow and "G" or "E"
+		if Data.yellow then
+			name = "G"
+		else
+			name = Data.gameName == "red" and "E" or "W"
+		end
 	else
 		name = "B"
 	end
