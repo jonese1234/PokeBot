@@ -137,7 +137,7 @@ local Paths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=23,yolo=16,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
+	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=16,yolo=12,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {c="thrash",disable=false}, {0,4}, {4,4}, {4,3}, {s="interact",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out

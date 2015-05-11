@@ -88,7 +88,7 @@ function Strategies.reset(reason, explanation, extra, wait)
 	else
 		separator = ":"
 	end
-	resetMessage = resetMessage..separator.." "..explanation
+	resetMessage = resetMessage..separator.." "..explanation.."."
 
 	if not Data.yellow and (Strategies.updates.misty or Strategies.updates.surge) and Strategies.deepRun then
 		Strategies.tweetProgress(Utils.capitalize(resetMessage))
@@ -130,10 +130,10 @@ end
 
 function Strategies.resetTime(timeLimit, explanation, custom)
 	if Strategies.overMinute(timeLimit) then
-		if not custom then
-			explanation = "Took too long to "..explanation.."."
-		end
 		if RESET_FOR_TIME then
+			if not custom then
+				explanation = "Took too long to "..explanation
+			end
 			return Strategies.reset("time", explanation)
 		end
 	end
@@ -246,8 +246,11 @@ local function interact(direction, extended)
 			end
 			Input.cancel()
 		else
-			if Player.interact(direction, extended) then
+			if status.attempts and status.attempts > 0 then
+				status.attempts = status.attempts - 1
+			elseif Player.interact(direction, extended) then
 				status.interacted = true
+				status.attempts = Data.yellow and 2 or 1
 			end
 		end
 	end
@@ -341,7 +344,7 @@ function Strategies.useItem(data)
 	if not status.startCount then
 		status.startCount = Inventory.count(data.item)
 	end
-	if Strategies.completedMenuFor(data) then
+	if not data.item or Strategies.completedMenuFor(data) then
 		return Strategies.closeMenuFor(data)
 	end
 	if Menu.pause() then
@@ -555,7 +558,7 @@ Strategies.functions = {
 			local timeLimit = Strategies.getTimeRequirement("misty")
 			if not Strategies.overMinute(timeLimit) then
 				local pbn = ""
-				if not Data.yellow and not Strategies.overMinute(timeLimit - 1) then
+				if not Strategies.overMinute(timeLimit - 1) then
 					pbn = " (PB pace)"
 				end
 				local elt = Utils.elapsedTime()
@@ -745,7 +748,12 @@ Strategies.functions = {
 				end
 				local replacement
 				if data.replace then
-					replacement = Pokemon.moveIndex(data.replace, teachTo) - 1
+					replacement = Pokemon.moveIndex(data.replace, teachTo)
+					if replacement then
+						replacement = replacement - 1
+					else
+						replacement = 0
+					end
 				else
 					replacement = 0
 				end
@@ -1136,7 +1144,7 @@ Strategies.functions = {
 				end
 			end
 			if not nidoranStatus then
-				nidoranStatus = "unrunnabled"
+				nidoranStatus = "unrunnable"
 			end
 			return Strategies.reset("stats", "Bad Nidoran - "..nidoranStatus)
 		end
@@ -1759,7 +1767,7 @@ Strategies.functions = {
 		if Inventory.count() <= (Inventory.contains("full_restore") and 18 or 17) then
 			return Strategies.closeMenuFor({close=true})
 		end
-		if Inventory.contains("carbos") then
+		if Data.red and Inventory.contains("carbos") then
 			strategyFunctions.item({item="carbos",poke="nidoking",all=true})
 			return false
 		end
