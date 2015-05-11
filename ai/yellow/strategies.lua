@@ -30,10 +30,16 @@ Strategies.warpToCerulean = false
 
 -- TIME CONSTRAINTS
 
+local function timeForStats()
+	local timeBonus = (stats.nidoran.attack - 53) * 0.05
+	local maxSpeed = math.min(stats.nidoran.speed, 52)
+	return timeBonus + (maxSpeed - 49) * 0.125
+end
+
 Strategies.timeRequirements = {
 
 	nidoran = function()
-		local timeLimit = 9
+		local timeLimit = 8.25
 		if Pokemon.inParty("pidgey") then
 			timeLimit = timeLimit + 0.5
 		end
@@ -41,7 +47,7 @@ Strategies.timeRequirements = {
 	end,
 
 	mt_moon = function()
-		local timeLimit = 32
+		local timeLimit = 29.25
 		if stats.nidoran.attack > 15 and stats.nidoran.speed > 14 then
 			timeLimit = timeLimit + 0.25
 		end
@@ -52,23 +58,23 @@ Strategies.timeRequirements = {
 	end,
 
 	misty = function() --TWEET
-		return 44
+		return 42 + timeForStats()
 	end,
 
 	trash = function()
-		return 53
+		return 51.25 + timeForStats()
 	end,
 
-	safari_carbos = function()
-		return 100
+	victory_road = function() --TWEET PB
+		return 102.8
 	end,
 
-	victory_road = function() --PB
-		return 104
+	e4center = function()
+		return 106.25
 	end,
 
 	champion = function() --PB
-		return 95
+		return 116.56
 	end,
 
 }
