@@ -10,12 +10,24 @@ if VERSION then
 end
 
 local yellowVersion = memory.getcurrentmemorydomainsize() > 30000
+local redVersion = true
+if not yellowVersion then
+	local titleText = memory.readbyte(0x0447)
+	if titleText == 96 or titleText == 97 then
+		redVersion = titleText ~= 97
+	elseif not require("storage.pokemon").inParty("nidoran", "nidorino", "nidoking") then
+		print("ERR: Unable to differentiate Red/Blue version")
+		if INTERNAL and not STREAMING_MODE then
+			redVersion = false --SAMPLE
+		end
+	end
+end
 
 Data = {
 	run = {},
 
 	yellow = yellowVersion,
-	gameName = yellowVersion and "yellow" or "red",
+	gameName = yellowVersion and "yellow" or (redVersion and "red" or "blue"),
 	versionNumber = version,
 }
 

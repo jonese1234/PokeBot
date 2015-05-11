@@ -219,7 +219,7 @@ local moves = {
 		power = 30,
 		max_pp = 30,
 		accuracy = 100,
-		multiple = 2,
+		multiple = 1.95,
 	},
 	{
 		name = 'Mega-Kick',

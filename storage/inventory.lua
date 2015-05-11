@@ -43,6 +43,7 @@ local items = {
 	surf = 198,
 	strength = 199,
 
+	mega_punch = 201,
 	horn_drill = 207,
 	bubblebeam = 211,
 	water_gun = 212,
