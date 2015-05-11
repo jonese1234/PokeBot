@@ -1468,6 +1468,24 @@ Strategies.functions = {
 		end
 	end,
 
+	healParalysis = function(data)
+		if not Combat.isParalyzed() then
+			return Strategies.closeMenuFor(data)
+		end
+		local heals = Inventory.contains("paralyze_heal", "full_restore")
+		if Strategies.initialize("paralyzed") then
+			local message
+			if heals then
+				message = "Healing Paralysis from Oddish"
+			else
+				message = "No Paralysis cure available :("
+			end
+			Bridge.chat(message)
+		end
+		data.item = heals
+		return Strategies.useItem(data)
+	end,
+
 	shopTM07 = function()
 		return Shop.transaction {
 			direction = "Up",

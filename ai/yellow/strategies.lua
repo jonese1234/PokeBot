@@ -530,7 +530,27 @@ strategyFunctions.centerCerulean = function(data)
 	return takeCenter(ppRequired, 3, 19, 17, finishX)
 end
 
+strategyFunctions.fightKoffing = function(data)
+	if Strategies.trainerBattle() then
+		if Strategies.initialize() then
+			status.leering = Battle.pp("horn_attack") < data.min
+		end
+		if status.leering and not Battle.opponentDamaged() then
+			return strategyFunctions.leer({{"koffing", 13}})
+		end
+		Battle.automate()
+	elseif status.foughtTrainer then
+		return true
+	end
+end
+
 -- reportMtMoon
+
+-- 4: Mt. Moon
+
+strategyFunctions.rivalSandAttack = function()
+	return true --TODO swap at low acc
+end
 
 strategyFunctions.acquireCharmander = function()
 	if Strategies.initialize() then
@@ -837,6 +857,32 @@ strategyFunctions.fightSabrina = function()
 		Strategies.deepRun = true
 		Control.ignoreMiss = false
 		return true
+	end
+end
+
+strategyFunctions.momHeal = function()
+	local currentMap = Memory.value("game", "map")
+	local needsHeal = Combat.hp() > (Control.yolo and 70 or 125) --RISK
+	needsHeal = Combat.hp() < Combat.maxHP() --TODO
+
+	local px, py = Player.position()
+	local dx, dy = px, py
+	if currentMap == 0 then
+		if needsHeal then
+			dy = 5
+		elseif py == 6 then
+			return true
+		end
+		Walk.step(dx, dy)
+	else
+		if needsHeal and px == 5 and py == 5 then
+			strategyFunctions.confirm({dir="Up"})
+		elseif Textbox.isActive() then
+			Input.cancel()
+		else
+			local momPath = {{2,7}, {2,6}, {5,6}, {5,5}, {5,6}, {3,6}, {3,8}}
+			Walk.custom(momPath)
+		end
 	end
 end
 
