@@ -55,6 +55,12 @@ function Strategies.hardReset(reason, message, extra, wait)
 	Data.reset(reason, Control.areaName, map, px, py, stats)
 
 	Bridge.chat(message, false, extra)
+
+	if Strategies.elite4Reason then
+		Bridge.guessResults("elite4", Strategies.elite4Reason)
+		Strategies.elite4Reason = nil
+	end
+
 	if Strategies.deepRun then
 		p("", true)
 		p("", true)
@@ -509,7 +515,7 @@ function Strategies.completeCans()
 		end
 		Bridge.chat(" "..prefix..", "..trashcanTries.." try Trashcans"..suffix)
 
-		Bridge.trashResults(trashcanTries)
+		Bridge.guessResults("trash", trashcanTries)
 
 		local timeLimit = Strategies.getTimeRequirement("trash") + 1
 		if Combat.inRedBar() then
@@ -1143,7 +1149,7 @@ Strategies.functions = {
 
 	catchFlierBackup = function()
 		if Strategies.initialize() then
-			Bridge.moonGuesses(true)
+			Bridge.guessing("moon", true)
 			Control.canDie(true)
 		end
 		local caught = Pokemon.inParty("pidgey", "spearow")
@@ -1424,8 +1430,8 @@ Strategies.functions = {
 		end
 	end,
 
-	guessTrashcans = function(data)
-		Bridge.trashGuesses(data.enabled)
+	guess = function(data)
+		Bridge.guessing(data.game, data.enabled)
 		return true
 	end,
 
@@ -1925,6 +1931,7 @@ Strategies.functions = {
 				end
 			elseif status.frames == 500 then
 				Bridge.chat("beat the game in "..status.finishTime.."!")
+				Strategies.elite4Reason = "victory"
 			elseif status.frames > 1800 then
 				return Strategies.hardReset("won", "Back to the grind - you can follow on Twitter for updates on our next good run! https://twitter.com/thepokebot")
 			end

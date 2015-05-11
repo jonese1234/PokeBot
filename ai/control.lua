@@ -99,8 +99,8 @@ local controlFunctions = {
 
 	startMtMoon = function()
 		Control.canDie(false)
-		Control.getMoonExp = not Data.yellow
-		Bridge.moonGuesses(false)
+		Control.getMoonExp = true
+		Bridge.guessing("moon", false)
 	end,
 
 	moon1Exp = function()

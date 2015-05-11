@@ -990,12 +990,15 @@ strategyFunctions.lorelei = function()
 	if Strategies.trainerBattle() then
 		local opponentName = Battle.opponent()
 		if opponentName == "dewgong" then
+			Strategies.elite4Reason = "dewgong"
 			if Memory.double("battle", "our_speed") < 121 then
-				Strategies.chat("speedfall", "got speed fall from Dewgong D: Attempting to recover with X Speed, we need a  Rest...")
+				Strategies.chat("speedfall", "got speed fall from Dewgong D: Attempting to recover with X Speed, we need a Rest...")
 				if not Strategies.prepare("x_speed") then
 					return false
 				end
 			end
+		else
+			Strategies.elite4Reason = nil
 		end
 		if Strategies.prepare("x_accuracy") then
 			Battle.automate()
@@ -1075,20 +1078,25 @@ end
 strategyFunctions.lance = function()
 	if Strategies.trainerBattle() then
 		local xItem
-		if Pokemon.isOpponent("dragonair") then
-			xItem = "x_speed"
-			if not Strategies.isPrepared(xItem) then
-				local __, turnsToDie = Combat.enemyAttack()
-				if turnsToDie and turnsToDie <= 1 then
-					local potion = Inventory.contains("full_restore", "super_potion")
-					if potion then
-						Inventory.use(potion, nil, true)
-						return false
+		local opponentName = Battle.opponent()
+		if opponentName == "gyarados" then
+			xItem = "x_special"
+			Strategies.elite4Reason = "gyarados"
+		else
+			Strategies.elite4Reason = nil
+			if opponentName == "dragonair" then
+				xItem = "x_speed"
+				if not Strategies.isPrepared(xItem) then
+					local __, turnsToDie = Combat.enemyAttack()
+					if turnsToDie and turnsToDie <= 1 then
+						local potion = Inventory.contains("full_restore", "super_potion")
+						if potion then
+							Inventory.use(potion, nil, true)
+							return false
+						end
 					end
 				end
 			end
-		else
-			xItem = "x_special"
 		end
 		if Strategies.prepare(xItem) then
 			Battle.automate()
@@ -1101,43 +1109,48 @@ end
 strategyFunctions.blue = function()
 	if Strategies.trainerBattle() then
 		local forced, xItem
-		if Pokemon.isOpponent("alakazam") then
-			local __, turnsToDie = Combat.enemyAttack()
-			if turnsToDie == 1 then
-				local ourSpeed, theirSpeed = Memory.double("battle", "our_speed"), Memory.double("battle", "opponent_speed")
-				if ourSpeed <= theirSpeed then
-					local speedMessage, canPotion
-					if ourSpeed == theirSpeed then
-						speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
-						canPotion = not Data.yolo and Inventory.contains("full_restore")
-					else
-						canPotion = Inventory.contains("full_restore")
-						speedMessage = "No Full Restores left, we'll need to get lucky."
-					end
-					if canPotion then
-						speedMessage = "Attempting to wait out a non-damage turn."
-					end
-					Strategies.chat("outsped", " Bad speed. "..speedMessage)
-					if canPotion then
-						Inventory.use("full_restore", nil, true)
-						return false
-					end
-				end
-			end
-		elseif Pokemon.isOpponent("exeggutor") then
-			if Combat.isSleeping() then
-				local sleepHeal
-				if not Combat.inRedBar() and Inventory.contains("full_restore") then
-					sleepHeal = "full_restore"
-				else
-					sleepHeal = "pokeflute"
-				end
-				Inventory.use(sleepHeal, nil, true)
-				return false
-			end
-			xItem = "x_accuracy"
-		else
+		local opponentName = Battle.opponent()
+		if opponentName == "sandslash" then
 			xItem = "x_special"
+			Strategies.elite4Reason = "sandslash"
+		else
+			Strategies.elite4Reason = nil
+			if opponentName == "alakazam" then
+				local __, turnsToDie = Combat.enemyAttack()
+				if turnsToDie == 1 then
+					local ourSpeed, theirSpeed = Memory.double("battle", "our_speed"), Memory.double("battle", "opponent_speed")
+					if ourSpeed <= theirSpeed then
+						local speedMessage, canPotion
+						if ourSpeed == theirSpeed then
+							speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
+							canPotion = not Data.yolo and Inventory.contains("full_restore")
+						else
+							canPotion = Inventory.contains("full_restore")
+							speedMessage = "No Full Restores left, we'll need to get lucky."
+						end
+						if canPotion then
+							speedMessage = "Attempting to wait out a non-damage turn."
+						end
+						Strategies.chat("outsped", " Bad speed. "..speedMessage)
+						if canPotion then
+							Inventory.use("full_restore", nil, true)
+							return false
+						end
+					end
+				end
+			elseif opponentName == "exeggutor" then
+				if Combat.isSleeping() then
+					local sleepHeal
+					if not Combat.inRedBar() and Inventory.contains("full_restore") then
+						sleepHeal = "full_restore"
+					else
+						sleepHeal = "pokeflute"
+					end
+					Inventory.use(sleepHeal, nil, true)
+					return false
+				end
+				xItem = "x_accuracy"
+			end
 		end
 		if Strategies.prepare(xItem) then
 			if Combat.xAccuracy() then

@@ -8,10 +8,10 @@ local json = require "external.json"
 
 local socket
 if INTERNAL then
-	socket = require("socket")
+	socket = require "socket"
 end
 
-local utils = require("util.utils")
+local utils = require "util.utils"
 
 local client = nil
 local timeStopped = true
@@ -154,20 +154,16 @@ end
 
 -- GUESSING
 
-function Bridge.moonGuesses(enabled)
-	send("moon,"..(enabled and "on" or "off"))
+function Bridge.guessing(guess, enabled)
+	send(guess..","..tostring(enabled))
+end
+
+function Bridge.guessResults(guess, result)
+	send(guess.."results,"..result)
 end
 
 function Bridge.moonResults(encounters, cutter)
-	send("moonresults,"..encounters..","..(cutter and "cutter" or "none"))
-end
-
-function Bridge.trashGuesses(enabled)
-	send("trash,"..(enabled and "on" or "off"))
-end
-
-function Bridge.trashResults(tries)
-	send("trashresults,"..tries)
+	Bridge.guessResults("moon", encounters..","..(cutter and "cutter" or "none"))
 end
 
 -- RESET
