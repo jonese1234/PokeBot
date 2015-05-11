@@ -47,7 +47,7 @@ local controlFunctions = {
 	end,
 
 	encounters = function(data)
-		if RESET_FOR_TIME and not Data.yellow then
+		if RESET_FOR_TIME then
 			local limit = data.limit
 			if limit and BEAST_MODE then
 				limit = limit - math.ceil(limit * 0.3)
@@ -104,7 +104,11 @@ local controlFunctions = {
 	end,
 
 	moon1Exp = function()
-		if Control.getMoonExp then
+		if Data.yellow then
+			shouldFight = {{name="geodude"}, {name="clefairy",levels={12,13}}}
+			oneHits = true
+			minExp = 2700
+		elseif Control.getMoonExp then
 			minExp = 2704
 			shouldFight = {{name="zubat",levels={9,10,11,12},exp=7.67}}
 			oneHits = true
@@ -112,7 +116,9 @@ local controlFunctions = {
 	end,
 
 	moon2Exp = function()
-		if Control.getMoonExp and Strategies.stats.nidoran then
+		if Data.yellow then
+			minExp = 3450
+		elseif Control.getMoonExp and Strategies.stats.nidoran then
 			minExp = 3011
 			local withinOne = withinOneKill(minExp)
 			if withinOne or Strategies.stats.nidoran.level4 then
@@ -123,7 +129,9 @@ local controlFunctions = {
 	end,
 
 	moon3Exp = function()
-		if Control.getMoonExp and Strategies.stats.nidoran then
+		if Data.yellow then
+			minExp = 4200
+		elseif Control.getMoonExp and Strategies.stats.nidoran then
 			minExp = 3798
 			local withinOne = withinOneKill(minExp)
 			if withinOne or Strategies.stats.nidoran.level4 then
@@ -161,12 +169,6 @@ local controlFunctions = {
 	catchNidoranYellow = function()
 		-- shouldCatch = {{name="nidoran",levels={6}}} --TODO DSum
 		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",requireHit=true}}
-	end,
-
-	moonExpYellow = function()
-		minExp = 2704 --TODO
-		shouldFight = {{name="geodude"}, {name="clefairy",levels={12,13}}}
-		oneHits = true
 	end,
 
 	catchCutterYellow = function()
@@ -275,7 +277,7 @@ function Control.shouldCatch(partySize)
 				if penultimate then
 					require("action.battle").fight(penultimate.midx)
 				else
-					if overHP and poke.requireHit then
+					if poke.requireHit and not Battle.opponentDamaged() then
 						return false
 					end
 					Inventory.use("pokeball", nil, true)
