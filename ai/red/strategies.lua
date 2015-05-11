@@ -254,6 +254,12 @@ function Strategies.requiresE4Center()
 	return true
 end
 
+function Strategies.checkSquirtleStats(attack, defense, speed, special)
+	if attack < 11 and special < 12 then
+		return Strategies.reset("stats", "Bad Squirtle - "..stats.starter.attack.." attack, "..stats.starter.special.." special")
+	end
+end
+
 -- STRATEGIES
 
 local strategyFunctions = Strategies.functions
@@ -291,62 +297,9 @@ end
 
 -- Route
 
-strategyFunctions.squirtleIChooseYou = function()
-	if Pokemon.inParty("squirtle") then
-		Bridge.caught("squirtle")
-		return true
-	end
-	if Player.face("Up") then
-		Textbox.name("A")
-	end
-end
+-- squirtleIChooseYou
 
-strategyFunctions.fightBulbasaur = function()
-	if status.tries < 9000 and Pokemon.index(0, "level") == 6 then
-		if status.tries > 200 then
-			local attDV, defDV, spdDV, sclDV = Pokemon.getDVs("squirtle")
-			stats.starter = {
-				attack = Pokemon.index(0, "attack"),
-				defense = Pokemon.index(0, "defense"),
-				speed = Pokemon.index(0, "speed"),
-				special = Pokemon.index(0, "special"),
-				attackDV = attDV,
-				defenseDV = defDV,
-				speedDV = spdDV,
-				specialDV = sclDV,
-			}
-			if stats.starter.attack < 11 and stats.starter.special < 12 then
-				return Strategies.reset("stats", "Bad Squirtle - "..stats.starter.attack.." attack, "..stats.starter.special.." special")
-			end
-			status.tries = 9001
-		else
-			status.tries = status.tries + 1
-		end
-	end
-	if Battle.isActive() and Battle.opponentAlive() then
-		local attack = Memory.double("battle", "our_attack")
-		if attack > 0 and RESET_FOR_TIME and not status.growled then
-			if attack ~= status.attack then
-				-- p(attack, Memory.double("battle", "opponent_hp"))
-				status.attack = attack
-			end
-			local growled
-			local attackBaseline = BEAST_MODE and 2 or 0
-			if attack <= 2 + attackBaseline then
-				growled = not Battle.opponentDamaged(3)
-			elseif attack <= 3 + attackBaseline then
-				growled = not Battle.opponentDamaged(1.9)
-			end
-			if growled then
-				return Strategies.reset("time", "Growled to death.", attack.." "..Memory.double("battle", "opponent_hp"))
-			end
-		end
-		if Strategies.resetTime("bulbasaur", "beat Bulbasaur") then
-			return true
-		end
-	end
-	return Strategies.buffTo("tail_whip", 6)
-end
+-- fightBulbasaur
 
 -- 1: RIVAL
 
@@ -535,16 +488,7 @@ strategyFunctions.grabForestPotion = function()
 	end
 end
 
-strategyFunctions.fightWeedle = function()
-	if Strategies.trainerBattle() then
-		if Memory.value("battle", "our_status") > 0 and not Inventory.contains("antidote") then
-			return Strategies.reset("antidote", "Poisoned, but we skipped the antidote")
-		end
-		return Strategies.buffTo("tail_whip", 5)
-	elseif status.foughtTrainer then
-		return true
-	end
-end
+-- fightWeedle
 
 strategyFunctions.equipForBrock = function(data)
 	if Strategies.initialize() then

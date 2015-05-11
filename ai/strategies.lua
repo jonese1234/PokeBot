@@ -954,6 +954,63 @@ Strategies.functions = {
 
 	-- ROUTE
 
+	squirtleIChooseYou = function()
+		if Pokemon.inParty("squirtle") then
+			Bridge.caught("squirtle")
+			return true
+		end
+		if Player.face("Up") then
+			Textbox.name("A")
+		end
+	end,
+
+	fightBulbasaur = function()
+		if status.tries < 9000 and Pokemon.index(0, "level") == 6 then
+			if status.tries > 200 then
+				status.tries = 9001
+
+				local attDV, defDV, spdDV, sclDV = Pokemon.getDVs("squirtle")
+				local attack, defense, speed, special = Pokemon.index(0, "attack"), Pokemon.index(0, "defense"), Pokemon.index(0, "speed"), Pokemon.index(0, "special")
+				stats.starter = {
+					attack = Pokemon.index(0, "attack"),
+					defense = Pokemon.index(0, "defense"),
+					speed = Pokemon.index(0, "speed"),
+					special = Pokemon.index(0, "special"),
+					attackDV = attDV,
+					defenseDV = defDV,
+					speedDV = spdDV,
+					specialDV = sclDV,
+				}
+				return Strategies.checkSquirtleStats(attack, defense, speed, special)
+			else
+				status.tries = status.tries + 1
+			end
+		end
+		if Battle.isActive() and Battle.opponentAlive() then
+			local attack = Memory.double("battle", "our_attack")
+			if attack > 0 and RESET_FOR_TIME and not status.growled then
+				if attack ~= status.attack then
+					-- p(attack, Memory.double("battle", "opponent_hp"))
+					status.attack = attack
+				end
+				local growled
+				local attackBaseline = BEAST_MODE and 2 or 0
+				if attack <= 2 + attackBaseline then
+					growled = not Battle.opponentDamaged(3)
+				elseif attack <= 3 + attackBaseline then
+					growled = not Battle.opponentDamaged(1.9)
+				end
+				if growled then
+					return Strategies.reset("time", "Growled to death", attack.." "..Memory.double("battle", "opponent_hp"))
+				end
+			end
+			if Strategies.resetTime("bulbasaur", "beat Bulbasaur") then
+				return true
+			end
+		end
+		return Strategies.buffTo("tail_whip", 6)
+	end,
+
 	swapNidoran = function()
 		local main = Memory.value("menu", "main")
 		local nidoranIndex = Pokemon.indexOf("nidoran")
@@ -968,7 +1025,7 @@ Strategies.functions = {
 					return false
 				end
 			else
-				if Combat.isPoisoned("squirtle")then
+				if Combat.isPoisoned("squirtle") then
 					Inventory.use("antidote", "squirtle")
 					return false
 				end
@@ -1003,6 +1060,17 @@ Strategies.functions = {
 
 	dodgePalletBoy = function()
 		return Strategies.dodgeUp(0x0223, 14, 14, 15, 7)
+	end,
+
+	fightWeedle = function()
+		if Strategies.trainerBattle() then
+			if Memory.value("battle", "our_status") > 0 and not Inventory.contains("antidote") then
+				return Strategies.reset("antidote", "Poisoned, but we skipped the antidote")
+			end
+			return Strategies.buffTo("tail_whip", 5)
+		elseif status.foughtTrainer then
+			return true
+		end
 	end,
 
 	checkNidoranStats = function()
