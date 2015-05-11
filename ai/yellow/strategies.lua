@@ -214,9 +214,11 @@ local function depositPikachu()
 						" PIKA PIIKA",
 						" NNOOO PIKAAA",
 						" Goodbye, Pikachu BibleThump",
-						" RIP in PC, Pikachu.",
+						" RIP in PC, Pikachu.", --
 						" I don't know how else to say this, but Nido and I are going steady now. Goodbye, Pikachu.",
 						" You're cute, Pikachu. But this is a speedrun, and frankly you're getting in my way.",
+						"come with me the time is right, there's no better team.... oh you're my best friend in a world we must defend... *stores Pikachu in pc*", --alloces
+						" ... and nothing of value was lost", --mymla
 					})
 				end
 			elseif menuColumn == 10 then
@@ -434,8 +436,9 @@ end
 strategyFunctions.battleSandshrew = function()
 	if Strategies.trainerBattle() then
 		if Pokemon.isOpponent("sandshrew") then
-			local enemyMove, enemyTurns = Combat.enemyAttack()
-			if enemyMove then
+			local __, turnsToKill, turnsToDie = Combat.bestMove()
+			if turnsToKill and turnsToKill > 1 and turnsToDie <= 2 then
+				local enemyMove = Combat.enemyAttack()
 				local damage = math.floor(enemyMove.damage * 1.8)
 				if Combat.hp() < damage and Inventory.contains("potion") then
 					Inventory.use("potion", "nidoran", true)
@@ -755,7 +758,7 @@ end
 strategyFunctions.lavenderRival = function()
 	if Strategies.trainerBattle() then
 		if Strategies.prepare("x_accuracy") then
-			Battle.automate()
+			Battle.automate("horn_drill")
 		end
 	elseif status.foughtTrainer then
 		return true
@@ -787,19 +790,39 @@ strategyFunctions.silphRival = function()
 	if Strategies.trainerBattle() then
 		if Strategies.prepare("x_accuracy") then
 			-- Strategies.prepare("x_speed")
-			local forced, prepare
+			local forced = "horn_drill"
+			local prepare
 			local opponentName = Battle.opponent()
 			if opponentName == "sandslash" then
-				local __, __, turnsToDie = Combat.bestMove()
-				if turnsToDie and turnsToDie < 2 then
-					forced = "horn_drill"
-				else
-					prepare = true
+				if not Strategies.isPrepared("x_speed") then
+					local __, __, turnsToDie = Combat.bestMove()
+					if turnsToDie and turnsToDie < 2 then
+						Strategies.chat("magneton", " In range to die to Sandslash after that, we'll need to risk finishing setting up against Magneton")
+					else
+						prepare = true
+					end
 				end
 			elseif opponentName == "magneton" then
+				if Combat.hp() <= 20 and not Strategies.isPrepared("x_speed") then
+					if Inventory.contains("super_potion") then
+						if Strategies.initialize("heals") then
+							local message = ""
+							if Strategies.yolo then
+								message = "is risking Sonicboom/Confusion to save time."
+							else
+								message = "is in range to die to Sonicboom/Confusion, healing up to play it safe."
+							end
+							Bridge.chat(message)
+						end
+						if not Strategies.yolo then
+							Inventory.use("super_potion", nil, true)
+							return false
+						end
+					end
+				end
 				prepare = true
-			elseif opponentName ~= "kadabra" then
-				forced = "horn_drill" --TODO necessary?
+			elseif opponentName == "kadabra" then
+				forced = "earthquake"
 			end
 			if not prepare or Strategies.prepare("x_speed") then
 				Battle.automate(forced)
@@ -929,11 +952,11 @@ end
 
 strategyFunctions.useViridianEther = function(data)
 	if Strategies.initialize() then
-		if not Strategies.vaporeon or not Inventory.contains("ether", "max_ether") then
+		if not Strategies.vaporeon then
 			return true
 		end
 	end
-	return strategyFunctions.ether({chain=data.chain, close=data.close})
+	return strategyFunctions.ether(data)
 end
 
 strategyFunctions.fightViridianRival = function()
@@ -1185,6 +1208,9 @@ end
 function Strategies.resetGame()
 	status = Strategies.status
 	stats = Strategies.stats
+
+	Strategies.vaporeon = false
+	Strategies.warpToCerulean = false
 end
 
 return Strategies
