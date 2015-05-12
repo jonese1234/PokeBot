@@ -7,7 +7,7 @@ local Paths = {
 	-- Into the Wild
 	{0, {5,6}, {10,6}, {10,0}},
 	-- Choose your character!
-	{40, {5,3}, {c="a",a="Pallet Rival"}, {s="allowDeath",on=true}, {5,4}, {7,4}, {s="confirm",dir="Up",type="A"}, {5,3}, {s="confirm",dir="Up",type="B"}, {s="acquire",poke="pikachu"}, {5,6}, {s="fightEevee"}, {5,12}},
+	{40, {5,3}, {c="a",a="Pallet Rival"}, {s="allowDeath",on=true}, {5,4}, {7,4}, {s="take",dir="Up"}, {5,3}, {s="dialogue",dir="Up",decline=true}, {s="acquire",poke="pikachu"}, {5,6}, {s="fightEevee"}, {5,12}},
 	-- Let's try this escape again
 	{0, {12,12}, {c="a",a="Pallet Town"}, {s="allowDeath",on=false}, {c="encounters",limit=6}, {c="trackEncounters",area="route1"}, {9,12}, {9,2}, {10,2}, {10,-1}},
 	-- First encounter
@@ -72,7 +72,7 @@ local Paths = {
 	-- Mt. Moon B2
 	{60, {5,5}, {5,17}, {21,17}},
 	-- Mt. Moon B3
-	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,exp=2700}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {11,31}, {11,16}, {12,16}, {12,10}, {s="potion",hp=5,chain=true}, {s="evolveNidoking"}, {12,9}, {s="talk",dir="Up"}, {s="fightKoffing",min=5}, {c="moon2Exp"}, {13,9}, {13,7}, {s="confirm",dir="Up"}, {13,5}, {12,5}, {12,4}, {3,4}, {3,5}, {3,4}, {s="fightKoffing",min=2}, {c="moon2Exp"}, {3,7}, {5,7}},
+	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,exp=2700}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {11,31}, {11,16}, {12,16}, {12,10}, {s="potion",hp=5,chain=true}, {s="evolveNidoking"}, {12,9}, {s="talk",dir="Up"}, {s="fightKoffing",min=5}, {c="moon2Exp"}, {13,9}, {13,7}, {s="dialogue",dir="Up"}, {13,5}, {12,5}, {12,4}, {3,4}, {3,5}, {3,4}, {s="fightKoffing",min=2}, {c="moon2Exp"}, {3,7}, {5,7}},
 	-- Mt. Moon escape
 	{60, {23,3}, {27,3}},
 
@@ -98,7 +98,7 @@ local Paths = {
 	-- To Bill's
 	{36, {0,8}, {9,8}, {9,7}, {11,7}, {11,9}, {14,9}, {14,6}, {15,6}, {15,4}, {17,4}, {17,7}, {18,7}, {s="talk",dir="Down",long=true}, {20,7}, {20,8}, {22,8}, {22,6}, {23,6}, {s="potion",hp=5,yolo=0}, {35,6}, {35,4}, {36,4}, {s="talk",dir="Right"}, {36,5}, {38,5}, {38,4}, {45,4}, {45,3}},
 	-- Save Bill
-	{88, {2,7}, {2,5}, {5,5}, {s="confirm",dir="Right"}, {1,5}, {s="interact",dir="Up"}, {4,5}, {s="talkToBill"}, {3,5}, {3,8}},
+	{88, {2,7}, {2,5}, {5,5}, {s="dialogue",dir="Right"}, {1,5}, {s="interact",dir="Up"}, {4,5}, {s="talkToBill"}, {3,5}, {3,8}},
 	-- Leave Bill's
 	{36, {45,4}, {45,12}, {36,12}, {36,11}, {-1,11}},
 	-- Secret Passage
@@ -111,11 +111,11 @@ local Paths = {
 -- 7: MISTY
 
 	-- Past the policeman
-	{3, {30,20}, {c="potion",b=true,yolo=true}, {8,20}, {8,12}, {27,12}, {27,11}},
+	{3, {30,20}, {c="a",a="MaChoke Jr."}, {c="potion",b=true,yolo=true}, {8,20}, {8,12}, {27,12}, {27,11}},
 	-- Wrecked house
 	{62, {2,7}, {2,2}, {3,2}, {3,0}},
 	-- Cerulean Rocket
-	{3, {27,9}, {28,9}, {33,9}, {33,18}, {36,18}, {36,31}, {25,31}, {25,36}},
+	{3, {27,9}, {28,9}, {30,9}, {s="announceMachop"}, {33,9}, {33,18}, {36,18}, {36,31}, {25,31}, {25,36}},
 	-- Out of Cerulean
 	{16, {15,0}, {15,28}, {17,28}, {17,27}},
 	-- Underground entrance
@@ -125,9 +125,9 @@ local Paths = {
 	-- Underground exit
 	{74, {4,4}, {3,8}},
 	-- No Oddish
-	{17, {17,14}, {c="a",a="Vermilion City"}, {17,25}, {15,25}, {15,27}, {15,28}, {11,28}, {11,29}, {s="potion",hp=15,yolo=10}, {s="potion",hp=5,full=true}, {s="waitToFight",dir="Down"}, {10,29}, {10,30}, {s="potion",hp=15,yolo=10}, {10,31}, {9,31}, {9,36}},
+	{17, {17,14}, {c="a",a="Quick Attacks"}, {17,25}, {15,25}, {15,27}, {15,28}, {11,28}, {11,29}, {s="potion",hp=15,yolo=10}, {s="potion",hp=5,full=true}, {s="waitToFight",dir="Down"}, {10,29}, {10,30}, {s="potion",hp=15,yolo=10}, {10,31}, {9,31}, {9,36}},
 	-- Enter Vermilion
-	{5, {19,0}, {c="disableCatch"}, {19,6}, {21,6}, {21,14}, {23,14}, {23,13}},
+	{5, {19,0}, {c="a",a="Vermilion City"}, {c="disableCatch"}, {19,6}, {21,6}, {21,14}, {23,14}, {23,13}},
 	-- Vermilion mart
 	{91, {3,7}, {3,5}, {2,5}, {s="shopVermilionMart"}, {3,5}, {3,8}},
 	-- To S.S. Anne
@@ -149,7 +149,7 @@ local Paths = {
 	-- To the Fan Club
 	{5, {18,29}, {18,26}, {30,26}, {30,14}, {15,14}, {9,14}, {9,13}},
 	-- Bicycle cert
-	{90, {2,7}, {2,5}, {0,5}, {0,1}, {2,1}, {s="confirm",dir="Right"}, {0,1}, {0,6}, {2,6}, {2,8}},
+	{90, {2,7}, {2,5}, {0,5}, {0,1}, {2,1}, {s="dialogue",dir="Right"}, {0,1}, {0,6}, {2,6}, {2,8}},
 	-- To Surge
 	{5, {9,14}, {9,15}, {15,15}, {15,17}, {s="swap",item="repel",dest=0,chain=true}, {s="potion",hp=70,yolo=60,chain=true}, {s="teach",move="cut",poke={"charmander","sandshrew","paras"},chain=true}, {s="teach",move="dig",poke={"charmander","sandshrew","paras"},chain=true}, {s="skill",move="cut",done=0x0D4D}, {15,20}, {12,20}, {12,19}},
 	-- Trashcans
@@ -221,7 +221,7 @@ local Paths = {
 	-- Leave Celadon
 	{6, {10,14}, {s="bicycle"}, {10,15}, {2,15}, {2,18}, {-1,18}},
 	-- Cut out of Celadon
-	{27, {39,10}, {34,10}, {s="skill",move="cut",dir="Up",done=0x0D4D}, {34,6}, {27,6}, {27,4}, {23,4}},
+	{27, {39,10}, {34,10}, {s="skill",move="cut",dir="Up",done=0x0D4D}, {34,6}, {27,6}, {27,5}, {23,5}},
 	-- Old man's hall
 	{186, {7,2}, {-1,2}},
 	-- To the Fly house
@@ -259,7 +259,7 @@ local Paths = {
 	-- To Celadon Center
 	{6, {41,10}, {41,9}},
 	-- Celadon Center
-	{133, {3,7}, {3,3}, {s="confirm",dir="Up"}, {3,8}},
+	{133, {3,7}, {3,3}, {s="dialogue",dir="Up"}, {3,8}},
 	-- Leave Celadon
 	{6, {41,10}, {s="bicycle"}, {41,11}, {50,11}},
 	-- To Saffron
@@ -287,7 +287,7 @@ local Paths = {
 	-- Warp down
 	{208, {3,15}, {3,14}, {18,14}, {18,9}, {s="interact",dir="Left"}, {14,9}, {14,11}, {11,11}},
 	-- Rival 5
-	{212, {5,3}, {c="a",a="Silph Rival"}, {4,3}, {4,2}, {3,2}, {c="potion",b=false}, {s="silphRival"}, {3,5}, {2,5}, {s="confirm",dir="Left",type="B"}, {s="acquire",poke="lapras"}, {2,7}, {5,7}},
+	{212, {5,3}, {c="a",a="Silph Rival"}, {4,3}, {4,2}, {3,2}, {c="potion",b=false}, {s="silphRival"}, {3,5}, {2,5}, {s="dialogue",dir="Left",decline=true}, {s="acquire",poke="lapras"}, {2,7}, {5,7}},
 	-- Giovanni
 	{235, {3,2}, {c="a",a="Silph Giovanni"}, {3,14}, {5,14}, {s="potion",hp=64,yolo=44}, {6,14}, {s="interact",dir="Up"}, {6,13}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=235}},
 
@@ -296,7 +296,7 @@ local Paths = {
 	-- Leave Celadon
 	{6, {41,10}, {c="a",a="Snorlax"}, {s="bicycle"}, {41,11}, {14,11}, {14,14}, {2,14}, {2,18}, {-1,18}},
 	-- トトロだ！
-	{27, {39,10}, {27,10}, {s="item",item="super_repel",chain=true}, {s="tossTM34"}, {s="item",item="elixer",poke="nidoking",chain=true}, {s="playPokeFlute"}, {23,10}},
+	{27, {39,10}, {27,10}, {s="item",item="super_repel",chain=true}, {s="potion",hp=125,yolo=70}, {s="tossTM34"}, {s="item",item="elixer",poke="nidoking",chain=true}, {s="playPokeFlute"}, {23,10}},
 	-- Snorlax pass
 	{186, {7,8}, {-1,8}},
 	-- Bicycle road
@@ -312,7 +312,7 @@ local Paths = {
 	-- Safari City
 	{7, {0,16}, {c="a",a="Safari Zone"}, {3,16}, {3,20}, {23,20}, {23,14}, {29,14}, {29,15}, {35,15}, {35,8}, {37,8}, {37,2}, {22,2}, {22,4}, {18,4}, {18,3}},
 	-- Safari entrance
-	{156, {3,5}, {3,2}, {4,2}, {s="confirm",dir="Right"}},
+	{156, {3,5}, {3,3}, {4,3}, {4,2}, {s="dialogue",dir="Up"}, {4,-1}},
 	-- Safari 1
 	{220, {15,25}, {s="item",item="super_repel",chain=true}, {s="bicycle"}, {15,16}, {28,16}, {28,11}, {30,11}},
 	-- Safari 2
@@ -357,7 +357,7 @@ local Paths = {
 	-- Fly home
 	{6, {41,10}, {s="fly",dest="pallet",map=0}},
 	-- Welcome home
-	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
+	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="elixer",move="earthquake",min=10,chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
 	{32, {4,0}, {c="potion",b=true,yolo=true}, {4,14}, {3,14}, {3,90}},
 	-- Enter Cinnabar Mansion
@@ -367,18 +367,18 @@ local Paths = {
 	-- F2
 	{214, {5,11}, {10,11}, {10,5}, {6,5}, {6,1}},
 	-- F3
-	{215, {6,2}, {11,2}, {11,6}, {10,6}, {s="confirm",dir="Up"}, {14,6}, {14,11}, {16,11}, {16,14}},
+	{215, {6,2}, {11,2}, {11,6}, {10,6}, {s="dialogue",dir="Up"}, {14,6}, {14,11}, {16,11}, {16,14}},
 	-- F1 drop
 	{165, {16,14}, {16,15}, {13,15}, {13,20}, {s="cinnabarCarbos"}, {21,23}},
 	-- B1
 	--TODO menu cancel for RC
-	{216, {23,22}, {23,16}, {s="item",item="super_repel"}, {23,15}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="item",item="rare_candy",poke="nidoking",all=true,close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
+	{216, {23,22}, {23,16}, {s="item",item="super_repel"}, {23,15}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="dialogue",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="dialogue",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {5,11}, {s="item",item="rare_candy",poke="nidoking",all=true}, {5,12}, {s="take",dir="Down"}, {s="skill",move="dig",map=216}},
 	-- Celadon -> Cinnabar
 	{6, {41,10}, {s="fly",dest="cinnabar",map=8}},
 	-- Cinnabar
 	{8, {11,12}, {s="bicycle"}, {18,12}, {18,3}},
 	-- Cinnabar Gym
-	{166, {16,17}, {c="a",a="Blaine's Gym"}, {16,14}, {18,14}, {18,10}, {15,10}, {15,8}, {s="confirm",dir="Up"}, {16,8}, {16,7}, {18,7}, {18,1}, {12,1}, {12,2}, {10,2}, {s="confirm",dir="Up",type="B"}, {12,2}, {12,7}, {10,7}, {10,8}, {9,8}, {s="confirm",dir="Up",type="B"}, {9,11}, {12,11}, {12,13}, {10,13}, {10,14}, {9,14}, {s="confirm",dir="Up",type="B"}, {9,16}, {1,16}, {1,14}, {s="confirm",dir="Up"}, {2,14}, {2,13}, {4,13}, {4,9}, {1,9}, {1,8}, {s="confirm",dir="Up",type="B"}, {2,8}, {2,7}, {4,7}, {4,5}, {3,5}, {3,4}, {s="talk",dir="Up"}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=166}},
+	{166, {16,17}, {c="a",a="Blaine's Gym"}, {16,14}, {18,14}, {18,10}, {15,10}, {15,8}, {s="dialogue",dir="Up"}, {16,8}, {16,7}, {18,7}, {18,1}, {12,1}, {12,2}, {10,2}, {s="dialogue",dir="Up",decline=true}, {12,2}, {12,7}, {10,7}, {10,8}, {9,8}, {s="dialogue",dir="Up",decline=true}, {9,11}, {12,11}, {12,13}, {10,13}, {10,14}, {9,14}, {s="dialogue",dir="Up",decline=true}, {9,16}, {1,16}, {1,14}, {s="dialogue",dir="Up"}, {2,14}, {2,13}, {4,13}, {4,9}, {1,9}, {1,8}, {s="dialogue",dir="Up",decline=true}, {2,8}, {2,7}, {4,7}, {4,5}, {3,5}, {3,4}, {s="talk",dir="Up"}, {s="fightBlaine"}, {s="split"}, {s="skill",move="dig",map=166}},
 
 -- 14: BLAINE
 
@@ -429,7 +429,7 @@ local Paths = {
 	-- Bruno
 	{246, {4,5}, {c="a",a="Bruno"}, {s="swap",item="x_special",dest="bicycle",chain=true}, {s="potionBeforeBruno",chain=true}, {s="item",item="elixer",poke="nidoking",close=true}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
 	-- Agatha
-	{247, {4,5}, {c="a",a="Agatha"}, {c="potion",b=true}, {s="potion",hp=113,full=true}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
+	{247, {4,5}, {c="a",a="Agatha"}, {s="potion",hp=113,full=true}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
 	-- Lance
 	{113, {6,10}, {c="a",a="Lance"}, {6,2}, {s="lance"}, {s="split"}, {5,2}, {5,1}, {s="potion",hp="GarySandslash",full=true}, {5,-1}},
 	-- Gary
