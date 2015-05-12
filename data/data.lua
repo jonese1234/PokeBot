@@ -1,35 +1,48 @@
-local Data
+local Data = {}
 
-local version = 0
-if VERSION then
-	local vIndex = 2
-	for segment in string.gmatch(VERSION, "([^.]+)") do
-		version = version + tonumber(segment) * 100 ^ vIndex
-		vIndex = vIndex - 1
-	end
-end
+-- INIT
 
-local yellowVersion = memory.getcurrentmemorydomainsize() > 30000
-local redVersion = true
-if not yellowVersion then
-	local titleText = memory.readbyte(0x0447)
-	if titleText == 96 or titleText == 97 then
-		redVersion = titleText ~= 97
-	elseif not require("storage.pokemon").inParty("nidoran", "nidorino", "nidoking") then
-		print("ERR: Unable to differentiate Red/Blue version")
-		if INTERNAL and not STREAMING_MODE then
-			redVersion = false --SAMPLE
+local function hasNido()
+	for idx=0, 5 do
+		local pokeID = memory.readbyte(0x116B + idx * 0x2C)
+		if pokeID == 3 or pokeID == 167 or pokeID == 7 then
+			return true
 		end
 	end
 end
 
-Data = {
-	run = {},
+function Data.init()
+	local version = 0
+	if VERSION then
+		local vIndex = 2
+		for segment in string.gmatch(VERSION, "([^.]+)") do
+			version = version + tonumber(segment) * 100 ^ vIndex
+			vIndex = vIndex - 1
+		end
+	end
 
-	yellow = yellowVersion,
-	gameName = yellowVersion and "yellow" or (redVersion and "red" or "blue"),
-	versionNumber = version,
-}
+	local yellowVersion = memory.getcurrentmemorydomainsize() > 30000
+	local gameName = "yellow"
+	if not yellowVersion then
+		gameName = "red"
+		local titleText = memory.readbyte(0x0447)
+		if titleText == 96 or titleText == 97 then
+			if titleText == 97 then
+				gameName = "blue"
+			end
+		elseif not hasNido() then
+			print("ERR: Unable to differentiate Red/Blue version")
+			if INTERNAL and not STREAMING_MODE then
+				gameName = "blue"
+			end
+		end
+	end
+
+	Data.run = {}
+	Data.yellow = yellowVersion
+	Data.gameName = gameName
+	Data.versionNumber = version
+end
 
 -- PRIVATE
 

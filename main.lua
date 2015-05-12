@@ -15,6 +15,8 @@ local START_WAIT = 99
 
 local Data = require "data.data"
 
+Data.init()
+
 local Battle = require "action.battle"
 local Textbox = require "action.textbox"
 local Walk = require "action.walk"
@@ -23,6 +25,8 @@ local Combat = require "ai.combat"
 local Control = require "ai.control"
 local Strategies = require("ai."..Data.gameName..".strategies")
 
+local Pokemon = require "storage.pokemon"
+
 local Bridge = require "util.bridge"
 local Input = require "util.input"
 local Memory = require "util.memory"
@@ -30,8 +34,6 @@ local Menu = require "util.menu"
 local Paint = require "util.paint"
 local Utils = require "util.utils"
 local Settings = require "util.settings"
-
-local Pokemon = require "storage.pokemon"
 
 local hasAlreadyStartedPlaying = false
 local oldSeconds
@@ -79,7 +81,7 @@ if STREAMING_MODE then
 	if not CUSTOM_SEED then
 		RESET_FOR_TIME = true
 	end
-	Bridge.init()
+	Bridge.init(Data.gameName)
 elseif BEAST_MODE then
 	RESET_FOR_TIME = true
 else

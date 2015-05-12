@@ -1,7 +1,5 @@
 local Pokemon = {}
 
-local Data = require "data.data"
-
 local Bridge = require "util.bridge"
 local Input = require "util.input"
 local Memory = require "util.memory"
@@ -137,10 +135,10 @@ local function indexOf(...)
 end
 Pokemon.indexOf = indexOf
 
-local function fieldMoveIndex(move)
+local function fieldMoveIndex(move, yellow)
 	local moveIndex = 0
 	local menuSize = Memory.value("menu", "size")
-	if Data.yellow then
+	if yellow then
 		if move == "cut" then
 			if Pokemon.inParty("charmander") then
 				moveIndex = 1
@@ -309,7 +307,7 @@ function Pokemon.getExpForLevelFromCurrent(levelups)
 	return math.floor((6 / 5 * level^3) - (15 * level^2) + (100 * level) - 140)
 end
 
-function Pokemon.use(move)
+function Pokemon.use(move, yellow)
 	local main = Memory.value("menu", "main")
 	local pokeName = Pokemon.forMove(move)
 	if main == 141 then
@@ -319,7 +317,7 @@ function Pokemon.use(move)
 		if column == 11 then
 			Menu.select(1, true)
 		elseif column == 10 or column == 12 then
-			Menu.select(fieldMoveIndex(move), true)
+			Menu.select(fieldMoveIndex(move, yellow), true)
 		else
 			Input.press("B")
 		end

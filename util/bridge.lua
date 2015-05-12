@@ -1,7 +1,5 @@
 local Bridge = {}
 
-local Data = require "data.data"
-
 local Utils = require "util.utils"
 
 local json = require "external.json"
@@ -42,7 +40,7 @@ end
 
 -- Wrapper functions
 
-function Bridge.init()
+function Bridge.init(gameName)
 	if socket then
 		-- io.popen("java -jar Main.jar")
 		client = socket.connect("127.0.0.1", 13378)
@@ -50,7 +48,7 @@ function Bridge.init()
 			client:settimeout(0.005)
 			client:setoption("keepalive", true)
 			print("Connected to Java!");
-			send("init,"..Data.gameName)
+			send("init,"..gameName)
 			return true
 		else
 			print("Error connecting to Java!");
