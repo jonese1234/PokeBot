@@ -19,6 +19,7 @@ local moves = {
 		power = 50,
 		max_pp = 25,
 		accuracy = 100,
+		critical = true,
 	},
 	{
 		name = 'Double-Slap',
@@ -1495,7 +1496,7 @@ local moves = {
 		power = 70,
 		max_pp = 20,
 		accuracy = 100,
-		multiple = 1.9,
+		critical = true,
 	},
 	{
 		name = 'Substitute',

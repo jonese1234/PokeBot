@@ -92,7 +92,11 @@ local function calcDamage(move, attacker, defender, rng)
 	else
 		attFactor, defFactor = attacker.att, defender.def
 	end
-	local damage = floor(floor(floor(2 * attacker.level / 5 + 2) * math.max(1, attFactor) * move.power / math.max(1, defFactor)) / 50) + 2
+	local attackerLevel = attacker.level
+	if move.critical then
+		attackerLevel = attackerLevel * 2
+	end
+	local damage = floor(floor(floor(2 * attackerLevel / 5 + 2) * math.max(1, attFactor) * move.power / math.max(1, defFactor)) / 50) + 2
 
 	if move.move_type == attacker.type1 or move.move_type == attacker.type2 then
 		damage = floor(damage * 1.5) -- STAB
