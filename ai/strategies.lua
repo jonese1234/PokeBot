@@ -589,18 +589,17 @@ Strategies.functions = {
 		end
 	end,
 
-	startFrames = function()
-		Strategies.frames = 0
-		return true
-	end,
-
-	reportFrames = function()
-		print("FR "..Strategies.frames)
-		local repels = Memory.value("player", "repel")
-		if repels > 0 then
-			print("S "..repels)
+	frames = function(data)
+		if data.report then
+			print("FR "..Strategies.frames)
+			local repels = Memory.value("player", "repel")
+			if repels > 0 then
+				print("S "..repels)
+			end
+			Strategies.frames = nil
+		else
+			Strategies.frames = 0
 		end
-		Strategies.frames = nil
 		return true
 	end,
 
