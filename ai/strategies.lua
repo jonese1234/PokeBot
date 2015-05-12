@@ -1493,6 +1493,18 @@ Strategies.functions = {
 		return interact("Up")
 	end,
 
+	announceMachop = function()
+		if Strategies.trainerBattle() then
+			local __, turnsToKill, turnsToDie = Combat.bestMove()
+			if turnsToKill and turnsToDie == 1 and turnsToKill > 1 then
+				Strategies.chat("machop", "needs a good damage range to one-shot this Machop, which can kill us with a Karate Chop critical.")
+			end
+			Battle.automate()
+		elseif status.foughtTrainer then
+			return true
+		end
+	end,
+
 	jingleSkip = function()
 		if status.canProgress then
 			local px, py = Player.position()
@@ -1540,8 +1552,8 @@ Strategies.functions = {
 		if Strategies.trainerBattle() then
 			if Pokemon.isOpponent("oddish") then
 				local __, turnsToKill = Combat.bestMove()
-				if turnsToKill and turnsToKill > 1 and Strategies.initialize() then
-					Bridge.chat("needs a good damage range to 1-shot this Oddish, which can paralyze.")
+				if turnsToKill and turnsToKill > 1 then
+					Strategies.chat("oddish", "needs a good damage range to 1-shot this Oddish, which can paralyze.")
 				end
 			end
 			Battle.automate()
