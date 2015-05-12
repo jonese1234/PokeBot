@@ -26,6 +26,7 @@ local memoryNames = {
 		text_input = 0x04B6,
 		text_length = 0x0EE9,
 		main = 0x1FF5,
+		option_dialogue = 0x1125,
 	},
 	player = {
 		name = 0x1158,

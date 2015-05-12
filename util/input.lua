@@ -62,19 +62,20 @@ function Input.press(button, frames, walk)
 end
 
 function Input.cancel(accept)
-	if accept and Memory.value("menu", "shop_current") == 20 then
+	if accept and Memory.value("menu", "option_dialogue") == 20 then
 		Input.press(accept)
-	else
-		local button
-		if bCancel then
-			button = "B"
-		else
-			button = "A"
-		end
-		remainingFrames = 0
-		sendButton(button, true)
-		bCancel = not bCancel
+		return true
 	end
+
+	local button
+	if bCancel then
+		button = "B"
+	else
+		button = "A"
+	end
+	remainingFrames = 0
+	sendButton(button, true)
+	bCancel = not bCancel
 end
 
 function Input.escape()

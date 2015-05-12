@@ -631,11 +631,12 @@ Strategies.functions = {
 		return interact(data.dir, data.long)
 	end,
 
-	confirm = function(data)
+	dialogue = function(data)
 		if Battle.handleWild() then
 			if Textbox.isActive() then
-				status.talked = true
-				Input.cancel(data.type or "A")
+				if Input.cancel(data.decline and "B" or "A") then
+					status.talked = true
+				end
 			else
 				if status.talked then
 					return true
@@ -1981,7 +1982,7 @@ Strategies.functions = {
 			end
 			Bridge.chat("is taking the Center to heal for Lorelei.")
 		end
-		return strategyFunctions.confirm({dir="Up"})
+		return strategyFunctions.dialogue({dir="Up"})
 	end,
 
 	prepareForLance = function()
