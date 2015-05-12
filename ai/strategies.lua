@@ -959,6 +959,19 @@ Strategies.functions = {
 		return Strategies.prepare("x_"..data.x)
 	end,
 
+	elixer = function(data)
+		local currentPP = Pokemon.pp(0, data.move)
+		if currentPP >= data.min then
+			return Strategies.closeMenuFor(data)
+		end
+		if Strategies.initialize() then
+			print("Elixer: "..data.move.." "..currentPP.." in "..Control.areaName)
+		end
+
+		data.item = "elixer"
+		return Strategies.useItem(data)
+	end,
+
 	-- ROUTE
 
 	squirtleIChooseYou = function()

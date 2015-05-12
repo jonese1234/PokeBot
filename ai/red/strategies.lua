@@ -1652,18 +1652,7 @@ end
 
 -- 15: SABRINA
 
-strategyFunctions.earthquakeElixer = function(data)
-	if Battle.pp("earthquake") >= data.min then
-		if Strategies.closeMenuFor(data) then
-			return true
-		end
-		return false
-	end
-	if Strategies.initialize() then
-		print("EQ Elixer: "..Control.areaName)
-	end
-	return Strategies.useItem({item="elixer", poke="nidoking", chain=data.chain, close=data.close})
-end
+--
 
 strategyFunctions.fightGiovanniMachoke = function()
 	if Strategies.initialize() then
