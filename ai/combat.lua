@@ -46,6 +46,7 @@ types[26] = "dragon"
 
 local savedEncounters = {}
 local conservePP = false
+local allowDamageRange = false
 local disableThrash = false
 local lastHP, lastExp
 
@@ -159,10 +160,14 @@ local function getMoves(who)--Get the moveset of us [0] or them [1]
 		local val = Memory.raw(base + idx)
 		if val > 0 then
 			local moveTable = Movelist.get(val)
-			if who == 0 then
-				moveTable.pp = Memory.raw(0x102D + idx)
+			if moveTable then
+				if who == 0 then
+					moveTable.pp = Memory.raw(0x102D + idx)
+				end
+				moves[idx + 1] = moveTable
+			else
+				p("ERR: Invalid move index", idx)
 			end
-			moves[idx + 1] = moveTable
 		end
 	end
 	return moves
@@ -206,7 +211,7 @@ local function calcBestHit(attacker, defender, ours, rng)
 					if not ret or minTurns < bestMinTurns or maxTurns < bestTurns then
 						replaces = true
 					elseif maxTurns == bestTurns and move.name == "Thrash" then
-						replaces = targetHP == Memory.double("battle", "opponent_max_hp")
+						replaces = targetHP == Memory.double("battle", "opponent_max_hp") --TODO battle turn 0
 					elseif maxTurns == bestTurns and ret.name == "Thrash" then
 						replaces = targetHP ~= Memory.double("battle", "opponent_max_hp")
 					elseif move.fast and not ret.fast then
@@ -216,7 +221,13 @@ local function calcBestHit(attacker, defender, ours, rng)
 					elseif move.multiple and ret.accuracy < 100 then
 						replaces = targetHP <= maxDmg * 0.5
 					elseif conservePP then
-						if maxTurns < 2 or maxTurns == bestMaxTurns then
+						if allowDamageRange then
+							if ret.name == "Horn-Attack" then
+								local avgDmg = (minDmg + maxDmg) / 2
+								local averageTurns = math.ceil(targetHP / avgDmg)
+								replaces = averageTurns <= bestTurns
+							end
+						elseif maxTurns < 2 or maxTurns == bestMaxTurns then
 							if ret.name == "Earthquake" and (move.name == "Ice-Beam" or move.name == "Thunderbolt") then
 								replaces = true
 							elseif move.pp > ret.pp then
@@ -370,12 +381,16 @@ function Combat.setDisableThrash(disable)
 	disableThrash = disable
 end
 
-function Combat.factorPP(enabled)
+function Combat.factorPP(enabled, damageRange)
 	conservePP = enabled
+	if damageRange ~= nil then
+		allowDamageRange = damageRange
+	end
 end
 
 function Combat.reset()
 	conservePP = false
+	allowDamageRange = false
 end
 
 function Combat.healthFor(opponent)
