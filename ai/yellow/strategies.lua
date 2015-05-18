@@ -493,6 +493,30 @@ strategyFunctions.fightBrock = function()
 	end
 end
 
+strategyFunctions.conserveHornAttacks = function()
+	local riskDamageRanges = false
+	if Pokemon.inParty("pikachu") then
+		local hornAttacks = Pokemon.pp(0, "horn_attack")
+		local ppRequired = 130
+		local potionsRequired = 3
+		if stats.nidoran.attack == 16 then
+			ppRequired = ppRequired - 1
+		end
+		if stats.nidoran.speed == 15 then
+			potionsRequired = potionsRequired - 1
+		end
+
+		if Inventory.count("potion") >= potionsRequired and hornAttacks >= ppRequired then
+			if not STREAMING_MODE then
+				Bridge.chat("is risking some damage ranges to attempt to double center skip...")
+			end
+			riskDamageRanges = true
+		end
+	end
+	Combat.factorPP(true, riskDamageRanges)
+	return true
+end
+
 strategyFunctions.reload = function(data)
 	local message = "is reloading the "
 	if data.area == "route3" then
