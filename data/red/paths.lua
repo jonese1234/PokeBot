@@ -175,13 +175,13 @@ local Paths = {
 	-- Bicycle out of Cerulean
 	{3, {13,26}, {s="swap",item="bicycle",dest=1,chain=true}, {s="teach",move="thunderbolt",replace="horn_attack",chain=true}, {s="bicycle"}, {19,26}, {19,27}, {s="skill",move="cut",done=0x0D4D}, {19,29}, {36,29}, {36,16}, {40,16}},
 	-- TPP's Bane
-	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="announceFourTurn"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
+	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="fourTurnThrash"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
 	-- To the cave
 	{21, {0,8}, {3,8}, {3,10}, {13,10}, {13,15}, {14,15}, {14,26}, {3,26}, {3,18}, {7,18}, {s="item",item="repel"}, {8,18}, {8,17}},
 	-- Rock Tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {s="redbarCubone"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1

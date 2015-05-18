@@ -1,4 +1,4 @@
-local Paths = {
+local YellowPaths = {
 
 	-- Ash's room
 	{38, {3,6}, {5,6}, {5,1}, {7,1}},
@@ -50,14 +50,14 @@ local Paths = {
 	-- Pewter City
 	{2, {18,35}, {18,26}, {s="centerViridian"}, {18,22}, {19,22}, {19,13}, {10,13}, {10,18}, {16,18}, {16,17}},
 	-- Brock
-	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,9}, {s="potion",hp=23}, {4,8}, {3,8}, {3,7}, {s="interact",dir="Up"}, {s="swapMove",move="horn_attack",to=0}, {s="battleSandshrew"}, {4,7}, {4,4}, {s="potion",hp=20}, {4,2}, {s="interact",dir="Up"}, {s="fightBrock"}, {s="split"}, {4,14}},
+	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,9}, {s="potion",hp=23}, {4,8}, {3,8}, {3,7}, {s="interact",dir="Up"}, {s="swapMove",move="horn_attack",to=0}, {s="fightSandshrew"}, {4,7}, {4,4}, {s="potion",hp=18}, {4,2}, {s="interact",dir="Up"}, {s="fightBrock"}, {s="split"}, {4,14}},
 
 -- 2: BROCK
 
 	-- To Pewter Mart
 	{2, {16,18}, {c="a",a="Route 3"}, {10,18}, {10,13}, {27,13}, {27,16}, {40,16}},
 	-- Route 3
-	{14, {0,8}, {c="trackEncounters",area="route3"}, {c="catchFlier"}, {c="pp",on=true}, {s="potion",hp=10}, {3,8}, {3,9}, {11,9}, {11,4}, {12,4}, {s="potion",hp=16}, {13,4}, {s="interact",dir="Right"}, {13,5}, {17,5}, {s="potion",hp=3}, {18,5}, {18,4}, {19,4}, {15,4}, {15,6}, {11,6}, {11,9}, {-1,9}},
+	{14, {0,8}, {s="conserveHornAttacks"}, {c="trackEncounters",area="route3"}, {c="catchFlier"}, {s="potion",hp=10}, {3,8}, {3,9}, {11,9}, {11,4}, {12,4}, {s="potion",hp=16}, {13,4}, {s="interact",dir="Right"}, {13,5}, {17,5}, {s="potion",hp=3}, {18,5}, {18,4}, {19,4}, {15,4}, {15,6}, {11,6}, {11,9}, {-1,9}},
 	-- Reload
 	{2, {39,17}, {s="reload",area="route3"}, {40,17}},
 	-- Bypass
@@ -171,13 +171,13 @@ local Paths = {
 	{3, {13,25}, {s="waitToPause"}, {13,26}, {s="swap",item="bicycle",dest=1,chain=true}, {s="teach",move="thunderbolt",replace="double_kick",chain=true}, {s="bicycle"}, {19,26}, {19,27}, {s="skill",move="cut",done=0x0D4D}, {19,29}, {36,29}, {36,16}, {40,16}},
 	-- TPP's Bane
 	--TODO HA after Confusion
-	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="announceFourTurn"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
+	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="fourTurnThrash"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
 	-- To the cave
 	{21, {0,8}, {3,8}, {3,10}, {13,10}, {13,15}, {14,15}, {14,26}, {3,26}, {3,18}, {7,18}, {s="item",item="repel"}, {8,18}, {8,17}},
 	-- Rock tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1
@@ -185,6 +185,7 @@ local Paths = {
 	-- Out of the Tunnel
 	{82, {37,17}, {32,17}, {32,23}, {37,23}, {37,28}, {28,28}, {26,24}, {23,24}, {s="talk",dir="Left"}, {23,27}, {15,27}, {15,33}},
 	-- To Lavender Town
+	--TODO optional ME
 	{21, {8,54}, {c="a",a="Lavender Town"}, {15,54}, {15,65}, {11,65}, {11,69}, {6,69}, {6,72}},
 	-- Through Lavender
 	{4, {6,0}, {6,6}, {0,6}, {0,8}, {-1,8}},
@@ -289,14 +290,14 @@ local Paths = {
 	-- Rival 5
 	{212, {5,3}, {c="a",a="Silph Rival"}, {4,3}, {4,2}, {3,2}, {c="potion",b=false}, {s="silphRival"}, {3,5}, {2,5}, {s="dialogue",dir="Left",decline=true}, {s="acquire",poke="lapras"}, {2,7}, {5,7}},
 	-- Giovanni
-	{235, {3,2}, {c="a",a="Silph Giovanni"}, {3,14}, {5,14}, {s="potion",hp=64,yolo=44}, {6,14}, {s="interact",dir="Up"}, {6,13}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=235}},
+	{235, {3,2}, {c="a",a="Silph Giovanni"}, {3,14}, {5,14}, {s="potion",hp=52,yolo=32}, {6,14}, {s="interact",dir="Up"}, {6,13}, {s="fightX",x="attack"}, {s="waitToFight"}, {s="split"}, {s="skill",move="dig",map=235}},
 
 -- 11: SILPH CO.
 
 	-- Leave Celadon
 	{6, {41,10}, {c="a",a="Snorlax"}, {s="bicycle"}, {41,11}, {14,11}, {14,14}, {2,14}, {2,18}, {-1,18}},
 	-- トトロだ！
-	{27, {39,10}, {27,10}, {s="item",item="super_repel",chain=true}, {s="potion",hp=125,yolo=70}, {s="tossTM34"}, {s="item",item="elixer",poke="nidoking",chain=true}, {s="playPokeFlute"}, {23,10}},
+	{27, {39,10}, {27,10}, {s="item",item="super_repel",chain=true}, {s="potion",hp="ErikaTangela",chain=true}, {s="tossTM34",chain=true}, {s="item",item="elixer",poke="nidoking",chain=true}, {s="playPokeFlute"}, {23,10}},
 	-- Snorlax pass
 	{186, {7,8}, {-1,8}},
 	-- Bicycle road
@@ -328,7 +329,7 @@ local Paths = {
 	-- Celadon once again
 	{6, {41,10}, {s="bicycle"}, {41,13}, {36,13}, {36,23}, {25,23}, {25,30}, {35,30}, {35,31}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {35,34}, {5,34}, {5,29}, {12,29}, {12,27}},
 	-- Erika
-	{134, {4,17}, {c="a",a="Erika's Gym"}, {4,16}, {1,16}, {1,9}, {0,9}, {0,4}, {1,4}, {s="skill",move="cut",done=0x0D4D}, {3,4}, {s="waitToFight"}, {s="potion",hp="ErikaTangela"}, {4,4}, {s="talk",dir="Up",long=true}, {s="fightX",x="special"}, {s="waitToFight"}, {s="split"}, {4,5}, {5,5}, {5,6}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {5,18}},
+	{134, {4,17}, {c="a",a="Erika's Gym"}, {4,16}, {1,16}, {1,9}, {0,9}, {0,4}, {1,4}, {s="skill",move="cut",done=0x0D4D}, {3,4}, {s="waitToFight"}, {4,4}, {s="talk",dir="Up",long=true}, {s="fightX",x="special"}, {s="waitToFight"}, {s="split"}, {4,5}, {5,5}, {5,6}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {5,18}},
 
 -- 13: ERIKA
 
@@ -396,7 +397,7 @@ local Paths = {
 -- 16: GIOVANNI
 
 	-- Leave Viridian
-	{1, {32,8}, {s="item",item="super_repel",chain=true}, {s="potion",hp=80,yolo=70,full=true,chain=true}, {s="useViridianEther",chain=true}, {s="item",item="carbos",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {32,12}, {17,12}, {17,16}, {16,16}, {16,17}, {-1,17}},
+	{1, {32,8}, {s="item",item="super_repel",chain=true}, {s="potionBeforeViridianRival",chain=true}, {s="useViridianEther",chain=true}, {s="item",item="carbos",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {32,12}, {17,12}, {17,16}, {16,16}, {16,17}, {-1,17}},
 	-- To Pokemon League
 	{33, {39,9}, {c="a",a="Viridian Rival"}, {35,9}, {35,12}, {31,12}, {31,5}, {29,5}, {s="fightViridianRival"}, {16,5}, {16,12}, {5,12}, {5,10}, {11,10}, {11,6}, {8,6}, {8,5}},
 	-- Pokemon League 1
@@ -425,11 +426,11 @@ local Paths = {
 -- 17: LORELEI
 
 	-- Lorelei
-	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {s="guess",game="elite4",enabled=false}, {4,2}, {s="talk",dir="Right"}, {s="lorelei"}, {s="split"}, {4,0}},
+	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {4,2}, {s="talk",dir="Right"}, {s="guess",game="elite4",enabled=false}, {s="lorelei"}, {s="split"}, {4,0}},
 	-- Bruno
 	{246, {4,5}, {c="a",a="Bruno"}, {s="swap",item="x_special",dest="bicycle",chain=true}, {s="potionBeforeBruno",chain=true}, {s="item",item="elixer",poke="nidoking",close=true}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
 	-- Agatha
-	{247, {4,5}, {c="a",a="Agatha"}, {s="potion",hp=113,full=true}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
+	{247, {4,5}, {c="a",a="Agatha"}, {s="potionBeforeAgatha"}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
 	-- Lance
 	{113, {6,10}, {c="a",a="Lance"}, {6,2}, {s="lance"}, {s="split"}, {5,2}, {5,1}, {s="potion",hp="GarySandslash",full=true}, {5,-1}},
 	-- Gary
@@ -439,4 +440,4 @@ local Paths = {
 
 }
 
-return Paths
+return YellowPaths
