@@ -536,8 +536,8 @@ strategyFunctions.fightBrock = function()
 				Input.press("A")
 			elseif bideTurns > 0 then
 				local onixHP = Memory.double("battle", "opponent_hp")
-				if not status.canProgress then
-					status.canProgress = onixHP
+				if not status.bideHP then
+					status.bideHP = onixHP
 					status.startBide = bideTurns
 				end
 				if turnsToKill then
@@ -545,7 +545,7 @@ strategyFunctions.fightBrock = function()
 					local turnsElapsed = status.startBide - bideTurns
 					if turnsElapsed >= 2 or turnsToKill <= 1 then
 						-- Bubble
-					elseif onixHP == status.canProgress then
+					elseif onixHP == status.bideHP then
 						if turnsToKill == 2 and Control.yolo then
 							if onixHP == Memory.double("battle", "opponent_max_hp") then
 								Strategies.chat("biding", "got first-turn Bided. Too far behind to wait it out, so attempting to finish off Onix before it hits (1 in 2 chance).")
@@ -574,7 +574,7 @@ strategyFunctions.fightBrock = function()
 			elseif Menu.onPokemonSelect() then
 				Pokemon.select("nidoran")
 			else
-				status.canProgress = false
+				status.bideHP = false
 				Battle.fight()
 			end
 
@@ -685,7 +685,7 @@ strategyFunctions.shortsKid = function()
 			forced = "horn_attack"
 		end
 	else
-		if Strategies.damaged(2) and stats.nidoran.speed == 15 then
+		if Battle.damaged(2) and stats.nidoran.speed == 15 then
 			forced = "horn_attack"
 		end
 		local potions = Inventory.count("potion")
@@ -693,9 +693,9 @@ strategyFunctions.shortsKid = function()
 			Strategies.chat("looper", "Stuck in a heal loop, we're just going to have to risk it.")
 			disablePotion = true
 		elseif potions <= 8 then
-			disablePotion = not Strategies.damaged(2)
+			disablePotion = not Battle.damaged(2)
 		else
-			disablePotion = Control.yolo and not Strategies.damaged(2)
+			disablePotion = Control.yolo and not Battle.damaged(2)
 		end
 	end
 	Control.battlePotion(not disablePotion)
@@ -777,7 +777,7 @@ strategyFunctions.rivalSandAttack = function(data)
 		elseif opponent == "kadabra" then
 			disableThrash = hasHornAttack and not Control.yolo and Combat.hp() < 11
 		elseif opponent == "ivysaur" then
-			if not Control.yolo and Strategies.damaged(5) then
+			if not Control.yolo and Battle.damaged(5) then
 				local potion
 				if Inventory.count("potion") <= 1 then
 					potion = Inventory.contains("super_potion")
@@ -976,39 +976,7 @@ strategyFunctions.potionBeforeMisty = function(data)
 	return strategyFunctions.potion({hp=healAmount, chain=data.chain})
 end
 
-strategyFunctions.fightMisty = function()
-	if Strategies.trainerBattle() then
-		if Battle.redeployNidoking() then
-			return false
-		end
-		local forced
-		if Battle.opponentAlive() and Combat.isConfused() then
-			if not status.sacrifice and not Control.yolo and stats.nidoran.speedDV >= 11 then
-				status.sacrifice = Pokemon.getSacrifice("pidgey", "spearow", "squirtle", "paras")
-			end
-
-			if Menu.onBattleSelect() then
-				if Strategies.initialize("sacrificed") then
-					local swapMessage = " Thrash didn't finish the kill :( "
-					if Control.yolo then
-						swapMessage = swapMessage.."Attempting to hit through Confusion to save time."
-					elseif status.sacrifice then
-						swapMessage = swapMessage.."Swapping out to cure Confusion."
-					else
-						swapMessage = swapMessage.."We'll have to hit through Confusion here."
-					end
-					Bridge.chat(swapMessage)
-				end
-			end
-			if status.sacrifice and Battle.sacrifice(status.sacrifice) then
-				return false
-			end
-		end
-		Battle.automate(forced)
-	elseif status.foughtTrainer then
-		return true
-	end
-end
+-- fightMisty
 
 -- 7: MISTY
 
@@ -1220,7 +1188,7 @@ strategyFunctions.procureBicycle = function()
 	end
 end
 
--- announceFourTurn
+-- fourTurnThrash
 
 strategyFunctions.redbarCubone = function()
 	if Strategies.trainerBattle() then
@@ -1558,7 +1526,7 @@ end
 strategyFunctions.fightHypno = function()
 	if Strategies.trainerBattle() then
 		local forced
-		if Pokemon.isOpponent("hypno") and not Strategies.damaged() then
+		if Pokemon.isOpponent("hypno") and not Battle.damaged() then
 			if Pokemon.info("nidoking", "hp") > Combat.healthFor("KogaWeezing") * 0.9 then
 				if Combat.isDisabled("thunderbolt") then
 					forced = "ice_beam"
