@@ -215,13 +215,6 @@ function Strategies.hasHealthFor(opponent, extra)
 	return afterHealth > Combat.healthFor(opponent)
 end
 
-function Strategies.damaged(factor)
-	if not factor then
-		factor = 1
-	end
-	return Combat.hp() * factor < Combat.maxHP()
-end
-
 function Strategies.trainerBattle()
 	local battleStatus = Memory.value("game", "battle")
 	if battleStatus > 0 then
