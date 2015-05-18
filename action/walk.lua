@@ -3,7 +3,7 @@ local Walk = {}
 local Data = require "data.data"
 
 local Control = require "ai.control"
-local paths = require("data."..Data.gameName..".paths")
+local Paths = require("data."..Data.gameName..".paths")
 
 local Input = require "util.input"
 local Memory = require "util.memory"
@@ -22,7 +22,7 @@ local function setPath(index, region)
 	pathIdx = index
 	stepIdx = 2
 	currentMap = region
-	path = paths[index]
+	path = Paths[index]
 end
 
 local function completeStep(region)
@@ -74,7 +74,7 @@ function Walk.init()
 		return false
 	end
 	for tries=1,2 do
-		for i,p in ipairs(paths) do
+		for i,p in ipairs(Paths) do
 			if i > 2 and p[1] == region then
 				local origin = p[2]
 				if tries == 2 or (origin[1] == px and origin[2] == py) then

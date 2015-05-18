@@ -153,11 +153,11 @@ end
 -- GUESSING
 
 function Bridge.guessing(guess, enabled)
-	send(guess..","..tostring(enabled))
+	send(guess, tostring(enabled))
 end
 
 function Bridge.guessResults(guess, result)
-	send(guess.."results,"..result)
+	send(guess.."results", result)
 end
 
 function Bridge.moonResults(encounters, cutter)

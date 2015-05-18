@@ -45,6 +45,7 @@ local pokeIDs = {
 	caterpie = 123,
 	metapod = 124,
 	hypno = 129,
+	golbat = 130,
 	weezing = 143,
 	persian = 144,
 	alakazam = 149,
@@ -57,6 +58,7 @@ local pokeIDs = {
 	charmander = 176,
 	squirtle = 177,
 	oddish = 185,
+	bellsprout = 188,
 }
 
 local moveList = {
