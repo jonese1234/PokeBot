@@ -327,7 +327,13 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 	Walk.step(px, py)
 end
 
-function Strategies.requiresE4Center()
+function Strategies.requiresE4Center(afterPP)
+	if afterPP then
+		local hornDrillPP = Battle.pp("horn_drill")
+		if hornDrillPP < 5 then
+			return true
+		end
+	end
 	if Control.areaName == "Elite Four" then
 		return not Strategies.hasHealthFor("LoreleiDewgong")
 	end

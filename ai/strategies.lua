@@ -111,6 +111,9 @@ function Strategies.death(extra)
 	elseif Combat.isConfused() then
 		explanation = "Confusion'd"
 		reason = "confusion"
+	elseif Combat.isSleeping() then
+		explanation = "Slumbering"
+		reason = "sleep"
 	elseif Control.yolo then
 		explanation = "Yolo strats"
 		reason = "yolo"
@@ -433,7 +436,7 @@ function Strategies.prepare(...)
 end
 
 function Strategies.getsSilphCarbosSpecially()
-	return Data.yellow and stats.nidoran.speedDV >= 11
+	return Data.yellow and Utils.match(stats.nidoran.speedDV, {11, 15})
 end
 
 function Strategies.needsCarbosAtLeast(count)
@@ -444,7 +447,7 @@ function Strategies.needsCarbosAtLeast(count)
 			carbosRequired = 3
 		elseif speedDV <= 10 then
 			carbosRequired = 2
-		else
+		elseif Strategies.getsSilphCarbosSpecially() then
 			carbosRequired = 1
 		end
 	else
