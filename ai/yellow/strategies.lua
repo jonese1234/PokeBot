@@ -910,10 +910,13 @@ strategyFunctions.fightSabrina = function()
 end
 
 strategyFunctions.momHeal = function()
-	local currentMap = Memory.value("game", "map")
-	local needsHeal = Combat.hp() > (Control.yolo and 70 or 125) --RISK
-	needsHeal = Combat.hp() < Combat.maxHP() --TODO
+	if Strategies.initialize() then
+		-- status.mom = not Strategies.canHealFor(Control.yolo and 70 or 125, true) --RISK
+		status.mom = true
+	end
+	needsHeal = status.mom and Pokemon.pp(0, "earthquake") < 10
 
+	local currentMap = Memory.value("game", "map")
 	local px, py = Player.position()
 	local dx, dy = px, py
 	if currentMap == 0 then
@@ -924,10 +927,10 @@ strategyFunctions.momHeal = function()
 		end
 		Walk.step(dx, dy)
 	else
-		if needsHeal and px == 5 and py == 5 then
-			strategyFunctions.confirm({dir="Up"})
-		elseif Textbox.isActive() then
+		if Textbox.isActive() then
 			Input.cancel()
+		elseif needsHeal and px == 5 and py == 5 then
+			Player.interact("Up")
 		else
 			local momPath = {{2,7}, {2,6}, {5,6}, {5,5}, {5,6}, {3,6}, {3,8}}
 			Walk.custom(momPath)
@@ -938,6 +941,24 @@ end
 -- dodgeGirl
 
 -- cinnabarCarbos
+
+strategyFunctions.fightBlaine = function()
+	if Strategies.trainerBattle() then
+		if Combat.hasParalyzeStatus() then
+			if Inventory.contains("full_restore") then
+				Strategies.chat("status_recover", "got Burned by Flamethrower. Attempting to recover with a Full Restore...")
+				Inventory.use("full_restore", nil, true)
+				return false
+			end
+			Strategies.chat("status_lost", "got Burned by Flamethrower without a Full Restore :(")
+		end
+		if Strategies.prepare("x_attack") then
+			Battle.automate()
+		end
+	elseif status.foughtTrainer then
+		return true
+	end
+end
 
 strategyFunctions.fightGiovanni = function()
 	if Strategies.trainerBattle() then
@@ -968,6 +989,18 @@ strategyFunctions.fightGiovanni = function()
 		Control.ignoreMiss = false
 		return true
 	end
+end
+
+-- GIOVANNI
+
+strategyFunctions.potionBeforeViridianRival = function(data)
+	if Strategies.vaporeon then
+		data.hp = 120
+		data.yolo = 64
+	else
+		data.hp = 64
+	end
+	return strategyFunctions.potion(data)
 end
 
 strategyFunctions.useViridianEther = function(data)
@@ -1058,12 +1091,15 @@ strategyFunctions.lorelei = function()
 end
 
 strategyFunctions.potionBeforeBruno = function(data)
-	local potionHP = 50
-	if Inventory.count("full_restore") > 1 and Strategies.damaged(2) then
-		potionHP = 200
+	data.hp = 32
+	if Control.yolo and Combat.inRedBar() then
+		data.yolo = 13
 	end
-	data.hp = potionHP
-	data.full = true
+	if Strategies.initialize() then
+		if data.yolo and Combat.hp() >= data.yolo then
+			Bridge.chat("is attempting to make back more time by carrying red-bar through Bruno...")
+		end
+	end
 	return strategyFunctions.potion(data)
 end
 
@@ -1087,6 +1123,18 @@ strategyFunctions.bruno = function()
 	elseif status.foughtTrainer then
 		return true
 	end
+end
+
+strategyFunctions.potionBeforeAgatha = function(data)
+	data.hp = 64
+	data.yolo = 32
+	if Strategies.initialize() and Control.yolo then
+		local curr_hp = Combat.hp()
+		if curr_hp < data.hp and curr_hp >= data.yolo then
+			Bridge.chat("is attempting to make back more time by red-barring off Agatha.")
+		end
+	end
+	return strategyFunctions.potion(data)
 end
 
 strategyFunctions.agatha = function()
@@ -1165,20 +1213,24 @@ strategyFunctions.blue = function()
 		else
 			Strategies.elite4Reason = nil
 			if opponentName == "alakazam" then
-				local __, turnsToDie = Combat.enemyAttack()
+				local __, turnsToKill, turnsToDie = Combat.bestMove()
 				if turnsToDie == 1 then
 					local ourSpeed, theirSpeed = Memory.double("battle", "our_speed"), Memory.double("battle", "opponent_speed")
 					if ourSpeed <= theirSpeed then
 						local speedMessage, canPotion
-						if ourSpeed == theirSpeed then
-							speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
-							canPotion = not Data.yolo and Inventory.contains("full_restore")
+						if Battle.damaged() then
+							if ourSpeed == theirSpeed then
+								speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
+								canPotion = not Data.yolo and Inventory.contains("full_restore")
+							else
+								canPotion = Inventory.contains("full_restore")
+								speedMessage = "No Full Restores left, we'll need to get lucky."
+							end
+							if canPotion then
+								speedMessage = "Attempting to wait out a non-damage turn."
+							end
 						else
-							canPotion = Inventory.contains("full_restore")
-							speedMessage = "No Full Restores left, we'll need to get lucky."
-						end
-						if canPotion then
-							speedMessage = "Attempting to wait out a non-damage turn."
+							speedMessage = " We'll need to get lucky vs. Alakazam here..."
 						end
 						Strategies.chat("outsped", " Bad speed. "..speedMessage)
 						if canPotion then
@@ -1190,7 +1242,7 @@ strategyFunctions.blue = function()
 			elseif opponentName == "exeggutor" then
 				if Combat.isSleeping() then
 					local sleepHeal
-					if not Combat.inRedBar() and Inventory.contains("full_restore") then
+					if not Combat.inRedBar() and Battle.damaged() and Inventory.contains("full_restore") then
 						sleepHeal = "full_restore"
 					else
 						sleepHeal = "pokeflute"
