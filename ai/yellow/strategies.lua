@@ -86,12 +86,14 @@ local function nidoranDSum(enabled)
 	if enabled and status.path == nil then
 		local opponentName = Battle.opponent()
 		local opponentLevel = Memory.value("battle", "opponent_level")
+		local runOffset
 		if opponentName == "rattata" then
 			if opponentLevel == 3 then
 				status.path = {0, 1, 11, 2, 11}
 			elseif opponentLevel == 4 then
 				status.path = {7, 2, 11, 2, 11}
 			end
+			runOffset = 570
 		elseif opponentName == "pidgey" then
 			if opponentLevel == 3 then
 				status.path = {9, 2, 11, 2, 11}
@@ -100,20 +102,23 @@ local function nidoranDSum(enabled)
 			elseif opponentLevel == 7 then
 				status.path = {0, 3, 11, 2, 11}
 			end
+			runOffset = 562
 		elseif opponentName == "nidoran" then
 			if opponentLevel == 4 then
 				status.path = {5, 2, 11, 2, 11}
 			end
+			runOffset = 615
 		elseif opponentName == "nidoranf" then
 			if opponentLevel == 4 then
 				status.path = {4, 2, 11, 2, 11}
 			elseif opponentLevel == 6 then
 				status.path = {1, 2, 11, 2, 11}
 			end
+			runOffset = 581
 		end
-		if status.path then --TODO
+		if status.path then
 			status.pathIndex = 1
-			status.startTime = Utils.frames() + 5
+			status.startTime = status.startTime + runOffset + 5
 		else
 			status.path = 0
 		end
@@ -124,10 +129,9 @@ local function nidoranDSum(enabled)
 	local encounterlessSteps = Memory.value("game", "encounterless")
 	local pikachuX = Memory.value("player", "pikachu_x") - 4
 	if enabled and status.path ~= 0 then
-		local duration = status.path[status.pathIndex]
-		local currentTime = Utils.frames()
-		if (currentTime - status.startTime) / 60 > duration then
-			status.startTime = currentTime
+		local duration = status.path[status.pathIndex] * 60
+		if Utils.frames() - status.startTime >= duration then
+			status.startTime = status.startTime + duration
 			if status.pathIndex >= #status.path then
 				status.path = 0
 			else
@@ -410,10 +414,7 @@ strategyFunctions.catchNidoran = function()
 			if Strategies.resetTime(resetLimit, resetMessage) then
 				return true
 			end
-			local enableDSum = Control.escaped
-			if enableDSum then
-				enableDSum = not RESET_FOR_TIME or not Strategies.overMinute(resetLimit - 0.25)
-			end
+			local enableDSum = status.startTime and (not RESET_FOR_TIME or not Strategies.overMinute(resetLimit - 0.1))
 			nidoranDSum(enableDSum)
 		end
 	end
