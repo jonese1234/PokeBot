@@ -249,9 +249,8 @@ local function interact(direction, extended)
 	end
 end
 
-function Strategies.buffTo(buff, defLevel)
+function Strategies.buffTo(buff, defLevel, forced)
 	if Strategies.trainerBattle() then
-		local forced
 		if not Battle.opponentDamaged() then
 			if defLevel and Memory.double("battle", "opponent_defense") > defLevel then
 				forced = buff
@@ -480,7 +479,7 @@ local function nidokingStats()
 		specialDV = sclDV,
 	}
 
-	Combat.factorPP(false)
+	Combat.factorPP(false, false)
 	Combat.setDisableThrash(false)
 
 	p(attDV, defDV, spdDV, sclDV)
@@ -653,6 +652,9 @@ Strategies.functions = {
 	end,
 
 	potion = function(data)
+		if not Battle.handleWild() then
+			return false
+		end
 		if not status.cancel then
 			local curr_hp = Combat.hp()
 			if curr_hp == 0 then
@@ -775,7 +777,7 @@ Strategies.functions = {
 			end
 			Input.press("B")
 		elseif not data.dir or Player.face(data.dir) then
-			if Pokemon.use(data.move) then
+			if Pokemon.use(data.move, Data.yellow) then
 				status.tries = status.tries + 1
 			elseif Data.yellow and Menu.hasTextbox() then
 				Textbox.handle()
@@ -810,7 +812,7 @@ Strategies.functions = {
 				press = destination[2]
 			end
 			Input.press(press)
-		elseif not Pokemon.use("fly") then
+		elseif not Pokemon.use("fly", Data.yellow) then
 			Menu.pause()
 		end
 	end,
@@ -937,16 +939,18 @@ Strategies.functions = {
 		end
 		local opp = Battle.opponent()
 		local defLimit = 9001
+		local forced
 		for i,poke in ipairs(data) do
 			if opp == poke[1] then
 				local minimumAttack = poke[3]
 				if not minimumAttack or stats.nidoran.attack > minimumAttack then
 					defLimit = poke[2]
 				end
+				forced = poke.forced
 				break
 			end
 		end
-		return Strategies.buffTo("leer", defLimit)
+		return Strategies.buffTo("leer", defLimit, forced)
 	end,
 
 	fightX = function(data)
@@ -1128,11 +1132,11 @@ Strategies.functions = {
 			local nidoranStatus
 			if att < 15 and spd < 14 and scl < 12 then
 				nidoranStatus = Utils.random {
-					"let's just forget this ever happened.",
-					"I hate everything BibleThump",
-					"perfect stats Kappa",
-					"there's always the next one...",
-					"worst possible stats.",
+					"let's just forget this ever happened",
+					"I hate everything BibleThump ",
+					"perfect stats Kappa ",
+					"there's always the next one..",
+					"worst possible stats",
 				}
 			else
 				if restrictiveStats and att == 15 and spd == 14 then
@@ -1337,9 +1341,6 @@ Strategies.functions = {
 	end,
 
 	reportMtMoon = function()
-		if Battle.pp("horn_attack") == 0 then
-			print("ERR: Ran out of Horn Attacks")
-		end
 		local moonEncounters = Data.run.encounters_moon
 		if moonEncounters then
 			local cutterStatus
@@ -1499,6 +1500,40 @@ Strategies.functions = {
 		return interact("Up")
 	end,
 
+	fightMisty = function()
+		if Strategies.trainerBattle() then
+			if Battle.redeployNidoking() then
+				return false
+			end
+			local forced
+			if Battle.opponentAlive() and Combat.isConfused() then
+				if not status.sacrifice and not Control.yolo and stats.nidoran.speedDV >= 11 then
+					status.sacrifice = Pokemon.getSacrifice("pidgey", "spearow", "squirtle", "paras", "sandshrew", "charmander")
+				end
+
+				if Menu.onBattleSelect() then
+					if Strategies.initialize("sacrificed") then
+						local swapMessage = " Thrash didn't finish the kill :( "
+						if Control.yolo then
+							swapMessage = swapMessage.."Attempting to hit through Confusion to save time."
+						elseif status.sacrifice then
+							swapMessage = swapMessage.."Swapping out to cure Confusion."
+						else
+							swapMessage = swapMessage.."We'll have to hit through Confusion here."
+						end
+						Bridge.chat(swapMessage)
+					end
+				end
+				if status.sacrifice and Battle.sacrifice(status.sacrifice) then
+					return false
+				end
+			end
+			Battle.automate(forced)
+		elseif status.foughtTrainer then
+			return true
+		end
+	end,
+
 	announceMachop = function()
 		if Strategies.trainerBattle() then
 			local __, turnsToKill, turnsToDie = Combat.bestMove()
@@ -1549,9 +1584,27 @@ Strategies.functions = {
 		return true
 	end,
 
-	announceFourTurn = function()
-		Bridge.chat("needs to 4-turn Thrash, or hit through Confusion (each a 1 in 2 chance) to beat this dangerous trainer...")
-		return true
+	fourTurnThrash = function()
+		if Strategies.trainerBattle() then
+			Strategies.chat("four_turn", "needs to 4-turn Thrash, or hit through Confusion (each a 1 in 2 chance) to beat this dangerous trainer...")
+
+			local forced
+			if Pokemon.isOpponent("bellsprout") then
+				if Battle.opponentAlive() then
+					if Data.yellow and Combat.isConfused() and Combat.hp() < 25 then
+						local potion = Inventory.contains("super_potion", "potion")
+						if potion then
+							Inventory.use(potion, nil, true)
+							return false
+						end
+					end
+					forced = "horn_attack"
+				end
+			end
+			Battle.automate(forced)
+		elseif status.foughtTrainer then
+			return true
+		end
 	end,
 
 	announceOddish = function()
@@ -1619,9 +1672,9 @@ Strategies.functions = {
 		if not Inventory.contains("fresh_water", "soda_pop") then
 			return true
 		end
-		if Textbox.isActive() then
-			Input.cancel("A")
-		else
+		if Memory.value("menu", "shop_current") == 20 then
+			Input.press("A")
+		elseif Textbox.handle() then
 			local cx, cy = Memory.raw(0x0223) - 3, Memory.raw(0x0222) - 3
 			local px, py = Player.position()
 			if Utils.dist(cx, cy, px, py) == 1 then
@@ -1859,13 +1912,17 @@ Strategies.functions = {
 	end,
 
 	checkEther = function()
-		if Data.yellow then
-			Strategies.maxEtherSkip = Strategies.requiresE4Center()
-		else -- TODO don't skip center if not in redbar?
-			Strategies.maxEtherSkip = not Strategies.requiresE4Center()
-		end
-		if not Strategies.maxEtherSkip then
-			Bridge.chat("is grabbing the Max Ether to skip the Elite 4 Center.")
+		if Inventory.ppRestoreCount() < 2 then
+			Strategies.maxEtherSkip = false
+		else
+			if Data.yellow then
+				Strategies.maxEtherSkip = Strategies.requiresE4Center(false)
+			else -- TODO don't skip center if not in redbar?
+				Strategies.maxEtherSkip = not Strategies.requiresE4Center()
+			end
+			if not Strategies.maxEtherSkip then
+				Bridge.chat("is grabbing the Max Ether to skip the Elite 4 Center.")
+			end
 		end
 		return true
 	end,
@@ -1944,10 +2001,10 @@ Strategies.functions = {
 
 	potionBeforeLorelei = function(data)
 		if Strategies.initialize() then
-			if Strategies.requiresE4Center() then
+			if Strategies.requiresE4Center(true) then
 				return true
 			end
-			if not Strategies.canHealFor("LoreleiDewgong", true) then
+			if not Strategies.canHealFor("LoreleiDewgong") then
 				return true
 			end
 			Bridge.chat("is healing before Lorelei to skip the Elite 4 Center...")
@@ -1960,7 +2017,7 @@ Strategies.functions = {
 	centerSkip = function()
 		if Strategies.initialize() then
 			Strategies.setYolo("e4center")
-			if not Strategies.requiresE4Center() then
+			if not Strategies.requiresE4Center(true) then
 				local message
 				if not Data.yellow then
 					message = "is skipping the Center and attempting to red-bar "
@@ -1973,7 +2030,7 @@ Strategies.functions = {
 				Bridge.chat(message)
 				return true
 			end
-			Bridge.chat("is taking the Center to heal for Lorelei.")
+			Bridge.chat("is taking the Center to heal HP/PP for Lorelei.")
 		end
 		return strategyFunctions.dialogue({dir="Up"})
 	end,
@@ -2023,9 +2080,9 @@ Strategies.functions = {
 						gui.cleartext()
 					end
 				end
+				Bridge.guessResults("elite4", "victory")
 			elseif status.frames == 500 then
 				Bridge.chat("beat the game in "..status.finishTime.."!")
-				Strategies.elite4Reason = "victory"
 			elseif status.frames > 1800 then
 				return Strategies.hardReset("won", "Back to the grind - you can follow on Twitter for updates on our next good run! https://twitter.com/thepokebot")
 			end
