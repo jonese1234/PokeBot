@@ -58,7 +58,7 @@ local controlFunctions = {
 	end,
 
 	pp = function(data)
-		Combat.factorPP(data.on)
+		Combat.factorPP(data.on, data.range)
 	end,
 
 	thrash = function(data)
@@ -167,12 +167,11 @@ local controlFunctions = {
 	-- YELLOW
 
 	catchNidoranYellow = function()
-		-- shouldCatch = {{name="nidoran",levels={6}}} --TODO DSum
-		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",requireHit=true}}
+		shouldCatch = {{name="nidoran",levels={6}}, {name="pidgey",levels={3,5},requireHit=true}}
 	end,
 
 	catchCutterYellow = function()
-		shouldCatch = {{name="sandshrew"}, {name="paras",levels={9,10,11,12}}}
+		shouldCatch = {{name="sandshrew"}}
 	end,
 
 }
@@ -246,7 +245,7 @@ function Control.shouldCatch(partySize)
 	if not shouldCatch then
 		return false
 	end
-	if Data.yellow and not Inventory.contains("pokeball") then
+	if Data.yellow and Pokemon.inParty("pidgey", "spearow") and not Inventory.contains("pokeball") then
 		return false
 	end
 	if not partySize then
