@@ -223,6 +223,9 @@ local function depositPikachu()
 						" You're cute, Pikachu. But this is a speedrun, and frankly you're getting in my way.",
 						"come with me the time is right, there's no better team.... oh you're my best friend in a world we must defend... *stores Pikachu in pc*", --alloces
 						" ... and nothing of value was lost", --mymla
+						" Now Pikachu is in Pikajail because it gets in the Pikaway.", --0xAbad1dea
+						" A little bit of Pikachu by my side... Just kidding!", --KatieW25
+						" #moofydraws https://twitter.com/moofinseeker/status/597845848253423617", --moofinseeker
 					})
 				end
 			elseif menuColumn == 10 then
@@ -317,7 +320,7 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 			elseif py > 3 then
 				py = 3
 			else
-				strategyFunctions.confirm({dir="Up"})
+				strategyFunctions.dialogue({dir="Up"})
 			end
 		end
 	end
@@ -363,12 +366,14 @@ strategyFunctions.catchNidoran = function()
 		return true
 	end
 	if Battle.isActive() then
-		status.path = nil
 		local catchableNidoran = Pokemon.isOpponent("nidoran") and Memory.value("battle", "opponent_level") == 6
-		if catchableNidoran then
-			if Strategies.initialize("naming") then
+		if not status.inBattle then
+			status.inBattle = true
+			status.startTime = Utils.frames()
+			if catchableNidoran and Strategies.initialize("naming") then
 				Bridge.pollForName()
 			end
+			status.path = nil
 		end
 		if Memory.value("battle", "menu") == 94 then
 			local partySize = Memory.value("player", "party_size")
@@ -391,7 +396,10 @@ strategyFunctions.catchNidoran = function()
 			Battle.handle()
 		end
 	else
-		Pokemon.updateParty()
+		if status.inBattle then
+			status.inBattle = false
+			Pokemon.updateParty()
+		end
 		local hasNidoran = Pokemon.inParty("nidoran")
 		if hasNidoran then
 			local px, py = Player.position()
@@ -536,6 +544,8 @@ strategyFunctions.reload = function(data)
 	return true
 end
 
+-- fightMetapod TODO
+
 strategyFunctions.centerMoon = function()
 	return takeCenter(5, 15, 11, 5, 12)
 end
@@ -552,7 +562,7 @@ strategyFunctions.centerCerulean = function(data)
 		local hasSufficientPP = hornAttacks > ppRequired
 
 		if Strategies.initialize() then
-			Combat.factorPP(hasSufficientPP)
+			Combat.factorPP(hasSufficientPP, false)
 			Strategies.warpToCerulean = not hasSufficientPP
 		end
 
@@ -653,6 +663,10 @@ strategyFunctions.acquireCharmander = function()
 	end
 	Walk.step(px, py)
 end
+
+-- fightMisty
+
+-- 6: MISTY
 
 -- jingleSkip
 
@@ -762,7 +776,7 @@ strategyFunctions.trashcans = function()
 	end
 end
 
--- announceFourTurn
+-- fourTurnThrash
 
 -- announceOddish
 
@@ -850,7 +864,7 @@ strategyFunctions.silphRival = function()
 				if not Strategies.isPrepared("x_speed") then
 					local __, __, turnsToDie = Combat.bestMove()
 					if turnsToDie and turnsToDie < 2 then
-						Strategies.chat("magneton", " In range to die to Sandslash after that, we'll need to risk finishing setting up against Magneton")
+						Strategies.chat("magneton", "is in range to die to Sandslash after that, we'll need to risk finishing setting up against Magneton.")
 					else
 						prepare = true
 					end
@@ -936,8 +950,6 @@ strategyFunctions.fightSabrina = function()
 			Battle.automate(forced)
 		end
 	elseif status.foughtTrainer then
-		Strategies.deepRun = true
-		Control.ignoreMiss = false
 		return true
 	end
 end
@@ -1344,7 +1356,7 @@ end
 
 function Strategies.initGame(midGame)
 	if midGame then
-		-- Strategies.setYolo("", true)
+		Strategies.setYolo("nidoran", true)
 	end
 	Control.preferredPotion = "super"
 end
