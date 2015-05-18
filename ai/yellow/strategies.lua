@@ -558,7 +558,27 @@ end
 -- 4: Mt. Moon
 
 strategyFunctions.rivalSandAttack = function()
-	return true --TODO swap at low acc
+	if Strategies.trainerBattle() then
+		if Battle.redeployNidoking() then
+			local sacrifice = Battle.deployed()
+			if sacrifice then
+				Strategies.chat("sacrificed", "got Sand-Attacked... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
+			end
+			return false
+		end
+		if Pokemon.isOpponent("sandshrew") and Memory.value("battle", "accuracy") < 6 then --TODO
+			local __, turnsToKill = Combat.bestMove()
+			if turnsToKill and turnsToKill == 1 then
+				local sacrifice = Pokemon.getSacrifice("pidgey")
+				if sacrifice and Pokemon.info(sacrifice, "level") < 6 and Battle.sacrifice(sacrifice) then
+					return false
+				end
+			end
+		end
+		Battle.automate()
+	elseif status.foughtTrainer then
+		return true
+	end
 end
 
 strategyFunctions.acquireCharmander = function()
