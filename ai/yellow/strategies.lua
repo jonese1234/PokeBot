@@ -1106,9 +1106,13 @@ end
 
 strategyFunctions.bruno = function()
 	if Strategies.trainerBattle() then
-		if Combat.hasParalyzeStatus() and Inventory.contains("full_restore") then
-			Inventory.use("full_restore", nil, true)
-			return false
+		if Combat.hasParalyzeStatus() then
+			if Inventory.contains("full_restore") then
+				Strategies.chat("status_recover", "is attempting to recover from Hitmonchan's status change with a Full Restore...")
+				Inventory.use("full_restore", nil, true)
+				return false
+			end
+			Strategies.chat("status_lost", "got a status change from Hitmonchan, without a Full Restore to cure :(")
 		end
 
 		local forced
@@ -1140,25 +1144,32 @@ end
 
 strategyFunctions.agatha = function()
 	if Strategies.trainerBattle() then
-		local preparing = true
+		local forced
+		local preparing = false
 		if Pokemon.isOpponent("gengar") then
 			if status.firstGengar == nil then
 				status.firstGengar = true
 			end
 			preparing = Memory.double("battle", "our_speed") < 147
-			if preparing and status.firstGengar then
+			if preparing and status.firstGengar and status.didParalyze then
 				if Inventory.count("x_speed") > 1 then
 					status.preparing = nil
 				end
 			end
-		elseif status.firstGengar then
-			status.firstGengar = false
+		else
+			if status.firstGengar then
+				status.firstGengar = false
+			end
+			if Pokemon.isOpponent("golbat") then
+				forced = "thunderbolt"
+			end
 		end
 		if preparing and not Strategies.prepare("x_speed") then
 			return false
 		end
 
 		if Combat.isParalyzed() then
+			status.didParalyze = true
 			if Inventory.contains("full_restore") then
 				Inventory.use("full_restore", nil, true)
 				return false
@@ -1167,7 +1178,7 @@ strategyFunctions.agatha = function()
 			Inventory.use("pokeflute", nil, true)
 			return false
 		end
-		Battle.automate()
+		Battle.automate(forced)
 	elseif status.foughtTrainer then
 		return true
 	end
@@ -1209,7 +1220,22 @@ strategyFunctions.blue = function()
 		local forced, xItem
 		local opponentName = Battle.opponent()
 		if opponentName == "sandslash" then
-			xItem = "x_special"
+			if Memory.raw(0x0FE9) == 32 then
+				Strategies.chat("froze", "froze Sandslash Kreygasm Finishing setup now...")
+				if Strategies.isPrepared("x_speed") or Strategies.isPrepared("x_special") then
+					xItem = "x_accuracy"
+				else
+					if stats.nidoran.speedDV <= 7 then
+						xItem = Inventory.contains("x_speed", "x_special")
+					else
+						xItem = Inventory.contains("x_special", "x_speed")
+					end
+				end
+			elseif Control.yolo then
+				Strategies.chat("yolo", "is attempting to freeze/crit Sandslash to make up more time...")
+			else
+				xItem = "x_special"
+			end
 			Strategies.elite4Reason = "sandslash"
 		else
 			Strategies.elite4Reason = nil
@@ -1239,6 +1265,23 @@ strategyFunctions.blue = function()
 							return false
 						end
 					end
+				end
+				if Combat.sandAttacked() and not Strategies.isPrepared("x_accuracy") then
+					Strategies.chat("kinesis", "got Kinesis'd, we'll need to risk setting up X Accuracy vs. Alakazam.")
+					xItem = "x_accuracy"
+				elseif turnsToKill and turnsToKill > 1 and not Strategies.isPrepared("x_speed") and not Strategies.isPrepared("x_special") then
+					local message
+					if stats.nidoran.speedDV <= 7 then
+						xItem = Inventory.contains("x_speed", "x_special")
+					else
+						xItem = Inventory.contains("x_special", "x_speed")
+					end
+					if xItem then
+						message = " We'll need to set up vs. Alakazam here to 1-shot it..."
+					else
+						message = " We'll need to get lucky vs. Alakazam here to 1-shot it..."
+					end
+					Strategies.chat("outsped", message)
 				end
 			elseif opponentName == "exeggutor" then
 				if Combat.isSleeping() then
