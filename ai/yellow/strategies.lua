@@ -434,21 +434,27 @@ strategyFunctions.centerViridian = function()
 	return takeCenter(15, 2, 13, 25, 18)
 end
 
-strategyFunctions.battleSandshrew = function()
+strategyFunctions.fightSandshrew = function()
+	local forced
 	if Strategies.trainerBattle() then
 		if Pokemon.isOpponent("sandshrew") then
 			local __, turnsToKill, turnsToDie = Combat.bestMove()
-			if turnsToKill and turnsToKill > 1 and turnsToDie <= 2 then
-				local enemyMove = Combat.enemyAttack()
-				local damage = math.floor(enemyMove.damage * 1.8)
-				if Combat.hp() < damage and Inventory.contains("potion") then
-					Inventory.use("potion", "nidoran", true)
-					return false
+			if turnsToKill then
+				if turnsToKill > 1 and turnsToDie <= 2 then
+					local enemyMove = Combat.enemyAttack()
+					local damage = math.floor(enemyMove.damage * 1.8)
+					if Combat.hp() < damage and Inventory.contains("potion") then
+						Inventory.use("potion", "nidoran", true)
+						return false
+					end
+				end
+				if turnsToKill == 3 then
+					forced = "tackle"
 				end
 			end
 		end
 	end
-	return strategyFunctions.leer {{"sandshrew", 14}}
+	return strategyFunctions.leer {{"sandshrew", 14, forced=forced}}
 end
 
 strategyFunctions.fightBrock = function()
@@ -457,37 +463,39 @@ strategyFunctions.fightBrock = function()
 		return Strategies.death()
 	end
 	if Strategies.trainerBattle() then
-		local __, turnsToKill, turnsToDie = Combat.bestMove()
-		if turnsToKill then
-			if turnsToDie < 2 and Inventory.contains("potion") then
-				Inventory.use("potion", "nidoran", true)
-			else
+		local forced
+		if Pokemon.isOpponent("onix") then
+			local __, turnsToKill, turnsToDie = Combat.bestMove()
+			if turnsToKill then
+				if turnsToDie < 2 and Inventory.contains("potion") then
+					Inventory.use("potion", "nidoran", true)
+					return false
+				end
 				local bideTurns = Memory.value("battle", "opponent_bide")
 				if bideTurns > 0 then
 					local onixHP = Memory.double("battle", "opponent_hp")
-					if status.tries == 0 then
-						status.tries = onixHP
+					if not status.bideHP then
+						status.bideHP = onixHP
 						status.startBide = bideTurns
 					end
-					local forced
-					if turnsToKill < 2 or status.startBide - bideTurns > 1 then
-					-- elseif turnsToKill < 3 and status.startBide == bideTurns then
-					elseif onixHP == status.tries then
+					local hasDamaged = onixHP ~= status.bideHP
+					if turnsToKill > 2 then
+						forced = "leer"
+					elseif turnsToKill == 1 then
+					elseif hasDamaged and status.startBide - bideTurns > 1 then
+					elseif turnsToKill == 2 and status.startBide == bideTurns then
+					elseif not hasDamaged then
 						forced = "leer"
 					end
-					Battle.fight(forced)
 				else
-					status.tries = 0
-					if turnsToKill > 3 then
-						strategyFunctions.leer({{"onix", 13}})
-					else
-						Battle.automate()
-					end
+					status.bideHP = nil
+				end
+				if turnsToKill > 2 then
+					forced = "leer"
 				end
 			end
-		else
-			Input.cancel()
 		end
+		Battle.automate(forced)
 	elseif status.foughtTrainer then
 		return true
 	end
