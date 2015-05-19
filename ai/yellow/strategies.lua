@@ -1013,7 +1013,7 @@ end
 
 strategyFunctions.fightGiovanni = function()
 	if Strategies.trainerBattle() then
-		Strategies.chat("critical", " Giovanni can end the run here with Dugtrio's high chance to critical...")
+		Strategies.chat("critical", " Giovanni can end the run here with Dugtrio and Persian's high chance to critical...")
 		if Strategies.prepare("x_speed") then
 			local forced
 			local prepareAccuracy
@@ -1317,7 +1317,9 @@ strategyFunctions.blue = function()
 					end
 				end
 				if Combat.sandAttacked() and not Strategies.isPrepared("x_accuracy") then
-					Strategies.chat("kinesis", "got Kinesis'd, we'll need to risk setting up X Accuracy vs. Alakazam.")
+					if Menu.onBattleSelect() and Battle.opponentAlive() then
+						Strategies.chat("kinesis", "got Kinesis'd, we'll need to risk setting up X Accuracy vs. Alakazam.")
+					end
 					xItem = "x_accuracy"
 				elseif turnsToKill and turnsToKill > 1 and not Strategies.isPrepared("x_speed") and not Strategies.isPrepared("x_special") then
 					local message

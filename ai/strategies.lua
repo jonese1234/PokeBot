@@ -1744,13 +1744,15 @@ Strategies.functions = {
 
 	silphCarbos = function()
 		if Strategies.initialize() then
-			local skipCarbos = not Strategies.needsCarbosAtLeast(2)
-			if not skipCarbos then
-				Bridge.chat(" This Nidoking has bad speed, so we need the extra Carbos here.")
+			local getCarbos = Strategies.needsCarbosAtLeast(2)
+			if getCarbos then
+				if not Data.yellow then
+					Bridge.chat(" This Nidoking has bad speed, so we need the extra Carbos here.")
+				end
 			elseif Strategies.getsSilphCarbosSpecially() then
-				skipCarbos = false
+				getCarbos = true
 			end
-			if skipCarbos then
+			if not getCarbos then
 				return true
 			end
 		end
@@ -1814,7 +1816,7 @@ Strategies.functions = {
 			if not Strategies.needsCarbosAtLeast(3) then
 				return true
 			end
-			Bridge.chat(" This Nidoking has bad speed, so we'll need to go out of our way for the extra Carbos here.")
+			Bridge.chat(" This Nidoking has terrible speed, so we'll need to go out of our way for the extra Carbos here.")
 		end
 		if Inventory.count("carbos") ~= status.carbos then
 			if Walk.step(20, 20) then
