@@ -102,6 +102,9 @@ function Strategies.death(extra)
 	if Control.missed then
 		explanation = "Missed"
 		reason = "miss"
+	elseif Control.wantedPotion then
+		explanation = "Ran out of potions"
+		reason = "potion"
 	elseif Control.criticaled then
 		explanation = "Critical'd"
 		reason = "critical"
@@ -699,6 +702,8 @@ Strategies.functions = {
 					end
 					toPotion = Inventory.contains(p_first, p_second, p_third)
 				end
+
+				Control.wantedPotion = toPotion == nil
 				if toPotion then
 					if Menu.pause() then
 						Inventory.use(toPotion)
@@ -706,7 +711,6 @@ Strategies.functions = {
 					end
 					return false
 				end
-				--TODO report wanted potion
 			end
 		end
 		if Strategies.closeMenuFor(data) then

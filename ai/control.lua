@@ -408,6 +408,7 @@ function Control.reset()
 	Control.yolo = false
 	Control.inBattle = false
 	Control.preferredPotion = nil
+	Control.wantedPotion = false
 end
 
 function Control.init()
