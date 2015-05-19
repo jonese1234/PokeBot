@@ -182,7 +182,7 @@ function Menu.onPokemonSelect(battleMenu)
 	if yellow then
 		battleMenu = battleMenu - 19
 	end
-	return battleMenu == 8 or battleMenu == 48 or battleMenu == 184 or battleMenu == 224
+	return battleMenu == 8 or battleMenu == 48 or battleMenu == 184 or battleMenu == 222 or battleMenu == 224
 end
 
 -- PAUSED
