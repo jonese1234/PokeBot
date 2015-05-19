@@ -61,7 +61,7 @@ local function recover()
 			end
 		end
 	end
-	if Combat.isParalyzed() then
+	if Combat.isParalyzed() and not Control.canDie() then
 		local heals = Inventory.contains("paralyze_heal", "full_restore")
 		if heals then
 			Inventory.use(heals, nil, true)
