@@ -925,11 +925,6 @@ Strategies.functions = {
 		end
 	end,
 
-	allowDeath = function(data)
-		Control.canDie(data.on)
-		return true
-	end,
-
 	leer = function(data)
 		local bm = Combat.bestMove()
 		if not bm or bm.minTurns < 3 then

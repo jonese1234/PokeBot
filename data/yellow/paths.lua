@@ -7,9 +7,9 @@ local YellowPaths = {
 	-- Into the Wild
 	{0, {5,6}, {10,6}, {10,0}},
 	-- Choose your character!
-	{40, {5,3}, {c="a",a="Pallet Rival"}, {s="allowDeath",on=true}, {5,4}, {7,4}, {s="take",dir="Up"}, {5,3}, {s="dialogue",dir="Up",decline=true}, {s="acquire",poke="pikachu"}, {5,6}, {s="fightEevee"}, {5,12}},
+	{40, {5,3}, {c="a",a="Pallet Rival"}, {c="allowDeath",on=true}, {5,4}, {7,4}, {s="take",dir="Up"}, {5,3}, {s="dialogue",dir="Up",decline=true}, {s="acquire",poke="pikachu"}, {5,6}, {s="fightEevee"}, {5,12}},
 	-- Let's try this escape again
-	{0, {12,12}, {c="a",a="Pallet Town"}, {s="allowDeath",on=false}, {c="encounters",limit=6}, {c="trackEncounters",area="route1"}, {9,12}, {9,2}, {10,2}, {10,-1}},
+	{0, {12,12}, {c="a",a="Pallet Town"}, {c="allowDeath",on=false}, {c="encounters",limit=5}, {c="trackEncounters",area="route1"}, {9,12}, {9,2}, {10,2}, {10,-1}},
 	-- First encounter
 	{12, {10,35}, {10,30}, {8,30}, {8,24}, {12,24}, {12,20}, {9,20}, {9,14}, {14,14}, {s="dodgePalletBoy"}, {14,2}, {11,2}, {11,-1}},
 	-- To the Mart
@@ -17,7 +17,7 @@ local YellowPaths = {
 	-- Viridian Mart
 	{42, {2,5}, {2,6}, {3,6}, {3,8}},
 	-- Backtracking
-	{1, {29,20}, {c="encounters",limit=7}, {29,21}, {26,21}, {26,30}, {20,30}, {20,36}},
+	{1, {29,20}, {c="encounters",limit=6}, {29,21}, {26,21}, {26,30}, {20,30}, {20,36}},
 	-- Parkour
 	{12, {10, 0}, {10,3}, {8,3}, {8,18}, {9,18}, {9,21}, {12,21}, {12,24}, {10,24}, {10,36}},
 	-- To Oak's lab
@@ -243,9 +243,9 @@ local YellowPaths = {
 	-- F3
 	{144, {3,9}, {3,10}, {6,10}, {6,13}, {8,13}, {8,6}, {17,6}, {17,9}, {18,9}},
 	-- F4
-	{145, {18,9}, {s="allowDeath",on=true}, {c="potion",b=false}, {18,7}, {16,7}, {s="talk",dir="Left"}, {s="digFight"}, {16,9}, {c="potion",b=true,yolo=true}, {14,9}, {14,10}, {13,10}, {s="take",dir="Left"}, {14,10}, {14,8}, {11,8}, {11,9}, {10,9}, {10,12}, {7,12}, {7,11}, {4,11}, {4,10}, {3,10}, {3,9}},
+	{145, {18,9}, {c="allowDeath",on=true}, {c="potion",b=false}, {18,7}, {16,7}, {s="talk",dir="Left"}, {s="digFight"}, {16,9}, {c="potion",b=true,yolo=true}, {14,9}, {14,10}, {13,10}, {s="take",dir="Left"}, {14,10}, {14,8}, {11,8}, {11,9}, {10,9}, {10,12}, {7,12}, {7,11}, {4,11}, {4,10}, {3,10}, {3,9}},
 	-- F5
-	{146, {3,9}, {4,9}, {4,11}, {s="take",dir="Down"}, {4,6}, {13,6}, {13,9}, {9,9}, {9,12}, {14,12}, {14,10}, {18,10}, {s="allowDeath",on=false}, {18,9}},
+	{146, {3,9}, {4,9}, {4,11}, {s="take",dir="Down"}, {4,6}, {13,6}, {13,9}, {9,9}, {9,12}, {14,12}, {14,10}, {18,10}, {c="allowDeath",on=false}, {18,9}},
 	-- F6
  	{147, {18,9}, {18,7}, {15,7}, {15,3}, {11,3}, {11,5}, {10,5}, {s="interact",dir="Left"}, {10,6}, {6,6}, {6,7}, {s="interact",dir="Down"}, {6,14}, {10,14}, {10,16}, {s="pokeDoll"}, {9,16}},
 	-- F7: Top
@@ -358,7 +358,7 @@ local YellowPaths = {
 	-- Fly home
 	{6, {41,10}, {s="fly",dest="pallet",map=0}},
 	-- Welcome home
-	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="elixer",move="earthquake",min=10,chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {s="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
+	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="elixer",move="earthquake",min=10,chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {c="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
 	{32, {4,0}, {c="potion",b=true,yolo=true}, {4,14}, {3,14}, {3,90}},
 	-- Enter Cinnabar Mansion
@@ -388,7 +388,7 @@ local YellowPaths = {
 	-- Viridian again
 	{1, {23,26}, {s="bicycle"}, {19,26}, {19,4}, {27,4}, {27,3}, {34,3}, {34,8}, {32,8}, {32,7}},
 	-- Giovanni Gym
-	{45, {16,17}, {c="potion",b=false}, {c="a",a="Giovanni's Gym Machokes"}, {16,16}, {14,16}, {14,9}, {13,9}, {13,7}, {15,7}, {15,4}, {12,4}, {12,5}, {11,5}, {s="potion",hp=25,yolo=0}, {10,5}, {c="a",a="Machoke"}, {10,4}, {s="fightX",x="attack"}, {13,5}, {13,4}, {15,4}, {15,7}, {13,7}, {13,11}, {14,11}, {14,16}, {16,16}, {16,18}},
+	{45, {16,17}, {c="potion",b=false}, {c="a",a="Giovanni's Gym Machokes"}, {16,16}, {14,16}, {14,9}, {13,9}, {13,7}, {15,7}, {15,4}, {12,4}, {12,5}, {11,5}, {s="potion",hp=25,yolo=0}, {10,5}, {c="a",a="Machoke"}, {10,4}, {s="fightX",x="special"}, {13,5}, {13,4}, {15,4}, {15,7}, {13,7}, {13,11}, {14,11}, {14,16}, {16,16}, {16,18}},
 	-- Reset Gym
 	{1, {32,8}, {c="a",a="Giovanni's Gym"}, {s="reload",area="giovanni"}, {32,7}},
 	-- Giovanni

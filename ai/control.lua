@@ -70,6 +70,11 @@ local controlFunctions = {
 		shouldFight = nil
 	end,
 
+	allowDeath = function(data)
+		Control.canDie(data.on == true)
+		return true
+	end,
+
 	-- RED
 
 	viridianExp = function()
