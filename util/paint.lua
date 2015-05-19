@@ -33,10 +33,10 @@ function Paint.draw(currentMap)
 	end
 
 	local caughtPokemon = {
-		{"squirtle"},
+		{"squirtle", "pikachu", "lapras"},
 		{"nidoran", "nidorino", "nidoking"},
 		{"spearow", "pidgey"},
-		{"paras", "oddish", "sandshrew", "charmander"},
+		{"paras", "oddish", "charmander", "sandshrew"},
 	}
 	local partyY = BOTTOM_EDGE
 	for i,pokemonCategory in ipairs(caughtPokemon) do
