@@ -68,7 +68,7 @@ local Paths = {
 	-- Leaving Pewter City
 	{2, {23,18}, {40,18}},
 	-- Route 3
-	{14, {0,10}, {c="a",a="Route 3"}, {c="catchFlier"}, {c="pp",on=true}, {c="trackEncounters",area="route3"}, {s="battleModeSet"}, {8,10}, {8,8}, {11,8}, {11,6}, {s="bugCatcher"}, {11,4}, {12,4}, {c="a",a="Shorts Kid"}, {s="potionBeforeShorts"}, {13,4}, {s="talk",dir="Right"}, {s="shortsKid"}, {s="tweetAfterBrock"}, {13,5}, {c="a",a="Route 3"}, {s="potionBeforeCocoons"}, {18,5}, {s="talk",dir="Right"}, {s="swapMove",move="horn_attack",to=0}, {18,6}, {22,6}, {22,5}, {23,5}, {s="potion",hp=4}, {24,5}, {s="talk",dir="Down"}, {s="fightMetapod"}, {27,5}, {27,9}, {s="catchFlierBackup"}, {37,8}, {37,5}, {49,5}, {49,10}, {57,10}, {57,8}, {59,8}, {59,-1}},
+	{14, {0,10}, {c="a",a="Route 3"}, {c="catchFlier"}, {c="pp",on=true}, {c="trackEncounters",area="route3"}, {s="battleModeSet"}, {8,10}, {8,8}, {11,8}, {11,6}, {s="bugCatcher"}, {11,4}, {12,4}, {c="a",a="Shorts Kid"}, {s="potionBeforeShorts"}, {13,4}, {s="talk",dir="Right"}, {s="shortsKid"}, {s="tweetBrock"}, {13,5}, {c="a",a="Route 3"}, {s="potionBeforeCocoons"}, {18,5}, {s="talk",dir="Right"}, {s="swapMove",move="horn_attack",to=0}, {18,6}, {22,6}, {22,5}, {23,5}, {s="potion",hp=4}, {24,5}, {s="talk",dir="Down"}, {s="fightMetapod"}, {27,5}, {27,9}, {s="catchFlierBackup"}, {37,8}, {37,5}, {49,5}, {49,10}, {57,10}, {57,8}, {59,8}, {59,-1}},
 	-- To the Center
 	{15, {9,16}, {c="pp",on=false}, {12,16}, {12,6}, {11,6}, {11,5}},
 	-- PP up
@@ -175,7 +175,7 @@ local Paths = {
 	-- Bicycle out of Cerulean
 	{3, {13,26}, {s="swap",item="bicycle",dest=1,chain=true}, {s="teach",move="thunderbolt",replace="horn_attack",chain=true}, {s="bicycle"}, {19,26}, {19,27}, {s="skill",move="cut",done=0x0D4D}, {19,29}, {36,29}, {36,16}, {40,16}},
 	-- TPP's Bane
-	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="fourTurnThrash"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
+	{20, {0,8}, {c="a",a="Route 9"}, {4,8}, {s="skill",move="cut",done=0x0C17,val=2}, {13,8}, {13,9}, {s="talk",dir="Down"}, {s="fourTurnThrash"}, {12,9}, {12,12}, {23,12}, {23,11}, {29,11}, {29,12}, {41,12}, {41,10}, {40,10}, {40,9}, {s="talk",dir="Up"}, {s="announceVenonat"}, {41,9}, {41,6}, {39,6}, {39,4}, {45,4}, {45,3}, {51,3}, {51,8}, {60,8}},
 	-- To the cave
 	{21, {0,8}, {3,8}, {3,10}, {13,10}, {13,15}, {14,15}, {14,26}, {3,26}, {3,18}, {7,18}, {s="item",item="repel"}, {8,18}, {8,17}},
 	-- Rock Tunnel
@@ -287,7 +287,7 @@ local Paths = {
 	-- Safari 1
 	{220, {15,25}, {s="bicycle"}, {15,16}, {28,16}, {28,11}, {30,11}},
 	-- Safari 2
-	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="tossInSafari"}, {s="item",item="carbos",poke="nidoking",close=true}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="centerSkipFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
+	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="tossInSafari"}, {s="item",item="carbos",poke="nidoking",close=true}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="extraFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
 	-- Safari 3
 	{218, {39,31}, {22,31}, {22,22}, {16,22}, {16,28}, {13,28}, {13,9}, {28,9}, {28,3}, {3,3}, {3,36}},
 	-- Safari 4
@@ -365,7 +365,7 @@ local Paths = {
 	-- Celadon once again
 	{6, {41,10}, {s="bicycle"}, {41,13}, {36,13}, {36,23}, {25,23}, {25,30}, {35,30}, {35,31}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {35,34}, {5,34}, {5,29}, {12,29}, {12,27}},
 	-- Erika
-	{134, {4,17}, {c="a",a="Erika's Gym"}, {4,16}, {1,16}, {1,9}, {0,9}, {0,4}, {1,4}, {s="skill",move="cut",done=0x0D4D}, {4,4}, {s="talk",dir="Up"}, {s="fightErika"}, {s="split"}, {4,5}, {5,5}, {5,6}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {5,18}},
+	{134, {4,17}, {c="a",a="Erika's Gym"}, {4,16}, {1,16}, {1,9}, {0,9}, {0,4}, {1,4}, {s="skill",move="cut",done=0x0D4D}, {4,4}, {s="talk",dir="Up"}, {s="fightErika"}, {s="split"}, {5,4}, {5,6}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {5,18}},
 
 -- 13: ERIKA
 
