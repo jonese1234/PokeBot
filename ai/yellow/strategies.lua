@@ -385,9 +385,6 @@ strategyFunctions.shopViridianPokeballs = function()
 end
 
 strategyFunctions.catchNidoran = function()
-	if not Control.canCatch() then
-		return true
-	end
 	if Battle.isActive() then
 		local catchableNidoran = Pokemon.isOpponent("nidoran") and Memory.value("battle", "opponent_level") == 6
 		if not status.inBattle then
@@ -399,16 +396,8 @@ strategyFunctions.catchNidoran = function()
 			status.path = nil
 		end
 		if Memory.value("battle", "menu") == 94 then
-			local partySize = Memory.value("player", "party_size")
-			if partySize < 3 then
-				local pokeballs = Inventory.count("pokeball")
-				local pokeballsRequired = partySize == 2 and 1 or 2
-				if not catchableNidoran and not Pokemon.inParty("nidoran") then
-					pokeballsRequired = pokeballsRequired + 1
-				end
-				if pokeballs < pokeballsRequired then
-					return Strategies.reset("pokeballs", "Ran too low on Pokeballs", pokeballs)
-				end
+			if not Control.canCatch() then --TODO move to top
+				return true
 			end
 		end
 		if Memory.value("menu", "text_input") == 240 then
