@@ -982,29 +982,29 @@ Strategies.functions = {
 	end,
 
 	leer = function(data)
-		local bm = Combat.bestMove()
-		if not bm or bm.minTurns < 3 then
-			if Strategies.trainerBattle() then
+		if Strategies.trainerBattle() then
+			local bm = Combat.bestMove()
+			if not bm or bm.minTurns < 3 then
 				Battle.automate(data.forced)
-			elseif status.foughtTrainer then
-				return true
+				return false
 			end
-			return false
-		end
-		local opp = Battle.opponent()
-		local defLimit = 9001
-		local forced
-		for i,poke in ipairs(data) do
-			if opp == poke[1] then
-				local minimumAttack = poke[3]
-				if not minimumAttack or stats.nidoran.attack > minimumAttack then
-					defLimit = poke[2]
+			local opp = Battle.opponent()
+			local defLimit = 9001
+			local forced
+			for i,poke in ipairs(data) do
+				if opp == poke[1] then
+					local minimumAttack = poke[3]
+					if not minimumAttack or stats.nidoran.attack > minimumAttack then
+						defLimit = poke[2]
+					end
+					forced = poke.forced
+					break
 				end
-				forced = poke.forced
-				break
 			end
+			return Strategies.buffTo("leer", defLimit, forced)
+		elseif status.foughtTrainer then
+			return true
 		end
-		return Strategies.buffTo("leer", defLimit, forced)
 	end,
 
 	fightX = function(data)
