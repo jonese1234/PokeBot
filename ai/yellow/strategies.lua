@@ -281,27 +281,37 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 		end
 	end
 
+	local dx, dy = px, py
 	if currentMap == startMap then
 		if not completedCenter then
 			if px ~= entranceX then
-				px = entranceX
+				dx = entranceX
 			else
-				py = entranceY
+				dy = entranceY
 			end
 		else
 			if not finishX or px == finishX then
 				return true
 			end
-			px = finishX
+			dx = finishX
 		end
 	else
 		if Pokemon.inParty("pikachu") then
 			if py > 5 then
-				py = 5
+				dy = 5
 			elseif px < 13 then
-				px = 13
+				local cx, cy = Memory.raw(0x0223) + 2, Memory.raw(0x0222) - 3
+				if currentMap == 64 and cx == px + 1 and cy == py then
+					if py == 4 then
+						dy = 5
+					else
+						dy = 4
+					end
+				else
+					dx = 13
+				end
 			elseif py ~= 4 then
-				py = 4
+				dy = 4
 			else
 				return depositPikachu()
 			end
@@ -311,20 +321,28 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 			end
 			if px ~= 3 then
 				if Menu.close() then
-					px = 3
+					local cx, cy = Memory.raw(0x0223) + 2, Memory.raw(0x0222) - 3
+					if currentMap == 64 and cx == px - 1 and cy == py then
+						if py == 4 then
+							dy = 5
+						else
+							dy = 4
+						end
+					else
+						dx = 3
+					end
 				end
 			elseif completedCenter then
 				if Textbox.handle() then
-					py = 8
+					dy = 8
 				end
 			elseif py > 3 then
-				py = 3
+				dy = 3
 			else
 				strategyFunctions.dialogue({dir="Up"})
 			end
 		end
 	end
-	Walk.step(px, py)
 end
 
 function Strategies.requiresE4Center(afterPP)
@@ -338,6 +356,7 @@ function Strategies.requiresE4Center(afterPP)
 		return not Strategies.hasHealthFor("LoreleiDewgong")
 	end
 	return not Strategies.canHealFor("LoreleiDewgong", true)
+	Walk.step(dx, dy)
 end
 
 -- STRATEGIES
