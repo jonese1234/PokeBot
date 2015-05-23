@@ -601,30 +601,49 @@ end
 
 Strategies.functions = {
 
+	tweetBrock = function()
+		local statRequirement, timeRequirement
+		if Data.yellow then
+			statRequirement = stats.nidoran.attack == 16 or stats.nidoran.speed == 15
+			timeRequirement = "brock"
+		else
+			statRequirement = stats.nidoran.rating < 2
+			timeRequirement = "shorts"
+		end
+		if statRequirement and not Strategies.overMinute(timeRequirement) then
+			Strategies.tweetProgress("On pace after Brock with a great Nidoran in", "brock")
+		end
+		return true
+	end,
+
 	tweetMisty = function()
 		Strategies.setYolo("misty")
 
 		if not Strategies.updates.brock and not Control.yolo and (not Combat.inRedBar() or Inventory.contains("potion")) then
 			local timeLimit = Strategies.getTimeRequirement("misty")
 			if not Strategies.overMinute(timeLimit) then
-				local pbn = ""
-				if not Strategies.overMinute(timeLimit - 1) then
-					pbn = " (PB pace)"
-				end
-				local elt = Utils.elapsedTime()
+				local elt, pbn = Strategies.paceMessage(timeLimit - 1)
 				Strategies.tweetProgress("Got a run going, just beat Misty "..elt.." in"..pbn, "misty")
 			end
 		end
 		return true
 	end,
 
-	tweetVictoryRoad = function()
-		local elt = Utils.elapsedTime()
-		local pbn = ""
-		if not Strategies.overMinute("victory_road") then
-			pbn = " (PB pace)"
+	tweetSurge = function()
+		Control.preferredPotion = "super"
+
+		if not Strategies.updates.misty then
+			local timeLimit = Strategies.getTimeRequirement("trash")
+			if not Strategies.overMinute(timeLimit + (not Data.yellow and 1.0 or 0.5)) then
+				local elt, pbn = Strategies.paceMessage(timeLimit + (not Data.yellow and 0.25 or 0))
+				Strategies.tweetProgress("Got a run going, just beat Surge "..elt.." in"..pbn, "surge")
+			end
 		end
-		local elt = Utils.elapsedTime()
+		return true
+	end,
+
+	tweetVictoryRoad = function()
+		local elt, pbn = Strategies.paceMessage("victory_road")
 		Strategies.tweetProgress("Entering Victory Road at "..elt..pbn.." on our way to the Elite Four in", "victory")
 		return true
 	end,

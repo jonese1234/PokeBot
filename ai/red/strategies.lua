@@ -253,35 +253,6 @@ end
 
 local strategyFunctions = Strategies.functions
 
--- General
-
-strategyFunctions.tweetAfterBrock = function()
-	if stats.nidoran.rating < 2 then
-		if not Strategies.overMinute("shorts") then
-			Strategies.tweetProgress("On pace after Brock with a great Nidoran in", "brock")
-		end
-	end
-	return true
-end
-
-strategyFunctions.tweetSurge = function()
-	Control.preferredPotion = "super"
-
-	if not Strategies.updates.misty then
-		local timeLimit = Strategies.getTimeRequirement("trash")
-		if not Strategies.overMinute(timeLimit + 1) then
-			local elt = Utils.elapsedTime()
-			local pbn = ""
-
-			if not Strategies.overMinute(timeLimit + 0.25) then
-				pbn = " (PB pace)"
-			end
-			Strategies.tweetProgress("Got a run going, just beat Surge "..elt.." in"..pbn, "surge")
-		end
-	end
-	return true
-end
-
 -- tweetVictoryRoad
 
 -- Route
