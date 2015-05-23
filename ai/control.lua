@@ -157,7 +157,7 @@ local controlFunctions = {
 		if Pokemon.inParty("pidgey", "spearow") then
 			shouldCatch = {{name="sandshrew"}}
 		else
-			shouldCatch = {{name="spearow",alt="pidgey",hp=15}, {name="pidgey",alt="spearow",hp=15}}
+			shouldCatch = {{name="spearow",alt="pidgey",requireHit=true}, {name="pidgey",alt="spearow",requireHit=true}}
 		end
 	end,
 
