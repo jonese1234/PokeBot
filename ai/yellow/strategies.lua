@@ -676,20 +676,35 @@ strategyFunctions.rivalSandAttack = function()
 		if Battle.redeployNidoking() then
 			local sacrifice = Battle.deployed()
 			if sacrifice then
-				Strategies.chat("sacrificed", "got Sand-Attacked... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
+				Strategies.chat("sacrificed", "got Sand-Attack'd... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
 			end
 			return false
 		end
-		if Pokemon.isOpponent("sandshrew") and Memory.value("battle", "accuracy") < 6 then --TODO
-			local __, turnsToKill = Combat.bestMove()
-			if turnsToKill and turnsToKill == 1 then
-				local sacrifice = Pokemon.getSacrifice("pidgey")
-				if sacrifice and Pokemon.info(sacrifice, "level") < 6 and Battle.sacrifice(sacrifice) then
-					return false
+		local forced
+		local accuracy = Memory.value("battle", "accuracy")
+		local opponentSandshrew = Pokemon.isOpponent("sandshrew")
+		if opponentSandshrew then
+			forced = "horn_attack"
+		end
+		if accuracy < 7 then
+			if opponentSandshrew then
+				local sacrifice = Pokemon.getSacrifice("pidgey", "spearow")
+				if sacrifice then
+					local threshold = (Control.yolo or Pokemon.info(sacrifice, "level") > 4) and 5 or 6
+					if accuracy < threshold then
+						local __, turnsToKill = Combat.bestMove()
+						if turnsToKill and turnsToKill == 1 then
+							if sacrifice and Battle.sacrifice(sacrifice) then
+								return false
+							end
+						end
+					end
 				end
+			else
+				Strategies.chat("sacrificed", "got Sand-Attacked... Attempting to hit through it.")
 			end
 		end
-		Battle.automate()
+		Battle.automate(forced)
 	elseif status.foughtTrainer then
 		return true
 	end
