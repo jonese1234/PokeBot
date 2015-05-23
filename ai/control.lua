@@ -221,15 +221,19 @@ function Control.shouldFight()
 end
 
 function Control.canCatch(partySize)
-	if not partySize then
-		partySize = Memory.value("player", "party_size")
+	local minimumCount = 0
+	if not Pokemon.inParty("nidoran", "nidorino", "nidoking") then
+		minimumCount = minimumCount + (Data.yellow and 1 or 2)
 	end
+	if not Pokemon.inParty("pidgey", "spearow") then
+		minimumCount = minimumCount + 1
+	end
+	if not Pokemon.inParty("paras", "oddish", "sandshrew") and not Data.yellow then
+		minimumCount = minimumCount + 1
+	end
+
 	local pokeballs = Inventory.count("pokeball")
-	local minimumCount = (Data.yellow and 3 or 4) - partySize
 	if pokeballs < minimumCount then
-		if Data.yellow and Pokemon.inParty("nidoran", "nidorino", "nidoking") and Pokemon.inParty("pidgey", "spearow") then
-			return false
-		end
 		Strategies.reset("pokeballs", "Ran too low on Pokeballs", pokeballs)
 		return false
 	end
