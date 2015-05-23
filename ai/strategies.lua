@@ -459,7 +459,9 @@ function Strategies.needsCarbosAtLeast(count)
 	local speedDV = stats.nidoran.speedDV
 	local carbosRequired = 0
 	if Data.yellow then
-		if speedDV <= 8 then
+		if speedDV <= 7 then
+			carbosRequired = 0
+		elseif speedDV <= 8 then
 			carbosRequired = 3
 		elseif speedDV <= 10 then
 			carbosRequired = 2
