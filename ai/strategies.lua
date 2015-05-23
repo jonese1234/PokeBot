@@ -196,17 +196,17 @@ function Strategies.chat(once, message)
 	end
 end
 
-function Strategies.canHealFor(damage, allowAlreadyHealed, disableFullRestore)
+function Strategies.canHealFor(damage, allowAlreadyHealed, allowFullRestore)
 	if type(damage) == "string" then
 		damage = Combat.healthFor(damage)
 	end
 	local curr_hp, max_hp = Combat.hp(), Combat.maxHP()
-	if allowAlreadyHealed and curr_hp > damage then
+	if allowAlreadyHealed and curr_hp > math.min(damage, max_hp - 1) then
 		return true
 	end
 	if max_hp - curr_hp > 3 then
 		local healChecks = {"super_potion", "potion"}
-		if not disableFullRestore then
+		if allowFullRestore then
 			table.insert(healChecks, 1, "full_restore")
 		end
 		for idx,potion in ipairs(healChecks) do
@@ -217,11 +217,20 @@ function Strategies.canHealFor(damage, allowAlreadyHealed, disableFullRestore)
 	end
 end
 
-function Strategies.hasHealthFor(opponent, extra)
+function Strategies.hasSupersFor(damage)
+	local healTo = math.min(Combat.healthFor(damage), Combat.maxHP())
+	return Inventory.count("super_potion") >= math.ceil((healTo - Combat.hp()) / 50)
+end
+
+function Strategies.hasHealthFor(opponent, extra, allowFull)
 	if not extra then
 		extra = 0
 	end
-	local afterHealth = math.min(Combat.hp() + extra, Combat.maxHP())
+	local max_hp = Combat.maxHP()
+	local afterHealth = math.min(Combat.hp() + extra, max_hp)
+	if allowFull and afterHealth == max_hp then
+		return true
+	end
 	return afterHealth > Combat.healthFor(opponent)
 end
 
@@ -547,6 +556,43 @@ function Strategies.completeCans()
 		end
 	end
 	Input.press(walkIn, 0)
+end
+
+local function hasEnoughHornDrills()
+	local earthquakeJinx = stats.nidoran.attackDV >= 11 and Battle.pp("earthquake") > 0
+	return Battle.pp("horn_drill") >= (earthquakeJinx and 4 or 5)
+end
+
+local function hasEnoughPPItemsToSkipCentering(afterRestoring, afterPickup)
+	if afterRestoring and not hasEnoughHornDrills() then
+		return false
+	end
+	local restoresRequired
+	if afterRestoring then
+		restoresRequired = afterPickup and 2 or 1
+	else
+		restoresRequired = 2
+	end
+	return Inventory.ppRestoreCount() >= restoresRequired
+end
+
+function Strategies.requiresE4Center(afterRestoring, afterPickup)
+	if not hasEnoughPPItemsToSkipCentering(afterRestoring, afterPickup) then
+		return true
+	end
+
+	if Control.areaName == "Elite Four" then
+		return not Strategies.hasHealthFor("LoreleiDewgong")
+	end
+	return not Strategies.hasSupersFor("LoreleiDewgong")
+end
+
+local function useEtherInsteadOfCenter()
+	return not hasEnoughHornDrills() and not Strategies.requiresE4Center(false, false)
+end
+
+local function requiresMaxEther()
+	return Inventory.ppRestoreCount() < (Strategies.requiresE4Center(true, false) and 2 or 3)
 end
 
 -- GENERALIZED STRATEGIES
@@ -1853,12 +1899,14 @@ Strategies.functions = {
 		return Strategies.tossItem("antidote", "tm34", "pokeball")
 	end,
 
-	centerSkipFullRestore = function()
+	extraFullRestore = function()
 		if Strategies.initialize() then
-			if Control.yolo or Inventory.contains("full_restore") then
-				return true
+			if not Data.yellow then
+				if Control.yolo or Inventory.contains("full_restore") then
+					return true
+				end
+				Bridge.chat("needs to grab the backup Full Restore here.")
 			end
-			Bridge.chat("needs to grab the backup Full Restore here.")
 		end
 		local px, py = Player.position()
 		if px < 21 then
@@ -1919,22 +1967,6 @@ Strategies.functions = {
 		Walk.step(px, py)
 	end,
 
-	checkEther = function()
-		if Inventory.ppRestoreCount() < 2 then
-			Strategies.maxEtherSkip = false
-		else
-			if Data.yellow then
-				Strategies.maxEtherSkip = Strategies.requiresE4Center(false)
-			else -- TODO don't skip center if not in redbar?
-				Strategies.maxEtherSkip = not Strategies.requiresE4Center()
-			end
-			if not Strategies.maxEtherSkip then
-				Bridge.chat("is grabbing the Max Ether to skip the Elite 4 Center.")
-			end
-		end
-		return true
-	end,
-
 	ether = function(data)
 		local main = Memory.value("menu", "main")
 		data.item = status.item
@@ -1944,9 +1976,13 @@ Strategies.functions = {
 			end
 		else
 			if not status.item then
-				if data.max and Strategies.maxEtherSkip then
-					return true
+				if data.max then
+					if not useEtherInsteadOfCenter() then
+						return true
+					end
+					Bridge.chat("is Elixering and grabbing the Max Ether to skip the Elite 4 Center.")
 				end
+
 				status.item = Inventory.contains("ether", "max_ether", "elixer")
 				if not status.item then
 					if Strategies.closeMenuFor(data) then
@@ -1976,10 +2012,7 @@ Strategies.functions = {
 
 	tossInVictoryRoad = function()
 		if Strategies.initialize() then
-			if Strategies.maxEtherSkip then
-				return true
-			end
-			if Inventory.ppRestoreCount() >= 2 then
+			if not requiresMaxEther() or not Inventory.isFull() or Inventory.contains("max_ether") then
 				return true
 			end
 		end
@@ -1988,14 +2021,13 @@ Strategies.functions = {
 
 	grabMaxEther = function()
 		if Strategies.initialize() then
-			if Strategies.maxEtherSkip and Inventory.ppRestoreCount() >= 2 then
+			if Inventory.isFull() or not requiresMaxEther() then
 				return true
 			end
-			if Inventory.isFull() then
-				return true
-			end
+			status.startCount = Inventory.count("max_ether")
 		end
-		if Inventory.contains("max_ether") then
+
+		if Inventory.count("max_ether") > status.startCount then
 			return true
 		end
 		local px, py = Player.position()
@@ -2009,7 +2041,7 @@ Strategies.functions = {
 
 	potionBeforeLorelei = function(data)
 		if Strategies.initialize() then
-			if Strategies.requiresE4Center(true) then
+			if Strategies.requiresE4Center(true, true) then
 				return true
 			end
 			if not Strategies.canHealFor("LoreleiDewgong") then
@@ -2025,7 +2057,7 @@ Strategies.functions = {
 	centerSkip = function()
 		if Strategies.initialize() then
 			Strategies.setYolo("e4center")
-			if not Strategies.requiresE4Center(true) then
+			if not Strategies.requiresE4Center(true, true) then
 				local message
 				if not Data.yellow then
 					message = "is skipping the Center and attempting to red-bar "
@@ -2034,8 +2066,8 @@ Strategies.functions = {
 					else
 						message = message.."the Elite 4!"
 					end
+					Bridge.chat(message)
 				end
-				Bridge.chat(message)
 				return true
 			end
 			Bridge.chat("is taking the Center to heal HP/PP for Lorelei.")

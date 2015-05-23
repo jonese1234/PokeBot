@@ -20,7 +20,7 @@ local Utils = require "util.utils"
 local Inventory = require "storage.inventory"
 local Pokemon = require "storage.pokemon"
 
-local riskGiovanni, maxEtherSkip
+local riskGiovanni
 
 local status = Strategies.status
 local stats = Strategies.stats
@@ -241,17 +241,6 @@ end
 
 local function canRiskGiovanni()
 	return stats.nidoran.attackDV >= 11 and stats.nidoran.specialDV >= 4
-end
-
-function Strategies.requiresE4Center()
-	local hornDrillPP = Battle.pp("horn_drill")
-	if hornDrillPP >= 5 then
-		return false
-	end
-	if hornDrillPP == 4 then
-		return stats.nidoran.attackDV < 11 or Battle.pp("earthquake") == 0
-	end
-	return true
 end
 
 function Strategies.checkSquirtleStats(attack, defense, speed, special)
@@ -1733,7 +1722,7 @@ end
 
 strategyFunctions.depositPokemon = function()
 	local toSize
-	if Strategies.hasHealthFor("LoreleiDewgong") or Strategies.requiresE4Center() then
+	if Strategies.hasHealthFor("LoreleiDewgong") or Strategies.requiresE4Center(true, true) then
 		toSize = 1
 	else
 		toSize = 2
@@ -1912,9 +1901,9 @@ strategyFunctions.blue = function()
 					local msg = " Uh oh... First-turn Sky Attack could end the run here, "
 					if Combat.hp() > skyDamage then
 						msg = msg.."no criticals pls D:"
-					elseif Strategies.canHealFor(healCutoff) then
+					elseif Strategies.canHealFor(healCutoff, true) then
 						msg = msg.."attempting to heal for it"
-						if not Strategies.canHealFor(skyDamage) then
+						if not Strategies.canHealFor(skyDamage, true) then
 							msg = msg.." (damage range)"
 						end
 						msg = msg.."."
@@ -1927,7 +1916,7 @@ strategyFunctions.blue = function()
 
 			if Strategies.prepare(firstItem) then
 				if not Strategies.isPrepared(secondItem) then
-					local toPotion = Strategies.canHealFor(healCutoff)
+					local toPotion = Strategies.canHealFor(healCutoff, true)
 					if toPotion then
 						Inventory.use(toPotion, nil, true)
 						return false
@@ -1976,7 +1965,6 @@ function Strategies.completeGameStrategy()
 end
 
 function Strategies.resetGame()
-	maxEtherSkip = false
 	status = Strategies.status
 	stats = Strategies.stats
 end
