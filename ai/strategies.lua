@@ -1449,10 +1449,12 @@ Strategies.functions = {
 			if Pokemon.info("nidoking", "level") ~= 20 then
 				status.cancel = true
 			else
-				if Data.yellow then
-					p("RCE", Pokemon.getExp())
+				if Pokemon.getExp() > 5550 then
+					status.cancel = true
+				else
+					local encounterDescription = Data.yellow and "a Geodude" or "enough encounters"
+					Bridge.chat("didn't kill "..encounterDescription.." in Mt. Moon. Using Rare Candies early to sacrifice some exp, but improve some damage ranges here.")
 				end
-				status.cancel = Pokemon.getExp() > 5550
 			end
 		end
 		data.poke = "nidoking"
@@ -1560,6 +1562,13 @@ Strategies.functions = {
 				return false
 			end
 			local forced
+			if Pokemon.isOpponent("staryu") then
+				local __, turnsToKill = Combat.bestMove()
+				if turnsToKill and turnsToKill > 1 then
+					Strategies.chat("staryu", "needs a good damage range to 1-shot Staryu with this attack...")
+				end
+			end
+
 			if Battle.opponentAlive() and Combat.isConfused() then
 				if not status.sacrifice and not Control.yolo and stats.nidoran.speedDV >= 11 then
 					status.sacrifice = Pokemon.getSacrifice("pidgey", "spearow", "squirtle", "paras", "sandshrew", "charmander")
@@ -1661,12 +1670,27 @@ Strategies.functions = {
 		end
 	end,
 
+	announceVenonat = function()
+		if Strategies.trainerBattle() then
+			if Pokemon.isOpponent("venonat") then
+				local __, turnsToKill, turnsToDie = Combat.bestMove()
+				if turnsToKill and turnsToKill > 1 and stats.nidoran.attackDV < 10 then
+					local effectsDescription = turnsToDie == 1 and "kill/confuse" or "confuse"
+					Strategies.chat("range", "needs a good damage range to 1-shot this Venonat, which can "..effectsDescription.."...")
+				end
+			end
+			Battle.automate()
+		elseif status.foughtTrainer then
+			return true
+		end
+	end,
+
 	announceOddish = function()
 		if Strategies.trainerBattle() then
 			if Pokemon.isOpponent("oddish") then
 				local __, turnsToKill = Combat.bestMove()
 				if turnsToKill and turnsToKill > 1 then
-					Strategies.chat("oddish", "needs a good damage range to 1-shot this Oddish, which can paralyze.")
+					Strategies.chat("oddish", "needs a good damage range to 1-shot this Oddish, which can sleep/paralyze.")
 				end
 			end
 			Battle.automate()
@@ -1683,7 +1707,7 @@ Strategies.functions = {
 		if Strategies.initialize("paralyzed") then
 			local message
 			if heals then
-				message = "Healing Paralysis from Oddish"
+				message = "Full restoring to cure paralysis from Oddish."
 			else
 				message = "No Paralysis cure available :("
 			end
