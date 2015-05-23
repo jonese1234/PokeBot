@@ -140,15 +140,7 @@ function Battle.isActive()
 end
 
 function Battle.isTrainer()
-	local battleType = Memory.value("game", "battle")
-	if battleType == 2 then
-		return true
-	end
-	if battleType == 1 then
-		Battle.handle()
-	else
-		Textbox.handle()
-	end
+	return Memory.value("game", "battle") == 2
 end
 
 function Battle.opponent()

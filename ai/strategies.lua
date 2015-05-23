@@ -341,7 +341,7 @@ function Strategies.completedMenuFor(data)
 end
 
 function Strategies.closeMenuFor(data)
-	if (not status.menuOpened and not data.close) or data.chain then
+	if data.chain or (not status.menuOpened and not data.close) then
 		if Menu.onPokemonSelect() or Menu.hasTextbox() then
 			Input.press("B")
 			return false
@@ -2061,7 +2061,7 @@ Strategies.functions = {
 				return true
 			end
 		end
-		return Strategies.tossItem("antidote", "tm34", "pokeball")
+		return Strategies.tossItem("antidote", "tm34", "x_attack", "pokeball")
 	end,
 
 	grabMaxEther = function()

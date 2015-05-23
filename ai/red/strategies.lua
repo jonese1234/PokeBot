@@ -160,21 +160,23 @@ local function nidoranDSum(enabled)
 				status.path = {0, 4, 12}
 			elseif opponentLevel == 3 then
 				status.path = {0, 14, 11}
-			else
+			elseif opponentLevel == 4 then
 				status.path = {0, 0, 10}
 			end
 		elseif opponentName == "spearow" then
 			if opponentLevel == 3 then
 				status.path = {2, 6, 12}
-			else
+			elseif opponentLevel == 5 then
 				status.path = {3, 6, 12}
 			end
 		elseif opponentName == "nidoran" then
-			status.path = {0, 6, 12}
+			if opponentLevel == 2 then
+				status.path = {0, 6, 12}
+			end
 		elseif opponentName == "nidoranf" then
 			if opponentLevel == 3 then
 				status.path = {4, 6, 12}
-			else
+			elseif opponentLevel == 4 then
 				status.path = {5, 6, 12}
 			end
 		end
@@ -1150,6 +1152,8 @@ end
 
 -- fourTurnThrash
 
+-- announceVenonat
+
 strategyFunctions.redbarCubone = function()
 	if Strategies.trainerBattle() then
 		local forced
@@ -1227,7 +1231,6 @@ strategyFunctions.shopBuffs = function()
 	if Strategies.initialize() then
 		if canRiskGiovanni() then
 			riskGiovanni = true
-			print("Giovanni skip strats!")
 		end
 	end
 

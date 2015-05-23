@@ -106,6 +106,9 @@ end
 -- GAME
 
 function Utils.canPotionWith(potion, forDamage, curr_hp, max_hp)
+	if curr_hp > max_hp - 3 then
+		return false
+	end
 	local potion_hp
 	if potion == "full_restore" then
 		potion_hp = 9001

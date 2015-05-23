@@ -233,7 +233,7 @@ local function depositPikachu()
 						" I don't know how else to say this, but Nido and I are going steady now. Goodbye, Pikachu.",
 						" You're cute, Pikachu. But this is a speedrun, and frankly you're getting in my way.",
 						"come with me the time is right, there's no better team.... oh you're my best friend in a world we must defend... *stores Pikachu in pc*", --alloces
-						" ... and nothing of value was lost", --mymla
+						" ... and nothing of value was lost.", --mymla
 						" Now Pikachu is in Pikajail because it gets in the Pikaway.", --0xAbad1dea
 						" A little bit of Pikachu by my side... Just kidding!", --KatieW25
 						" #moofydraws https://twitter.com/moofinseeker/status/597845848253423617", --moofinseeker
@@ -862,6 +862,8 @@ end
 
 -- fourTurnThrash
 
+-- announceVenonat
+
 -- announceOddish
 
 strategyFunctions.deptElevator = function()
@@ -940,7 +942,6 @@ end
 strategyFunctions.silphRival = function()
 	if Strategies.trainerBattle() then
 		if Strategies.prepare("x_accuracy") then
-			-- Strategies.prepare("x_speed")
 			local forced = "horn_drill"
 			local prepare
 			local opponentName = Battle.opponent()
