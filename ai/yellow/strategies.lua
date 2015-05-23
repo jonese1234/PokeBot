@@ -1330,10 +1330,13 @@ strategyFunctions.lance = function()
 			Strategies.elite4Reason = nil
 			if opponentName == "dragonair" then
 				xItem = "x_speed"
-				if not Strategies.isPrepared(xItem) then
+				if Memory.value("battle", "cooldown") == 0 and not Strategies.isPrepared(xItem) then
 					local __, turnsToDie = Combat.enemyAttack()
-					if turnsToDie and turnsToDie <= 1 then
+					if turnsToDie and turnsToDie == 1 then
 						local potion = Inventory.contains("full_restore", "super_potion")
+						if potion ~= "full_restore" then
+							Strategies.chat("dragonair", "ran out of Full Restores, we'll need to get lucky setting up on Dragonair...")
+						end
 						if potion then
 							Inventory.use(potion, nil, true)
 							return false
@@ -1348,6 +1351,36 @@ strategyFunctions.lance = function()
 	elseif status.foughtTrainer then
 		return true
 	end
+end
+
+strategyFunctions.prepareForBlue = function()
+	if Strategies.initialize() then
+		local message, healSkip
+		if Strategies.setYolo("blue") then
+			local healLimit = Strategies.getTimeRequirement("blue") + 0.25
+			healSkip = Strategies.overMinute(healLimit)
+			if healSkip then
+				message = "is attempting to skip healing and yolofreeze Sandslash to make up even more time..."
+			else
+				message = "is attempting to freeze/crit Sandslash to make up more time..."
+			end
+		elseif Strategies.hasHealthFor("GarySandslash", 0, true) then
+			message = "has enough health to tank Sandslash... Let's go!"
+			healSkip = true
+		elseif Strategies.canHealFor("GarySandslash", true, true) or Strategies.hasSupersFor("GarySandslash") then
+			message = "is healing for Sandslash..."
+		else
+			message = "is unable to heal for Sandslash... Looks like we're going to have to freeze!"
+			Control.wantedPotion = true
+			healSkip = true
+		end
+		Bridge.chat(message)
+		if healSkip then
+			return true
+		end
+	end
+
+	return strategyFunctions.potion({hp="GarySandslash", full=true})
 end
 
 strategyFunctions.blue = function()
@@ -1366,9 +1399,7 @@ strategyFunctions.blue = function()
 						xItem = Inventory.contains("x_special", "x_speed")
 					end
 				end
-			elseif Control.yolo then
-				Strategies.chat("yolo", "is attempting to freeze/crit Sandslash to make up more time...")
-			else
+			elseif not Control.yolo and Strategies.hasHealthFor("GarySandslash", 0, true) then
 				xItem = "x_special"
 			end
 			Strategies.elite4Reason = "sandslash"
@@ -1382,19 +1413,19 @@ strategyFunctions.blue = function()
 						local speedMessage, canPotion
 						if Battle.damaged() then
 							if ourSpeed == theirSpeed then
-								speedMessage = "We'll need to get lucky to win this speed tie vs. Alakazam..."
+								speedMessage = "we'll need to get lucky to win this speed tie vs. Alakazam..."
 								canPotion = not Data.yolo and Inventory.contains("full_restore")
 							else
 								canPotion = Inventory.contains("full_restore")
-								speedMessage = "No Full Restores left, we'll need to get lucky."
+								speedMessage = "with no Full Restores left, we'll need to get lucky..."
 							end
 							if canPotion then
-								speedMessage = "Attempting to wait out a non-damage turn."
+								speedMessage = "attempting to wait out a non-damage turn."
 							end
 						else
-							speedMessage = " We'll need to get lucky vs. Alakazam here..."
+							speedMessage = "we'll need to get lucky vs. Alakazam here..."
 						end
-						Strategies.chat("outsped", " Bad speed. "..speedMessage)
+						Strategies.chat("outsped", " Bad speed, "..speedMessage)
 						if canPotion then
 							Inventory.use("full_restore", nil, true)
 							return false
@@ -1435,7 +1466,7 @@ strategyFunctions.blue = function()
 			end
 		end
 		if Strategies.prepare(xItem) then
-			if Combat.xAccuracy() then
+			if Combat.xAccuracy() and opponentName ~= "sandslash" then
 				forced = "horn_drill"
 			end
 			Battle.automate(forced)
