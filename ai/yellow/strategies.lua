@@ -458,32 +458,57 @@ strategyFunctions.leerCaterpies = function()
 		status.secondCaterpie = true
 	end
 	local leerAmount = status.secondCaterpie and 7 or 10
-	return strategyFunctions.leer({{"caterpie", leerAmount}})
+	return strategyFunctions.leer {{"caterpie", leerAmount}}
 end
 
 -- checkNidoranStats
 
+strategyFunctions.leerMetapod = function()
+	if not status.outsped then
+		if Battle.isTrainer() then
+			if Pokemon.isOpponent("caterpie") then
+				status.battle = true
+			elseif status.battle and status.outsped == nil and Pokemon.isOpponent("metapod") then
+				status.outsped = Memory.double("battle", "our_speed") < Memory.double("battle", "opponent_speed")
+			end
+		end
+		return strategyFunctions.leer {{"caterpie",9}, {"metapod",11}}
+	end
+
+	if Strategies.trainerBattle() then
+		Battle.automate()
+	elseif status.foughtTrainer then
+		return true
+	end
+end
+
 strategyFunctions.centerViridian = function()
+	if Strategies.initialize() then
+		local riskTackling = Pokemon.pp(0, "horn_attack") >= 19
+		Combat.factorPP(true, riskTackling)
+	end
 	return takeCenter(15, 2, 13, 25, 18)
 end
 
 strategyFunctions.fightSandshrew = function()
+	if Strategies.initialize() then
+	 	Strategies.setYolo("sandshrew")
+	end
+
 	local forced
-	if Strategies.trainerBattle() then
-		if Pokemon.isOpponent("sandshrew") then
-			local __, turnsToKill, turnsToDie = Combat.bestMove()
-			if turnsToKill then
-				if turnsToKill > 1 and turnsToDie <= 2 then
-					local enemyMove = Combat.enemyAttack()
-					local damage = math.floor(enemyMove.damage * 1.8)
-					if Combat.hp() < damage and Inventory.contains("potion") then
-						Inventory.use("potion", "nidoran", true)
-						return false
-					end
+	if Pokemon.isOpponent("sandshrew") then
+		local __, turnsToKill, turnsToDie = Combat.bestMove()
+		if turnsToKill then
+			if turnsToKill > (Control.yolo and 2 or 1) and turnsToDie <= 2 then
+				local enemyMove = Combat.enemyAttack()
+				local damage = math.floor(enemyMove.damage * 1.8)
+				if Combat.hp() < damage and Inventory.contains("potion") then
+					Inventory.use("potion", "nidoran", true)
+					return false
 				end
-				if turnsToKill == 3 then
-					forced = "tackle"
-				end
+			end
+			if turnsToKill == 3 then
+				forced = "tackle"
 			end
 		end
 	end
@@ -538,24 +563,39 @@ strategyFunctions.conserveHornAttacks = function()
 	local riskDamageRanges = false
 	if Pokemon.inParty("pikachu") then
 		local hornAttacks = Pokemon.pp(0, "horn_attack")
-		local ppRequired = 130
-		local potionsRequired = 3
+		local ppRequired = 16
+		if not Pokemon.inParty("pidgey", "spearow") then
+			ppRequired = ppRequired + 1
+		end
 		if stats.nidoran.attack == 16 then
 			ppRequired = ppRequired - 1
 		end
-		if stats.nidoran.speed == 15 then
+
+		local potionCount = Inventory.count("potion")
+		local potionsRequired = 3
+		if Control.yolo or stats.nidoran.speed == 15 then
 			potionsRequired = potionsRequired - 1
 		end
-
-		if Inventory.count("potion") >= potionsRequired and hornAttacks >= ppRequired then
-			if not STREAMING_MODE then
-				Bridge.chat("is risking some damage ranges to attempt to double center skip...")
-			end
+		if potionCount >= potionsRequired and hornAttacks >= ppRequired then
+			Bridge.chat("is risking some damage ranges to attempt to double Center skip...")
 			riskDamageRanges = true
 		end
 	end
 	Combat.factorPP(true, riskDamageRanges)
 	return true
+end
+
+strategyFunctions.fightNidoran = function()
+	if Strategies.trainerBattle() then
+		local enemyMove = Combat.enemyAttack()
+		if enemyMove then
+			Control.battlePotion(Combat.hp() <= enemyMove.damage)
+		end
+		Battle.automate()
+	elseif status.foughtTrainer then
+		Control.battlePotion(true)
+		return true
+	end
 end
 
 strategyFunctions.reload = function(data)
@@ -610,10 +650,16 @@ end
 strategyFunctions.fightKoffing = function(data)
 	if Strategies.trainerBattle() then
 		if Strategies.initialize() then
-			status.leering = Battle.pp("horn_attack") < data.min
+			status.leering = Combat.isDisabled("horn_attack") or Battle.pp("horn_attack") < data.min
 		end
-		if status.leering and not Battle.opponentDamaged() then
-			return strategyFunctions.leer({{"koffing", 13}})
+
+		local forced
+		if Pokemon.isOpponent("voltorb") then
+			if Battle.pp("horn_attack") < data.min + 1 then
+				forced = "double_kick"
+			end
+		elseif status.leering and not Battle.opponentDamaged() then
+			return strategyFunctions.leer {{"koffing", 13}}
 		end
 		Battle.automate()
 	elseif status.foughtTrainer then
