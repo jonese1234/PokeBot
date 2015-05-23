@@ -215,17 +215,26 @@ local function calcBestHit(attacker, defender, ours, rng)
 					elseif maxTurns == bestTurns and ret.name == "Thrash" then
 						replaces = targetHP ~= Memory.double("battle", "opponent_max_hp")
 					elseif move.fast and not ret.fast then
-						replaces = maxTurns <= bestTurns
+						if move.multiple then
+							replaces = targetHP <= maxDmg * 0.49
+						else
+							replaces = maxTurns <= bestTurns
+						end
 					elseif ret.fast then
 						replaces = maxTurns < bestTurns
 					elseif move.multiple and ret.accuracy < 100 then
 						replaces = targetHP <= maxDmg * 0.5
 					elseif conservePP then
 						if allowDamageRange then
-							if ret.name == "Horn-Attack" then
-								local avgDmg = (minDmg + maxDmg) / 2
-								local averageTurns = math.ceil(targetHP / avgDmg)
-								replaces = averageTurns <= bestTurns
+							local isMetapod = attacker.id == 124
+							if not isMetapod or maxTurns <= 2 then
+								if ret.name == "Horn-Attack" then
+									local weightedDmg = (minDmg + maxDmg * 2) / 3
+									local weightedTurns = math.ceil(targetHP / weightedDmg)
+									replaces = weightedTurns <= bestTurns
+								elseif move.name == "Horn-Attack" then
+									replaces = maxTurns < bestMinTurns
+								end
 							end
 						elseif maxTurns < 2 or maxTurns == bestMaxTurns then
 							if ret.name == "Earthquake" and (move.name == "Ice-Beam" or move.name == "Thunderbolt") then
@@ -382,7 +391,9 @@ function Combat.setDisableThrash(disable)
 end
 
 function Combat.factorPP(enabled, damageRange)
-	conservePP = enabled
+	if enabled ~= nil then
+		conservePP = enabled
+	end
 	if damageRange ~= nil then
 		allowDamageRange = damageRange
 	end
