@@ -1053,10 +1053,17 @@ end
 
 strategyFunctions.momHeal = function()
 	if Strategies.initialize() then
-		-- status.mom = not Strategies.canHealFor(Control.yolo and 70 or 125, true) --RISK
-		status.mom = true
+		local ppItemsRequired = Strategies.vaporeon and 3 or 2
+		status.momHeal = Inventory.ppRestoreCount() < ppItemsRequired or Combat.hp() + 50 < (Control.yolo and "BlaineNinetails" or 96)
+		local message
+		if status.momHeal then
+			message = "healing with mom before Blaine."
+		else
+			message = "elixering to skip healing with mom."
+		end
+		Bridge.chat("is "..message)
 	end
-	needsHeal = status.mom and Pokemon.pp(0, "earthquake") < 10
+	needsHeal = status.momHeal and Pokemon.pp(0, "earthquake") < 10
 
 	local currentMap = Memory.value("game", "map")
 	local px, py = Player.position()

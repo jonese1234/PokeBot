@@ -271,6 +271,30 @@ local Opponents = {
 
 -- YELLOW
 
+	BlaineNinetails = {
+		type1 = "fire",
+		type2 = "fire",
+		def = 84,
+		id = 83,
+		spec = 108,
+		hp = 135,
+		speed = 108,
+		level = 48,
+		att = 86,
+
+		moves = {
+			{
+				accuracy = 100,
+				name = "Flamethrower",
+				power = 95,
+				id = 53,
+				special = true,
+				max_pp = 15,
+				move_type = "fire",
+			},
+		},
+	},
+
 	GarySandslash = {
 		type1 = "ground",
 		type2 = "ground",
