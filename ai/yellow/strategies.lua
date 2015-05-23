@@ -1197,11 +1197,30 @@ end
 
 -- centerSkip
 
-strategyFunctions.shopE4 = function()
-	Control.preferredPotion = "full"
-	return Shop.transaction {
-		buy = {{name="full_restore", index=2, amount=3}}
-	}
+strategyFunctions.shopFullRestores = function()
+	if Strategies.initialize() then
+		Control.preferredPotion = "full"
+		local fullRestores = Inventory.count("full_restore")
+		local restoresRequired
+		if Control.yolo then
+			restoresRequired = 1
+		else
+			restoresRequired = 2
+		end
+		if fullRestores >= restoresRequired then --RISK
+			if fullRestores == 1 then
+				Bridge.chat("is skipping buying extra Full Restores to attempt to make up more time on the Elite 4.")
+			end
+			return true
+		end
+	end
+	local px, py = Player.position()
+	if px == 2 and py == 5 then
+		return Shop.transaction {
+			buy = {{name="full_restore", index=2, amount=3}}
+		}
+	end
+	Walk.step(2, 5)
 end
 
 strategyFunctions.lorelei = function()
