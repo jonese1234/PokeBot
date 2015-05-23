@@ -86,39 +86,50 @@ local function nidoranDSum(enabled)
 	if enabled and status.path == nil then
 		local opponentName = Battle.opponent()
 		local opponentLevel = Memory.value("battle", "opponent_level")
-		local runOffset
+		dsumming = opponentName..opponentLevel
+		local runOffset, waitOffset, searchDuration
 		if opponentName == "rattata" then
 			if opponentLevel == 3 then
-				status.path = {0, 1, 11, 2, 11}
+				waitOffset = 1.3
+				searchDuration = 3.2
 			elseif opponentLevel == 4 then
-				status.path = {7, 2, 11, 2, 11}
+				waitOffset = 9.0
+				searchDuration = 2.6
 			end
 			runOffset = 570
 		elseif opponentName == "pidgey" then
 			if opponentLevel == 3 then
-				status.path = {9, 2, 11, 2, 11}
+				waitOffset = -1.1
+				searchDuration = 3.2
 			elseif opponentLevel == 5 then
-				status.path = {3, 2, 11, 2, 11}
+				waitOffset = 4.7
+				searchDuration = 1.9
 			elseif opponentLevel == 7 then
-				status.path = {0, 3, 11, 2, 11}
+				waitOffset = 2.1
+				searchDuration = 1.4
 			end
 			runOffset = 562
 		elseif opponentName == "nidoran" then
 			if opponentLevel == 4 then
-				status.path = {5, 2, 11, 2, 11}
+				waitOffset = 6.3
+				searchDuration = 1.9
 			end
 			runOffset = 615
 		elseif opponentName == "nidoranf" then
 			if opponentLevel == 4 then
-				status.path = {4, 2, 11, 2, 11}
+				waitOffset = 5.6
+				searchDuration = 1.9
 			elseif opponentLevel == 6 then
-				status.path = {1, 2, 11, 2, 11}
+				waitOffset = 2.5
+				searchDuration = 1.3
 			end
 			runOffset = 581
 		end
-		if status.path then
+		if waitOffset then
+			local waitDuration = 12.8 - searchDuration
+			status.path = {waitOffset, searchDuration, waitDuration, searchDuration, waitDuration}
 			status.pathIndex = 1
-			status.startTime = status.startTime + runOffset + 5
+			status.startTime = status.startTime + runOffset
 		else
 			status.path = 0
 		end
