@@ -90,7 +90,7 @@ function Strategies.reset(reason, explanation, extra, wait)
 	end
 	resetMessage = resetMessage..separator.." "..explanation.."."
 
-	if not Data.yellow and (Strategies.updates.misty or Strategies.updates.surge) and Strategies.deepRun then
+	if Strategies.updates.victory and not Control.yolo then
 		Strategies.tweetProgress(Utils.capitalize(resetMessage))
 	end
 
@@ -147,22 +147,26 @@ end
 
 function Strategies.setYolo(name, forced)
 	local minimumTime = Strategies.getTimeRequirement(name)
-	if not minimumTime or (not forced and not RESET_FOR_TIME) then
-		return false
-	end
-	local shouldYolo = BEAST_MODE or Strategies.overMinute(minimumTime)
-	if Control.yolo ~= shouldYolo then
-		Control.yolo = shouldYolo
-		Control.setYolo(shouldYolo)
-		local prefix
-		if Control.yolo then
-			prefix = "en"
-		else
-			prefix = "dis"
+	if minimumTime and (forced or RESET_FOR_TIME) then
+		local shouldYolo = BEAST_MODE or Strategies.overMinute(minimumTime)
+		if Control.yolo ~= shouldYolo then
+			Control.yolo = shouldYolo
+			Control.setYolo(shouldYolo)
+			local prefix
+			if Control.yolo then
+				prefix = "en"
+			else
+				prefix = "dis"
+			end
+			print("YOLO "..prefix.."abled at "..Control.areaName)
 		end
-		print("YOLO "..prefix.."abled at "..Control.areaName)
 	end
 	return Control.yolo
+end
+
+function Strategies.paceMessage(time)
+	Strategies.pbPace = not Strategies.overMinute(time)
+	return Utils.elapsedTime(), Strategies.pbPace and " (PB pace)" or ""
 end
 
 -- HELPERS
