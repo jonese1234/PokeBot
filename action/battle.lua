@@ -45,7 +45,7 @@ local function recover()
 						second = "full_restore"
 					end
 				else
-					if Control.preferredPotion == "super" and max_hp - curr_hp > 22 then
+					if Control.preferredPotion == "super" or max_hp - curr_hp > 22 then
 						first = "super_potion"
 						second = "potion"
 					else

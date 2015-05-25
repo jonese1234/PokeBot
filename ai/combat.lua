@@ -193,13 +193,13 @@ local function calcBestHit(attacker, defender, ours, rng)
 	local bestTurns, bestMinTurns = 9001, 9001
 	local bestDmg = -1
 	local ourMaxHit
+	local targetHP = defender.hp
 	local ret = nil
 	for idx,move in ipairs(attacker.moves) do
 		if not move.pp or move.pp > 0 then
 			local minDmg, maxDmg = calcDamage(move, attacker, defender, rng)
 			if maxDmg then
 				local minTurns, maxTurns
-				local targetHP = defender.hp
 				if maxDmg <= 0 then
 					minTurns, maxTurns = 9001, 9001
 				else
