@@ -302,6 +302,7 @@ local function takeCenter(pp, startMap, entranceX, entranceY, finishX)
 			end
 		else
 			if not finishX or px == finishX then
+				Combat.factorPP(nil, false)
 				return true
 			end
 			dx = finishX
@@ -551,9 +552,6 @@ strategyFunctions.conserveHornAttacks = function()
 	if Pokemon.inParty("pikachu") then
 		local hornAttacks = Pokemon.pp(0, "horn_attack")
 		local ppRequired = 16
-		if not Pokemon.inParty("pidgey", "spearow") then
-			ppRequired = ppRequired + 1
-		end
 		if stats.nidoran.attack == 16 then
 			ppRequired = ppRequired - 1
 		end
@@ -563,6 +561,7 @@ strategyFunctions.conserveHornAttacks = function()
 		if Control.yolo or stats.nidoran.speed == 15 then
 			potionsRequired = potionsRequired - 1
 		end
+		p(hornAttacks, ppRequired, potionCount, potionsRequired)
 		if potionCount >= potionsRequired and hornAttacks >= ppRequired then
 			Bridge.chat("is risking some damage ranges to attempt to double Center skip...")
 			riskDamageRanges = true
@@ -636,19 +635,21 @@ end
 
 strategyFunctions.fightKoffing = function(data)
 	if Strategies.trainerBattle() then
-		if Strategies.initialize() then
-			status.leering = Combat.isDisabled("horn_attack") or Battle.pp("horn_attack") < data.min
-		end
-
 		local forced
-		if Pokemon.isOpponent("voltorb") then
+		local opponent = Battle.opponent()
+		if opponent == "voltorb" then
 			if Battle.pp("horn_attack") < data.min + 1 then
 				forced = "double_kick"
 			end
-		elseif status.leering and not Battle.opponentDamaged() then
-			return strategyFunctions.leer {{"koffing", 13}}
+		elseif opponent == "koffing" then
+			if Strategies.initialize("check_leer") then
+				status.leering = Combat.isDisabled("horn_attack") or Battle.pp("horn_attack") < data.min
+			end
+			if status.leering and not Battle.opponentDamaged() then
+				return strategyFunctions.leer {{"koffing", 13}}
+			end
 		end
-		Battle.automate()
+		Battle.automate(forced)
 	elseif status.foughtTrainer then
 		return true
 	end
