@@ -604,7 +604,7 @@ Strategies.functions = {
 	tweetBrock = function()
 		local statRequirement, timeRequirement
 		if Data.yellow then
-			statRequirement = stats.nidoran.attack == 16 or stats.nidoran.speed == 15
+			statRequirement = Pokemon.inParty("pidgey") and stats.nidoran.attack == 16 or stats.nidoran.speed == 15 --TODO
 			timeRequirement = "brock"
 		else
 			statRequirement = stats.nidoran.rating < 2
@@ -660,13 +660,14 @@ Strategies.functions = {
 
 	frames = function(data)
 		if data.report then
-			print("FR "..Strategies.frames)
+			p("FR", Strategies.frames, Utils.frames() - Strategies.startFrames)
 			local repels = Memory.value("player", "repel")
 			if repels > 0 then
 				print("S "..repels)
 			end
 			Strategies.frames = nil
 		else
+			Strategies.startFrames = Utils.frames()
 			Strategies.frames = 0
 		end
 		return true
@@ -1209,7 +1210,8 @@ Strategies.functions = {
 					"I hate everything BibleThump ",
 					"perfect stats Kappa ",
 					"there's always the next one..",
-					"worst possible stats",
+					"worst possible stats hype",
+					"unrunnable everything -.- "
 				}
 			else
 				if restrictiveStats and att == 15 and spd == 14 then
@@ -1709,7 +1711,8 @@ Strategies.functions = {
 			" I think that ship broke the ocean.",
 			" Ah, lovely weather in Vermilion City this time of year, isn't it?",
 			" As a devout practicing member of the Church of Going Fast, I find the depiction of this unskippable cutscene offensive, frankly.",
-			" Anyone else feel cheated we didn't actually get to ride to some far off land in that boat?"
+			" Anyone else feel cheated we didn't actually get to ride to some far off land in that boat?",
+			" So let me get this straight, the ship hadn't even left port yet, and the captain was already seasick? DansGame" --amanazi
 		)
 		return true
 	end,
