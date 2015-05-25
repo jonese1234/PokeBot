@@ -885,58 +885,7 @@ end
 
 -- lassEther
 
-strategyFunctions.potionBeforeMisty = function(data)
-	if Strategies.initialize() then
-		if data.goldeen then
-			Strategies.setYolo("bills")
-			if Control.yolo and Combat.hp() > 7 then
-				return true
-			end
-		end
-	end
-
-	local healAmount = data.goldeen and 66 or 72
-	local canTwoHit = stats.nidoran.attackDV >= (Control.yolo and 8 or 9)
-	local isSpeedTie = stats.nidoran.speedDV == 11
-	local canSpeedTie = stats.nidoran.speedDV >= 11
-	if Control.yolo then
-		if canTwoHit and stats.nidoran.speedDV >= 12 then
-			healAmount = 46
-		elseif canTwoHit or canSpeedTie then
-			healAmount = 66
-		else
-			healAmount = healAmount - 4
-		end
-	else
-		if canTwoHit and stats.nidoran.speedDV >= 13 then
-			healAmount = 46
-		elseif canTwoHit and canSpeedTie then
-			healAmount = 66
-		end
-	end
-	healAmount = healAmount - (stats.nidoran.special - 43)
-
-	if not data.goldeen and Strategies.initialize("healed") then
-		local message
-		local potionCount = Inventory.count("potion")
-		local needsToHeal = healAmount - Combat.hp()
-		if potionCount * 20 < needsToHeal then
-			message = "ran too low on potions to adequately heal before Misty D:"
-		elseif healAmount < 60 then
-			message = "is limiting heals to attempt to get closer to red-bar off Misty..."
-		elseif isSpeedTie then
-			message = "will need to get lucky with speed ties to beat Misty here..."
-		elseif not canSpeedTie then
-			message = "will need to get lucky to beat Misty here. We're outsped..."
-		elseif not canTwoHit then
-			message = "will need to get lucky with damage ranges to beat Misty here..."
-		end
-		if message then
-			Bridge.chat(message, false, potionCount)
-		end
-	end
-	return strategyFunctions.potion({hp=healAmount, chain=data.chain})
-end
+-- potionBeforeMisty
 
 -- fightMisty
 

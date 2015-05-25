@@ -737,6 +737,8 @@ strategyFunctions.acquireCharmander = function()
 	Walk.step(px, py)
 end
 
+-- potionBeforeMisty
+
 -- fightMisty
 
 -- 6: MISTY

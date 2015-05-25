@@ -1575,6 +1575,54 @@ Strategies.functions = {
 		return interact("Up")
 	end,
 
+	potionBeforeMisty = function(data)
+		if Strategies.initialize() then
+			if data.goldeen then
+				Strategies.setYolo("bills")
+				if Control.yolo and Combat.hp() > 7 then
+					return true
+				end
+			end
+		end
+
+		local healAmount = 72
+		local canTwoHit = stats.nidoran.attackDV >= (Control.yolo and 8 or 9)
+		local isSpeedTie = stats.nidoran.speedDV == 12
+		local outspeeds = stats.nidoran.speedDV >= (Control.yolo and 12 or 13)
+		if not Data.yellow and canTwoHit and outspeeds then
+			healAmount = 46
+		elseif canTwoHit and isSpeedTie then
+			healAmount = 66
+		elseif Control.yolo then
+			healAmount = healAmount - 4
+		end
+		healAmount = healAmount - (stats.nidoran.special - 43)
+		if Pokemon.index(0, "level") == 24 then
+			healAmount = healAmount - 3
+		end
+
+		if not data.goldeen and Strategies.initialize("healed") then
+			local message
+			local potionCount = Inventory.count("potion")
+			local needsToHeal = healAmount - Combat.hp()
+			if potionCount * 20 < needsToHeal then
+				message = "ran too low on potions to adequately heal before Misty D:"
+			elseif healAmount < 60 then
+				message = "is limiting heals to attempt to get closer to red-bar off Misty..."
+			elseif isSpeedTie then
+				message = "will need to get lucky with speed ties to beat Misty here..."
+			elseif not outspeeds then
+				message = "will need to get lucky to beat Misty here. We're outsped..."
+			elseif not canTwoHit then
+				message = "will need to get lucky with damage ranges to beat Misty here..."
+			end
+			if message then
+				Bridge.chat(message, false, potionCount)
+			end
+		end
+		return strategyFunctions.potion({hp=healAmount, chain=data.chain})
+	end,
+
 	fightMisty = function()
 		if Strategies.trainerBattle() then
 			if Battle.redeployNidoking() then

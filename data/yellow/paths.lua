@@ -57,7 +57,7 @@ local YellowPaths = {
 	-- To Pewter Mart
 	{2, {16,18}, {c="a",a="Route 3"}, {10,18}, {10,13}, {27,13}, {27,16}, {40,16}},
 	-- Route 3
-	{14, {0,8}, {s="conserveHornAttacks"}, {c="trackEncounters",area="route3"}, {c="catchFlier"}, {s="potion",hp=10}, {3,8}, {3,9}, {11,9}, {11,4}, {12,4}, {s="potion",hp=16}, {13,4}, {s="interact",dir="Right"}, {13,5}, {17,5}, {s="potion",hp=3}, {18,5}, {18,4}, {19,4}, {s="fightNidoran"}, {15,4}, {15,6}, {11,6}, {11,9}, {-1,9}},
+	{14, {0,8}, {s="conserveHornAttacks"}, {c="trackEncounters",area="route3"}, {c="catchFlier"}, {s="potion",hp=10}, {3,8}, {3,9}, {11,9}, {11,4}, {12,4}, {s="potion",hp=16}, {13,4}, {s="interact",dir="Right"}, {13,5}, {17,5}, {s="potion",hp=10}, {18,5}, {18,4}, {19,4}, {s="fightNidoran"}, {15,4}, {15,6}, {11,6}, {11,9}, {-1,9}},
 	-- Reload
 	{2, {39,17}, {s="reload",area="route3"}, {40,17}},
 	-- Bypass
@@ -106,7 +106,7 @@ local YellowPaths = {
 	-- Celadon Returns
 	{3, {24,0}, {24,15}, {22,15}, {22,18}, {s="centerCerulean",second=true}, {22,18}, {22,20}, {30,20}, {30,19}},
 	-- Misty
-	{65, {4,13}, {c="a",a="Misty's Gym"}, {c="potion",b=false}, {4,8}, {2,8}, {2,5}, {7,5}, {7,3}, {6,3}, {5,3}, {s="waitToFight"}, {s="potion",hp=70,yolo=65}, {5,2}, {s="talk",dir="Left"}, {s="waitToFight"}, {s="split"}, {s="tweetMisty"}, {5,3}, {7,3}, {7,5}, {5,5}, {5,14}},
+	{65, {4,13}, {c="a",a="Misty's Gym"}, {c="potion",b=false}, {4,8}, {2,8}, {2,5}, {7,5}, {7,3}, {6,3}, {5,3}, {s="waitToFight"}, {s="potionBeforeMisty"}, {5,2}, {s="talk",dir="Left"}, {s="waitToFight"}, {s="split"}, {s="tweetMisty"}, {5,3}, {7,3}, {7,5}, {5,5}, {5,14}},
 
 -- 7: MISTY
 
@@ -360,7 +360,7 @@ local YellowPaths = {
 	-- Welcome home
 	{0, {5,6}, {s="momHeal"}, {s="item",item="super_repel",chain=true}, {s="potion",hp=96,yolo="BlaineNinetails",chain=true}, {s="elixer",move="earthquake",min=10,chain=true}, {s="teach",move="strength",poke="lapras",chain=true}, {s="teach",move="surf",poke="lapras",chain=true}, {s="item",item="rare_candy",poke="nidoking",all=true,chain=true}, {s="bicycle"}, {c="allowDeath",on=false}, {3,6}, {s="dodgeGirl"}, {3,17}, {s="skill",move="surf",dir="Right",x=4}, {4,18}},
 	-- To Cinnabar
-	{32, {4,0}, {c="potion",b=true,yolo=true}, {4,14}, {3,14}, {3,90}},
+	{32, {4,0}, {4,14}, {3,14}, {3,90}},
 	-- Enter Cinnabar Mansion
 	{8, {3,0}, {c="a",a="Cinnabar Mansion"}, {3,4}, {6,4}, {6,3}},
 	-- F1
@@ -411,11 +411,11 @@ local YellowPaths = {
 	-- F3
 	{198, {23,7}, {23,6}, {22,6}, {22,4}, {s="skill",move="strength"}, {22,2}, {23,2}, {23,1}, {7,1}, {7,0}, {6,0}, {6,1}, {7,1}, {7,2}, {3,2}, {3,1}, {2,1}, {2,4}, {1,4}, {1,5}, {2,5}, {2,4}, {4,4}, {4,2}, {7,2}, {7,1}, {20,1}, {20,6}, {17,6}, {17,4}, {9,4}, {9,10}, {5,10}, {5,8}, {1,8}, {1,15}, {11,15}, {11,16}, {20,16}, {20,15}, {23,15}},
 	-- F2
-	{194, {22,16}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei",chain=true}, {s="skill",move="strength",chain=true}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
+	{194, {22,16}, {s="guess",game="elite4",enabled=true}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei",chain=true}, {s="skill",move="strength",chain=true}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
 	-- F3
 	{198, {27,15}, {27,8}, {26,8}},
 	-- F2 Exit
-	{194, {27,7}, {s="guess",game="elite4",enabled=true}, {30,7}},
+	{194, {27,7}, {30,7}},
 	-- Victory end
 	{34, {14,32}, {18,32}, {18,20}, {14,20}, {14,10}, {13,10}, {13,6}, {10,6}, {10,-1}},
 	-- Elite Four entrance
