@@ -664,7 +664,7 @@ strategyFunctions.rivalSandAttack = function()
 		if Battle.redeployNidoking() then
 			local sacrifice = Battle.deployed()
 			if sacrifice then
-				Strategies.chat("sacrificed", "got Sand-Attack'd... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
+				Strategies.chat("sacrificed", "got Sand-Attack'd twice... Swapping out "..Utils.capitalize(sacrifice).." to restore accuracy.")
 			end
 			return false
 		end
@@ -688,8 +688,8 @@ strategyFunctions.rivalSandAttack = function()
 						end
 					end
 				end
-			else
-				Strategies.chat("sacrificed", "got Sand-Attacked... Attempting to hit through it.")
+			elseif not Pokemon.isOpponent("eevee") then --TODO
+				Strategies.chat("sacrificed", "got Sand-Attack'd... Attempting to hit through it.")
 			end
 		end
 		Battle.automate(forced)
@@ -701,11 +701,10 @@ end
 strategyFunctions.acquireCharmander = function()
 	if Strategies.initialize() then
 		if Pokemon.inParty("sandshrew", "paras") then
+			Bridge.chat("caught a Paras/Sandshrew in Mt. Moon! This skips having to get Charmander here.")
 			return true
 		end
-		Bridge.chat("couldn't catch a Paras/Sandshrew in Mt. Moon. Getting a free Charmander to teach Cut.")
 	end
-	local acquiredCharmander = Pokemon.inParty("charmander")
 	if Textbox.isActive() then
 		if Menu.getCol() == 15 then
 			local accept = Memory.raw(0x0C3A) == 239
@@ -716,7 +715,7 @@ strategyFunctions.acquireCharmander = function()
 		return false
 	end
 	local px, py = Player.position()
-	if acquiredCharmander then
+	if Pokemon.inParty("charmander") then
 		if Strategies.initialize("aquired") then
 			Bridge.caught("charmander")
 		end
@@ -1033,8 +1032,10 @@ end
 
 strategyFunctions.momHeal = function()
 	if Strategies.initialize() then
+		Strategies.setYolo("mom")
+
 		local ppItemsRequired = Strategies.vaporeon and 3 or 2
-		status.momHeal = Inventory.ppRestoreCount() < ppItemsRequired or Combat.hp() + 50 < (Control.yolo and "BlaineNinetails" or 96)
+		status.momHeal = Inventory.ppRestoreCount() < ppItemsRequired or Combat.hp() + 50 < (Control.yolo and Combat.healthFor("BlaineNinetails") or 96)
 		local message
 		if status.momHeal then
 			message = "healing with mom before Blaine."
@@ -1098,15 +1099,16 @@ strategyFunctions.fightGiovanni = function()
 			local opponent = Battle.opponent()
 			if opponent == "persian" then
 				prepareAccuracy = true
-				if not status.prepared and not Strategies.isPrepared("x_accuracy") then
-					status.prepared = true
-					Bridge.chat("needs to finish setting up against Persian...")
+				if not Strategies.isPrepared("x_accuracy") then
+					local __, turnsToDie = Combat.enemyAttack()
+					if turnsToDie and turnsToDie == 1 then
+						Strategies.chat("persian", "needs to finish setting up against Persian...")
+					end
 				end
 			elseif opponent == "dugtrio" then
-				prepareAccuracy = Memory.value("battle", "dig") > 0
-				if prepareAccuracy and not status.dug then
-					status.dug = true
-					Bridge.chat("got Dig, which gives an extra turn to set up with X Accuracy. No criticals!")
+				prepareAccuracy = Memory.value("battle", "attack_turns") > 0
+				if prepareAccuracy then
+					Strategies.chat("dig", "got Dig, which gives an extra turn to set up with X Accuracy. No critical!")
 				end
 			end
 			if not prepareAccuracy or Strategies.prepare("x_accuracy") then
@@ -1240,9 +1242,11 @@ end
 
 strategyFunctions.potionBeforeBruno = function(data)
 	data.hp = 32
+	data.topOff = true
 	if Control.yolo and Combat.inRedBar() then
 		data.yolo = 13
 	end
+
 	if Strategies.initialize() then
 		if data.yolo and Combat.hp() >= data.yolo then
 			Bridge.chat("is attempting to make back more time by carrying red-bar through Bruno...")
@@ -1280,6 +1284,8 @@ end
 strategyFunctions.potionBeforeAgatha = function(data)
 	data.hp = 64
 	data.yolo = 32
+	data.topOff = true
+
 	if Strategies.initialize() and Control.yolo then
 		local curr_hp = Combat.hp()
 		if curr_hp < data.hp and curr_hp >= data.yolo then
