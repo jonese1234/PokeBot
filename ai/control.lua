@@ -123,6 +123,7 @@ local controlFunctions = {
 	moon2Exp = function()
 		if Data.yellow then
 			minExp = 3450
+			oneHits = false
 		elseif Control.getMoonExp and Strategies.stats.nidoran then
 			minExp = 3011
 			local withinOne = withinOneKill(minExp)
@@ -136,6 +137,7 @@ local controlFunctions = {
 	moon3Exp = function()
 		if Data.yellow then
 			minExp = 4200
+			oneHits = false
 		elseif Control.getMoonExp and Strategies.stats.nidoran then
 			minExp = 3798
 			local withinOne = withinOneKill(minExp)
@@ -206,7 +208,7 @@ function Control.shouldFight()
 			if oid == Pokemon.getID(encounter.name) and (not encounter.levels or Utils.match(opponentLevel, encounter.levels)) then
 				if oneHits then
 					local move = Combat.bestMove()
-					if move and move.maxDamage * 0.92 < Memory.double("battle", "opponent_hp") then
+					if move and move.maxDamage * 0.925 < Memory.double("battle", "opponent_hp") then
 						return false
 					end
 				end
