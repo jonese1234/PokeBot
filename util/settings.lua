@@ -47,7 +47,7 @@ end
 -- PUBLIC
 
 function Settings.set(...)
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if not isEnabled(name) then
 			if Menu.open(settings_menu, 1) then
 				Menu.setOption(name, desired[name])
@@ -58,7 +58,7 @@ function Settings.set(...)
 	return Menu.cancel(settings_menu)
 end
 
-function Settings.startNewAdventure(startWait)
+function Settings.startNewAdventure()
 	local startMenu, withBattleStyle
 	if Data.gameName ~= "red" then
 		withBattleStyle = "battle_style"
@@ -72,7 +72,7 @@ function Settings.startNewAdventure(startWait)
 		if Settings.set("text_speed", "battle_animation", withBattleStyle) then
 			Menu.select(0)
 		end
-	elseif math.random(0, startWait) == 0 then
+	elseif math.random(0, START_WAIT) == 0 then
 		Input.press("Start", 2)
 	end
 end

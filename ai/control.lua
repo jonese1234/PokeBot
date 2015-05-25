@@ -19,10 +19,11 @@ local potionInBattle = true
 local encounters = 0
 
 local canDie, shouldFight, minExp
-local shouldCatch, attackIdx
+local shouldCatch
 local extraEncounter, maxEncounters
 local battleYolo
 local encountersSection
+local oneHits
 
 Control.areaName = "Unknown"
 Control.getMoonExp = true
@@ -204,7 +205,7 @@ function Control.shouldFight()
 	if expRemaining > 0 then
 		local oid = Memory.value("battle", "opponent_id")
 		local opponentLevel = Memory.value("battle", "opponent_level")
-		for i,encounter in ipairs(shouldFight) do
+		for __,encounter in ipairs(shouldFight) do
 			if oid == Pokemon.getID(encounter.name) and (not encounter.levels or Utils.match(opponentLevel, encounter.levels)) then
 				if oneHits then
 					local move = Combat.bestMove()
@@ -222,7 +223,7 @@ function Control.shouldFight()
 	end
 end
 
-function Control.canCatch(partySize)
+function Control.canCatch()
 	local minimumCount = 0
 	if not Pokemon.inParty("nidoran", "nidorino", "nidoking") then
 		minimumCount = minimumCount + (Data.yellow and 1 or 2)
@@ -271,7 +272,7 @@ function Control.shouldCatch(partySize)
 	end
 	local oid = Memory.value("battle", "opponent_id")
 	local opponentLevel = Memory.value("battle", "opponent_level")
-	for i,poke in ipairs(shouldCatch) do
+	for __,poke in ipairs(shouldCatch) do
 		if oid == Pokemon.getID(poke.name) and not Pokemon.inParty(poke.name, poke.alt) then
 			if not poke.levels or Utils.match(opponentLevel, poke.levels) then
 				local overHP = poke.hp and Memory.double("battle", "opponent_hp") > poke.hp
@@ -381,7 +382,7 @@ function Control.encounter(battleState)
 				if not opponentAlive and shouldCatch and not Control.killedCatch then
 					local gottaCatchEm = {"pidgey", "spearow", "paras", "oddish"}
 					local opponent = Battle.opponent()
-					for i,catch in ipairs(gottaCatchEm) do
+					for __,catch in ipairs(gottaCatchEm) do
 						if opponent == catch then
 							if not Pokemon.inParty(catch) then
 								local criticaled = Memory.value("battle", "critical") == 1

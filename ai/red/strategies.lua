@@ -227,7 +227,7 @@ local function potionForRedBar(damage)
 		{"potion", 20},
 		{"super_potion", 50},
 	}
-	for i,potionTable in ipairs(potions) do
+	for __,potionTable in ipairs(potions) do
 		local potion = potionTable[1]
 		if Inventory.contains(potion) then
 			local healsFor = potionTable[2]
@@ -700,7 +700,7 @@ end
 
 -- dodgeCerulean
 
-strategyFunctions.rivalSandAttack = function(data)
+strategyFunctions.rivalSandAttack = function()
 	if Strategies.trainerBattle() then
 		if Battle.redeployNidoking() then
 			local sacrifice = Battle.deployed()
@@ -930,7 +930,6 @@ strategyFunctions.catchOddish = function()
 		Player.interact("Left")
 		Strategies.foughtRaticateEarly = true
 	else
-		local path
 		if caught then
 			if Strategies.initialize("caught") then
 				Bridge.caught(Pokemon.inParty("oddish"))
@@ -1212,7 +1211,6 @@ end
 
 strategyFunctions.lavenderRival = function()
 	if Strategies.trainerBattle() then
-		local forced
 		if stats.nidoran.special > 44 then -- RISK
 			local __, enemyTurns = Combat.enemyAttack()
 			if enemyTurns and enemyTurns < 2 and Pokemon.isOpponent("pidgeotto", "gyarados") then
@@ -1293,7 +1291,7 @@ strategyFunctions.silphRival = function()
 		if Strategies.prepare("x_accuracy", "x_speed") then
 			local forced
 			local opponentName = Battle.opponent()
-			local curr_hp, red_hp = Combat.hp(), Combat.redHP()
+			local curr_hp = Combat.hp()
 			if opponentName == "gyarados" then
 				if status.gyaradosDamage then
 					if willRedBar(status.gyaradosDamage) then

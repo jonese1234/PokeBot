@@ -11,8 +11,6 @@ local PAINT_ON     = true -- Display contextual information while the bot runs
 
 VERSION = "2.0.2"
 
-local START_WAIT = 99
-
 local Data = require "data.data"
 
 Data.init()
@@ -30,7 +28,6 @@ local Pokemon = require "storage.pokemon"
 local Bridge = require "util.bridge"
 local Input = require "util.input"
 local Memory = require "util.memory"
-local Menu = require "util.menu"
 local Paint = require "util.paint"
 local Utils = require "util.utils"
 local Settings = require "util.settings"
@@ -109,7 +106,7 @@ local function generateNextInput(currentMap)
 					resetAll()
 				end
 			else
-				Settings.startNewAdventure(START_WAIT)
+				Settings.startNewAdventure()
 			end
 		else
 			if not running then
@@ -134,7 +131,7 @@ local function generateNextInput(currentMap)
 				end
 			end
 		elseif battleState > 0 then
-			if not Control.shouldCatch(partySize) then
+			if not Control.shouldCatch() then
 				Battle.automate()
 			end
 		elseif Textbox.handle() then

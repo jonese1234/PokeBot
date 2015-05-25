@@ -44,7 +44,6 @@ types[24] = "psychic"
 types[25] = "ice"
 types[26] = "dragon"
 
-local savedEncounters = {}
 local conservePP = false
 local allowDamageRange = false
 local disableThrash = false
@@ -133,7 +132,7 @@ local function getOpponentType(ty)
 end
 Combat.getOpponentType = getOpponentType
 
-function getOurType(ty)
+local function getOurType(ty)
 	local t1 = types[Memory.value("battle", "our_type1")]
 	if ty ~= 0 then
 		t1 = types[Memory.value("battle", "our_type2")]
@@ -195,7 +194,7 @@ local function calcBestHit(attacker, defender, ours, rng)
 	local ourMaxHit
 	local targetHP = defender.hp
 	local ret = nil
-	for idx,move in ipairs(attacker.moves) do
+	for __,move in ipairs(attacker.moves) do
 		if not move.pp or move.pp > 0 then
 			local minDmg, maxDmg = calcDamage(move, attacker, defender, rng)
 			if maxDmg then
@@ -236,7 +235,7 @@ local function calcBestHit(attacker, defender, ours, rng)
 									replaces = maxTurns < bestMinTurns
 								end
 							end
-						elseif maxTurns < 2 or maxTurns == bestMaxTurns then
+						elseif maxTurns < 2 or maxTurns == bestTurns then
 							if ret.name == "Earthquake" and (move.name == "Ice-Beam" or move.name == "Thunderbolt") then
 								replaces = true
 							elseif move.pp > ret.pp then
@@ -278,7 +277,7 @@ local function getBestMove(ours, enemy, draw)
 		return
 	end
 	local bm, bestUs = calcBestHit(ours, enemy, true)
-	local jj, bestEnemy = calcBestHit(enemy, ours, false)
+	local __, bestEnemy = calcBestHit(enemy, ours, false)
 	if not bm then
 		return
 	end
@@ -341,7 +340,7 @@ function Combat.isPoisoned(target)
 	return checkStatus(target, 0x8)
 end
 
-function Combat.hasParalyzeStatus(target)
+function Combat.hasParalyzeStatus()
 	return Memory.value("battle", "paralyzed") > 0
 end
 
@@ -412,7 +411,7 @@ end
 
 function Combat.inKillRange(draw)
 	local ours, enemy = activePokemon()
-	local enemyAttack, __ = calcBestHit(enemy, ours, false)
+	local enemyAttack, turnsToDie = calcBestHit(enemy, ours, false)
 	local __, turnsToKill = calcBestHit(ours, enemy, true)
 	if not turnsToKill or not enemyAttack then
 		return false
@@ -434,7 +433,7 @@ function Combat.inKillRange(draw)
 			end
 			outsped = Memory.value("battle", "attack_turns") > 0
 		end
-		if outsped or isConfused or turnsToKill > 1 or ours.speed <= enemy.speed or Pokemon.info(target, "status") > 0 then
+		if outsped or isConfused or turnsToKill > 1 or ours.speed <= enemy.speed or Pokemon.info(0, "status") > 0 then
 			return ours, hpReq
 		end
 	end
@@ -461,7 +460,7 @@ function Combat.nonKill()
 	end
 	local bestDmg = -1
 	local ret = nil
-	for idx,move in ipairs(ours.moves) do
+	for __,move in ipairs(ours.moves) do
 		if not move.pp or move.pp > 0 then
 			local __, maxDmg = calcDamage(move, ours, enemy, true)
 			if maxDmg > 0 then

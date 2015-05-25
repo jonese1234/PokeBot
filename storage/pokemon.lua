@@ -126,7 +126,7 @@ end
 Pokemon.index = index
 
 local function indexOf(...)
-	for ni,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		local pid = pokeIDs[name]
 		for i=0,5 do
 			local atIdx = index(i)
@@ -223,7 +223,7 @@ function Pokemon.getName(id)
 end
 
 function Pokemon.getSacrifice(...)
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		local pokemonIndex = indexOf(name)
 		if pokemonIndex ~= -1 and index(pokemonIndex, "hp") > 0 then
 			return name
@@ -232,7 +232,7 @@ function Pokemon.getSacrifice(...)
 end
 
 function Pokemon.inParty(...)
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if indexOf(name) ~= -1 then
 			return name
 		end
@@ -276,7 +276,7 @@ end
 
 function Pokemon.isOpponent(...)
 	local oid = Memory.value("battle", "opponent_id")
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if oid == pokeIDs[name] then
 			return name
 		end
@@ -285,7 +285,7 @@ end
 
 function Pokemon.isDeployed(...)
 	local deployedID = Memory.value("battle", "our_id")
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if deployedID == pokeIDs[name] then
 			return name
 		end

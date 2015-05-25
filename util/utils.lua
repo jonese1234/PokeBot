@@ -12,7 +12,7 @@ function p(...)
 		string = arg[0]
 	else
 		string = ""
-		for i,str in ipairs(arg) do
+		for __,str in ipairs(arg) do
 			if str == true then
 				string = string.."\n"
 			else
@@ -46,7 +46,7 @@ function Utils.eachi(table, func)
 end
 
 function Utils.match(needle, haystack)
-	for i,val in ipairs(haystack) do
+	for __,val in ipairs(haystack) do
 		if needle == val then
 			return true
 		end
@@ -86,7 +86,7 @@ end
 
 function Utils.multiplyString(string, times)
 	local result = string
-	for i=1, times-1 do
+	for __=1, times-1 do
 		result = result.." "..string
 	end
 	return result

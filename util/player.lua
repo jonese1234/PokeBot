@@ -2,8 +2,6 @@ local Player = {}
 
 local Textbox = require "action.textbox"
 
-local Data = require "data.data"
-
 local Input = require "util.input"
 local Memory = require "util.memory"
 

@@ -32,7 +32,7 @@ end
 
 -- Helper functions
 
-function dir(px, py, dx, dy)
+local function dir(px, py, dx, dy)
 	local direction
 	if py > dy then
 		direction = "Up"
@@ -47,7 +47,7 @@ function dir(px, py, dx, dy)
 end
 Walk.dir = dir
 
-function step(dx, dy, through)
+local function step(dx, dy, through)
 	local px, py = Player.position()
 	if px == dx and py == dy then
 		return true

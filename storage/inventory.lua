@@ -3,7 +3,6 @@ local Inventory = {}
 local Input = require "util.input"
 local Memory = require "util.memory"
 local Menu = require "util.menu"
-local Utils = require "util.utils"
 
 local Pokemon = require "storage.pokemon"
 
@@ -82,7 +81,7 @@ function Inventory.count(name)
 end
 
 function Inventory.contains(...)
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if Inventory.count(name) > 0 then
 			return name
 		end
@@ -90,7 +89,7 @@ function Inventory.contains(...)
 end
 
 function Inventory.containsAll(...)
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		if not Inventory.contains(name) then
 			return false
 		end

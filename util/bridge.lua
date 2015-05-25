@@ -9,8 +9,6 @@ if INTERNAL then
 	socket = require "socket"
 end
 
-local utils = require "util.utils"
-
 local client = nil
 local timeStopped = true
 
@@ -107,8 +105,6 @@ function Bridge.process()
 		-- print(">"..response)
 		if response:find("name:") then
 			return response:gsub("name:", "")
-		else
-
 		end
 	end
 end

@@ -209,7 +209,7 @@ function Strategies.canHealFor(damage, allowAlreadyHealed, allowFullRestore)
 		if allowFullRestore then
 			table.insert(healChecks, 1, "full_restore")
 		end
-		for idx,potion in ipairs(healChecks) do
+		for __,potion in ipairs(healChecks) do
 			if Inventory.contains(potion) and Utils.canPotionWith(potion, damage, curr_hp, max_hp) then
 				return potion
 			end
@@ -410,7 +410,7 @@ function Strategies.isPrepared(...)
 	if not status.preparing then
 		return false
 	end
-	for i,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		local currentCount = Inventory.count(name)
 		if currentCount > 0 then
 			local previousCount = status.preparing[name]
@@ -427,7 +427,7 @@ function Strategies.prepare(...)
 		status.preparing = {}
 	end
 	local item
-	for idx,name in ipairs(arg) do
+	for __,name in ipairs(arg) do
 		local currentCount = Inventory.count(name)
 		local needsItem = currentCount > 0
 		local previousCount = status.preparing[name]
@@ -550,7 +550,7 @@ function Strategies.completeCans()
 	}
 	local walkIn = "Up"
 	for dir,tileset in pairs(completePath) do
-		for i,tile in ipairs(tileset) do
+		for __,tile in ipairs(tileset) do
 			if px == tile[1] and py == tile[2] then
 				walkIn = dir
 				break
@@ -923,7 +923,7 @@ Strategies.functions = {
 		elseif status.firstIndex < 0 or status.lastIndex < 0 then
 			swapComplete = true
 			if Strategies.initialize("swapUnavailable") then
-				p("Not available to swap", data.item, data.dest, itemIndex, destIndex)
+				p("Not available to swap", data.item, data.dest, status.firstIndex, status.lastIndex)
 			end
 		elseif status.startedAt ~= Inventory.indexOf(status.checkItem) then
 			swapComplete = true
@@ -1011,7 +1011,7 @@ Strategies.functions = {
 			local opp = Battle.opponent()
 			local defLimit = 9001
 			local forced
-			for i,poke in ipairs(data) do
+			for __,poke in ipairs(data) do
 				if opp == poke[1] then
 					local minimumAttack = poke[3]
 					if not minimumAttack or stats.nidoran.attack > minimumAttack then
@@ -1203,7 +1203,7 @@ Strategies.functions = {
 		end
 
 		if resetsForStats then
-			local nidoranStatus
+			local nidoranStatus = nil
 			if att < 15 and spd < 14 and scl < 12 then
 				nidoranStatus = Utils.random {
 					"let's just forget this ever happened",
@@ -1630,7 +1630,6 @@ Strategies.functions = {
 			if Battle.redeployNidoking() then
 				return false
 			end
-			local forced
 			if Pokemon.isOpponent("staryu") then
 				local __, turnsToKill = Combat.bestMove()
 				if turnsToKill and turnsToKill > 1 then
@@ -1660,7 +1659,7 @@ Strategies.functions = {
 					return false
 				end
 			end
-			Battle.automate(forced)
+			Battle.automate()
 		elseif status.foughtTrainer then
 			return true
 		end
@@ -2035,7 +2034,6 @@ Strategies.functions = {
 	end,
 
 	cinnabarCarbos = function()
-		local minDV = Data.yellow and 11 or 10
 		local skipsCarbos = not Strategies.needsCarbosAtLeast(Data.yellow and 2 or 1)
 		if Strategies.initialize() then
 			status.startCount = Inventory.count("carbos")
@@ -2064,7 +2062,6 @@ Strategies.functions = {
 	end,
 
 	ether = function(data)
-		local main = Memory.value("menu", "main")
 		data.item = status.item
 		if status.item and Strategies.completedMenuFor(data) then
 			if Strategies.closeMenuFor(data) then

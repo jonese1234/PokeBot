@@ -1,7 +1,5 @@
 local Shop = {}
 
-local Textbox = require "action.textbox"
-
 local Data = require "data.data"
 
 local Input = require "util.input"
@@ -17,7 +15,7 @@ function Shop.transaction(options)
 		menuIdx = 1
 		itemMenu = Data.yellow and 28 or 29
 		quantityMenu = 158
-		for i,sit in ipairs(options.sell) do
+		for __,sit in ipairs(options.sell) do
 			local idx = Inventory.indexOf(sit.name)
 			if idx ~= -1 then
 				item = sit
@@ -31,7 +29,7 @@ function Shop.transaction(options)
 		menuIdx = 0
 		itemMenu = Data.yellow and 122 or 123
 		quantityMenu = 161
-		for i,bit in ipairs(options.buy) do
+		for __,bit in ipairs(options.buy) do
 			local needed = (bit.amount or 1) - Inventory.count(bit.name)
 			if needed > 0 then
 				item = bit
@@ -78,8 +76,7 @@ end
 
 function Shop.vend(options)
 	local item
-	menuIdx = 0
-	for i,bit in ipairs(options.buy) do
+	for __,bit in ipairs(options.buy) do
 		local needed = (bit.amount or 1) - Inventory.count(bit.name)
 		if needed > 0 then
 			item = bit

@@ -39,7 +39,7 @@ function Paint.draw(currentMap)
 		{"paras", "oddish", "charmander", "sandshrew"},
 	}
 	local partyY = BOTTOM_EDGE
-	for i,pokemonCategory in ipairs(caughtPokemon) do
+	for __,pokemonCategory in ipairs(caughtPokemon) do
 		local pokemon = Pokemon.inParty(unpack(pokemonCategory))
 		if pokemon then
 			drawText(RIGHT_EDGE, partyY, Utils.capitalize(pokemon), true)

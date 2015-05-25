@@ -103,7 +103,7 @@ local function attack(attackIndex)
 	end
 end
 
-function movePP(name)
+local function movePP(name)
 	local midx = Pokemon.battleMove(name)
 	if not midx then
 		return 0
@@ -212,7 +212,7 @@ function Battle.handleWild(battleStatus)
 	Battle.handle()
 end
 
-function Battle.fight(move, skipBuffs)
+function Battle.fight(move)
 	if move then
 		if type(move) ~= "number" then
 			move = Pokemon.battleMove(move)
@@ -296,6 +296,7 @@ function Battle.redeployNidoking()
 	elseif Menu.hasTextbox() and Menu.getCol() == 1 then
 		Input.press("A")
 	else
+		local forced
 		local __, turns = Combat.bestMove()
 		if turns == 1 then
 			if Pokemon.isDeployed("spearow") then
