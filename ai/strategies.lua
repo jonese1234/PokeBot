@@ -2172,17 +2172,17 @@ Strategies.functions = {
 	end,
 
 	prepareForLance = function()
-		local enableFull
-		if Strategies.hasHealthFor("LanceGyarados", 100) then
-			enableFull = Inventory.count("super_potion") < 2
-		elseif Strategies.hasHealthFor("LanceGyarados", 50) then
-			enableFull = not Inventory.contains("super_potion")
-		else
-			enableFull = true
-		end
+		local curr_hp = Combat.hp()
 		local min_recovery = Combat.healthFor("LanceGyarados")
 		if not Control.yolo then
-			min_recovery = min_recovery + 2
+			min_recovery = min_recovery + 1
+		end
+
+		local enableFull = Inventory.count("full_restore") > (Control.yolo and 0 or 1)
+		if curr_hp + 50 < min_recovery then
+			enableFull = not Inventory.contains("super_potion")
+		elseif curr_hp + 100 < min_recovery then
+			enableFull = Inventory.count("super_potion") < 2
 		end
 		return strategyFunctions.potion({hp=min_recovery, full=enableFull, chain=true})
 	end,
