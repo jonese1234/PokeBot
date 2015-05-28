@@ -86,7 +86,6 @@ local function nidoranDSum(enabled)
 	if enabled and status.path == nil then
 		local opponentName = Battle.opponent()
 		local opponentLevel = Memory.value("battle", "opponent_level")
-		dsumming = opponentName..opponentLevel
 		local runOffset, waitOffset, searchDuration
 		if opponentName == "rattata" then
 			if opponentLevel == 3 then
@@ -460,7 +459,11 @@ strategyFunctions.centerViridian = function()
 		local riskTackling = Pokemon.pp(0, "horn_attack") >= 19
 		Combat.factorPP(true, riskTackling)
 	end
-	return takeCenter(15, 2, 13, 25, 18)
+	local minimumHornAttacks = 15
+	if stats.nidoran.attack == 16 then
+		minimumHornAttacks = minimumHornAttacks - 1
+	end
+	return takeCenter(minimumHornAttacks, 2, 13, 25, 18)
 end
 
 strategyFunctions.fightSandshrew = function()
@@ -539,6 +542,9 @@ strategyFunctions.conserveHornAttacks = function()
 		local ppRequired = 16
 		if stats.nidoran.attack == 16 then
 			ppRequired = ppRequired - 1
+			if stats.nidoran.speed == 15 then
+				ppRequired = ppRequired - 1
+			end
 		end
 
 		local potionCount = Inventory.count("potion")
@@ -583,7 +589,11 @@ end
 -- fightMetapod TODO
 
 strategyFunctions.centerMoon = function()
-	return takeCenter(5, 15, 11, 5, 12)
+	local minimumHornAttacks = 5
+	if stats.nidoran.attack == 16 then
+		minimumHornAttacks = minimumHornAttacks - 1
+	end
+	return takeCenter(minimumHornAttacks, 15, 11, 5, 12)
 end
 
 strategyFunctions.centerCerulean = function(data)
