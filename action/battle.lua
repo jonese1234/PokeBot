@@ -213,21 +213,37 @@ function Battle.handleWild(battleStatus)
 end
 
 function Battle.fight(move)
+	local moveIndex
 	if move then
-		if type(move) ~= "number" then
-			move = Pokemon.battleMove(move)
+		local disableCheck
+		if type(move) == "string" then
+			disableCheck = move
+			moveIndex = Pokemon.battleMove(move)
+		else
+			disableCheck = move.id
+			Battle.accurateAttack = move.accuracy == 100
+			moveIndex = move.midx
 		end
-		attack(move)
-	else
+		if Combat.isDisabled(disableCheck) then
+			move = nil
+		end
+	end
+	if not move then
 		move = Combat.bestMove()
 		if move then
 			Battle.accurateAttack = move.accuracy == 100
-			attack(move.midx)
-		elseif Memory.value("menu", "text_length") == 127 then
-			Input.press("B")
+			moveIndex = move.midx
 		else
-			Input.cancel()
+			moveIndex = nil
 		end
+	end
+
+	if moveIndex then
+		attack(moveIndex)
+	elseif Memory.value("menu", "text_length") == 127 then
+		Input.press("B")
+	else
+		Input.cancel()
 	end
 end
 

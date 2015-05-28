@@ -235,7 +235,7 @@ local function calcBestHit(attacker, defender, ours, rng)
 									replaces = maxTurns < bestMinTurns
 								end
 							end
-						elseif maxTurns < 2 or maxTurns == bestTurns then
+						elseif maxTurns < 2 or maxTurns == bestMinTurns then
 							if ret.name == "Earthquake" and (move.name == "Ice-Beam" or move.name == "Thunderbolt") then
 								replaces = true
 							elseif move.pp > ret.pp then

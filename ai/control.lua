@@ -286,7 +286,7 @@ function Control.shouldCatch(partySize)
 					penultimate = Combat.nonKill()
 				end
 				if penultimate then
-					require("action.battle").fight(penultimate.midx)
+					require("action.battle").fight(penultimate)
 				else
 					if poke.requireHit and not Battle.opponentDamaged() then
 						return false
