@@ -1020,7 +1020,7 @@ Strategies.functions = {
 			local forced
 			for __,poke in ipairs(data) do
 				if opp == poke[1] then
-					local minimumAttack = poke[3]
+					local minimumAttack = poke.minAttack
 					if not minimumAttack or stats.nidoran.attack > minimumAttack then
 						defLimit = poke[2]
 					end

@@ -452,22 +452,7 @@ end
 -- checkNidoranStats
 
 strategyFunctions.leerMetapod = function()
-	if not status.outsped then
-		if Battle.isTrainer() then
-			if Pokemon.isOpponent("caterpie") then
-				status.battle = true
-			elseif status.battle and status.outsped == nil and Pokemon.isOpponent("metapod") then
-				status.outsped = Memory.double("battle", "our_speed") < Memory.double("battle", "opponent_speed")
-			end
-		end
-		return strategyFunctions.leer {{"caterpie",9}, {"metapod",11}}
-	end
-
-	if Strategies.trainerBattle() then
-		Battle.automate()
-	elseif status.foughtTrainer then
-		return true
-	end
+	return strategyFunctions.leer {{"caterpie",9}, {"metapod",11}}
 end
 
 strategyFunctions.centerViridian = function()
@@ -645,8 +630,11 @@ strategyFunctions.fightKoffing = function(data)
 			if Strategies.initialize("check_leer") then
 				status.leering = Combat.isDisabled("horn_attack") or Battle.pp("horn_attack") < data.min
 			end
-			if status.leering and not Battle.opponentDamaged() then
-				return strategyFunctions.leer {{"koffing", 13}}
+			if status.leering then
+				if not Battle.opponentDamaged() then
+					forced = "tackle"
+				end
+				return Strategies.buffTo("leer", 25, forced)
 			end
 		end
 		Battle.automate(forced)
