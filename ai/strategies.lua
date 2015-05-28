@@ -1431,12 +1431,14 @@ Strategies.functions = {
 
 			local caughtCutter = Pokemon.inParty("paras", "sandshrew")
 			local catchDescription
+			local exclamation = "."
 			if caughtCutter then
 				catchDescription = caughtCutter
 				if goodEncounters then
 					conjunction = "and"
 				end
-				cutterStatus = "we caught a "..Utils.capitalize(caughtCutter).."!"
+				cutterStatus = "we caught a "..Utils.capitalize(caughtCutter)
+				exclamation = "!"
 			else
 				local catchPokemon = Data.yellow and "sandshrew" or "paras"
 				catchDescription = "no_"..catchPokemon
@@ -1447,11 +1449,12 @@ Strategies.functions = {
 				if Data.yellow then
 					cutterStatus = cutterStatus.."cutter"
 				else
-					cutterStatus = cutterStatus..Utils.capitalize(catchPokemon).." :("
+					cutterStatus = cutterStatus..Utils.capitalize(catchPokemon)
+					exclamation = " :("
 				end
 			end
 			Bridge.caught(catchDescription)
-			Bridge.chat(moonEncounters.." Moon encounters, "..conjunction.." "..cutterStatus)
+			Bridge.chat(moonEncounters.." Moon encounters, "..conjunction.." "..cutterStatus..exclamation)
 			Bridge.moonResults(moonEncounters, caughtCutter)
 		end
 
@@ -1715,7 +1718,7 @@ Strategies.functions = {
 			" *yawn*",
 			" :z",
 			" I think that ship broke the ocean.",
-			" Ah, lovely weather in Vermilion City this time of year, isn't it?",
+			" Ahh, lovely weather in Vermilion City this time of year, isn't it?",
 			" As a devout practicing member of the Church of Going Fast, I find the depiction of this unskippable cutscene offensive, frankly.",
 			" Anyone else feel cheated we didn't actually get to ride to some far off land in that boat?",
 			" So let me get this straight, the ship hadn't even left port yet, and the captain was already seasick? DansGame" --amanazi

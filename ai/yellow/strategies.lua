@@ -949,7 +949,7 @@ strategyFunctions.silphRival = function()
 				if Combat.hp() <= 20 and not Strategies.isPrepared("x_speed") then
 					if Inventory.contains("super_potion") then
 						if Strategies.initialize("heals") then
-							local message = ""
+							local message
 							if Strategies.yolo then
 								message = "is risking Sonicboom/Confusion to save time."
 							else
@@ -1044,7 +1044,7 @@ strategyFunctions.momHeal = function()
 		end
 		Bridge.chat("is "..message)
 	end
-	needsHeal = status.momHeal and Pokemon.pp(0, "earthquake") < 10
+	local needsHeal = status.momHeal and Pokemon.pp(0, "earthquake") < 10
 
 	local currentMap = Memory.value("game", "map")
 	local px, py = Player.position()
@@ -1385,7 +1385,7 @@ strategyFunctions.prepareForBlue = function()
 		elseif Strategies.hasHealthFor("GarySandslash", 0, true) then
 			message = "has enough health to tank Sandslash... Let's go!"
 			healSkip = true
-		elseif Strategies.canHealFor("GarySandslash", true, true) or Strategies.hasSupersFor("GarySandslash") then
+		elseif Inventory.contains("full_restore") or Strategies.canHealFor("GarySandslash", true, true) or Strategies.hasSupersFor("GarySandslash") then
 			message = "is healing for Sandslash..."
 		else
 			message = "is unable to heal for Sandslash... Looks like we're going to have to freeze!"
@@ -1498,7 +1498,8 @@ end
 
 function Strategies.initGame(midGame)
 	if midGame then
-		Strategies.setYolo("nidoran", true)
+		-- Strategies.setYolo("nidoran", true)
+		-- Strategies.vaporeon = true
 	end
 	Control.preferredPotion = "super"
 end
