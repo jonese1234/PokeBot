@@ -747,7 +747,13 @@ Strategies.functions = {
 			if type(toHP) == "string" then
 				toHP = Combat.healthFor(toHP)
 			end
-			toHP = math.min(toHP, Combat.maxHP())
+
+			local max_hp = Combat.maxHP()
+			if status.didPotion and data.topOff then
+				toHP = math.max(toHP, max_hp - 49)
+			end
+			toHP = math.min(toHP, max_hp)
+
 			local toHeal = toHP - curr_hp
 			if toHeal > 0 then
 				local toPotion
@@ -778,6 +784,7 @@ Strategies.functions = {
 				Control.wantedPotion = toPotion == nil
 				if toPotion then
 					if Menu.pause() then
+						status.didPotion = true
 						Inventory.use(toPotion)
 						status.menuOpened = true
 					end

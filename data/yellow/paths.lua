@@ -137,7 +137,7 @@ local YellowPaths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=16,yolo=12,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
+	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=14,yolo=8,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {c="thrash",disable=false}, {0,4}, {4,4}, {4,3}, {s="interact",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out
@@ -151,7 +151,7 @@ local YellowPaths = {
 	-- Bicycle cert
 	{90, {2,7}, {2,5}, {0,5}, {0,1}, {2,1}, {s="dialogue",dir="Right"}, {0,1}, {0,6}, {2,6}, {2,8}},
 	-- To Surge
-	{5, {9,14}, {9,15}, {15,15}, {15,17}, {s="swap",item="repel",dest=0,chain=true}, {s="potion",hp=70,yolo=60,chain=true}, {s="teach",move="cut",poke={"charmander","sandshrew","paras"},chain=true}, {s="teach",move="dig",poke={"charmander","sandshrew","paras"},chain=true}, {s="skill",move="cut",done=0x0D4D}, {15,20}, {12,20}, {12,19}},
+	{5, {9,14}, {9,15}, {15,15}, {15,17}, {s="swap",item="repel",dest=0,chain=true}, {s="potion",hp=70,yolo=44,chain=true}, {s="teach",move="cut",poke={"charmander","sandshrew","paras"},chain=true}, {s="teach",move="dig",poke={"charmander","sandshrew","paras"},chain=true}, {s="skill",move="cut",done=0x0D4D}, {15,20}, {12,20}, {12,19}},
 	-- Trashcans
 	{92, {4,17}, {c="a",a="Surge's Gym"}, {4,15}, {1,15}, {1,12}, {s="guess",game="trash",enabled=false}, {s="trashcans"}, {4,6}, {4,3}, {5,3}, {5,2}, {s="interact",dir="Up"}, {s="waitToFight"}, {s="split"}, {s="tweetSurge"}, {4,2}, {4,13}, {5,13}, {5,18}},
 
@@ -338,7 +338,7 @@ local YellowPaths = {
 	-- To Koga
 	{7, {19,28}, {c="a",a="Koga's Gym"}, {5,28}, {5,27}},
 	-- Koga
-	{157, {4,17}, {4,16}, {9,16}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp=60,yolo=25}, {1,3}, {2,3}, {2,5}, {1,5}, {1,7}, {1,9}, {2,9}, {s="potion",hp=80,yolo=70}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
+	{157, {4,17}, {4,16}, {9,16}, {9,9}, {7,9}, {s="talk",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp="HypnoConfusion",topOff=true}, {1,3}, {2,3}, {2,5}, {1,5}, {1,7}, {1,9}, {2,9}, {s="potion",hp=80,yolo=70}, {4,9}, {s="talk",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
 
 -- 12: KOGA
 

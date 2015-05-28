@@ -306,10 +306,10 @@ local function activePokemon(preset)
 		enemy = Opponents[preset]
 		local toBoost = enemy.boost
 		if toBoost then
-			local currSpec = ours.spec
+			local currentStat = ours[toBoost.stat]
 			local booster = toBoost.mp
-			if (currSpec < 140) == (booster > 1) then
-				ours.spec = math.floor(currSpec * booster)
+			if toBoost.stat ~= "spec" or (currentStat < 140) == (booster > 1) then
+				ours[toBoost.stat] = math.floor(currentStat * booster)
 			end
 		end
 	else

@@ -319,7 +319,7 @@ local Opponents = {
 		},
 		boost = {
 			stat = "def",
-			mp = 8 / 9
+			mp = 9 / 8
 		},
 	},
 
