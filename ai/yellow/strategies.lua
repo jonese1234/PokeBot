@@ -30,51 +30,78 @@ Strategies.warpToCerulean = false
 
 -- TIME CONSTRAINTS
 
-local function timeForStats()
-	local timeBonus = (stats.nidoran.attack - 53) * 0.05
-	local maxSpeed = math.min(stats.nidoran.speed, 52)
-	return timeBonus + (maxSpeed - 49) * 0.125
+local function timeForStats(level8)
+	local timeBonus = 0
+	if level8 then
+		if stats.nidoran.attack == 16 then
+			timeBonus = timeBonus + 0.25
+		end
+		if stats.nidoran.speed == 15 then
+			timeBonus = timeBonus + 0.3
+		end
+	else
+		timeBonus = (stats.nidoran.attack - 53) * 0.05
+		local maxSpeed = math.min(stats.nidoran.speed, 52)
+		timeBonus = timeBonus + (maxSpeed - 49) * 0.125
+	end
+	return timeBonus
+end
+
+local function timeForFlier()
+	return Pokemon.inParty("pidgey", "spearow") and 0.5 or 0
 end
 
 Strategies.timeRequirements = {
 
 	nidoran = function()
-		local timeLimit = 8.25
-		if Pokemon.inParty("pidgey") then
-			timeLimit = timeLimit + 0.5
-		end
-		return timeLimit
+		return 7.5 + timeForFlier()
+	end,
+
+	forest = function() --YOLO
+		return 13 + timeForFlier() + timeForStats(true)
+	end,
+
+	brock = function()
+		return 15 + timeForFlier() + timeForStats(true)
 	end,
 
 	mt_moon = function()
-		local timeLimit = 29.25
-		if stats.nidoran.attack > 15 and stats.nidoran.speed > 14 then
-			timeLimit = timeLimit + 0.25
-		end
+		local timeLimit = 28.25 + timeForStats(true)
 		if Pokemon.inParty("paras", "sandshrew") then
 			timeLimit = timeLimit + 0.25
+		end
+		if Pokemon.getExp() > 4200 then
+			timeLimit = timeLimit + 0.15
 		end
 		return timeLimit
 	end,
 
 	misty = function() --TWEET
-		return 42 + timeForStats()
+		return 41 + timeForStats()
 	end,
 
-	trash = function()
-		return 51.25 + timeForStats()
+	trash = function() --YOLO
+		return 49.75 + timeForStats()
 	end,
 
-	victory_road = function() --TWEET PB
-		return 102.8
+	mom = function() --YOLO
+		return 90
 	end,
 
-	e4center = function()
-		return 106.25
+	victory_road = function() --TWEET
+		local timeLimit = 101.5
+		if Strategies.requiresE4Center(true, true) then
+			timeLimit = timeLimit - 0.1
+		end
+		return timeLimit
+	end,
+
+	blue = function() --YOLO
+		return 112.28
 	end,
 
 	champion = function() --PB
-		return 116.56
+		return 115.28
 	end,
 
 }
@@ -467,10 +494,6 @@ strategyFunctions.centerViridian = function()
 end
 
 strategyFunctions.fightSandshrew = function()
-	if Strategies.initialize() then
-	 	Strategies.setYolo("sandshrew")
-	end
-
 	local forced
 	if Pokemon.isOpponent("sandshrew") then
 		local __, turnsToKill, turnsToDie = Combat.bestMove()
