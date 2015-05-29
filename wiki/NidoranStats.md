@@ -4,7 +4,7 @@
 
 In gen 1, Pokémon stats are described by HP, attack, defense, speed, and special. Special is used as both an attack and defense measurement for attacks designated as "special" internally.
 
-The minimum stats at level 8 are **25** HP, **14** attack, **11** defense, **12** speed, **11** special.
+The minimum stats at level 8 are **25** HP, **14** attack, **11** defense, **13** speed, **11** special.
 
 The maximum stats at level 8 are **27** HP, **16** attack, **14** defense, **15** speed, **13** special.
 
@@ -20,12 +20,12 @@ The probability of stats are derived from the DV values, which describe the poss
 
 **Level 8** (learn Horn Attack)
 
-| Skill\DV | 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 |
-|----------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| Attack   | 14 | 14 | 14 | 14 | 14 | 15 | 15 | 15 | 15 | 15 | 15 | 16 | 16 | 16 | 16 | 16 |
-| Defense  | 11 | 11 | 11 | 12 | 12 | 12 | 12 | 12 | 12 | 13 | 13 | 13 | 13 | 13 | 13 | 14 |
-| Speed    | 13 | 13 | 13 | 13 | 13 | 13 | 14 | 14 | 14 | 14 | 14 | 14 | 15 | 15 | 15 | 15 |
-| Special  | 11 | 11 | 11 | 11 | 12 | 12 | 12 | 12 | 12 | 12 | 13 | 13 | 13 | 13 | 13 | 13 |
+| Skill\DV | 0  | 1  | 2  | 3  | 4    | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   |
+|----------|----|----|----|----|------|------|------|------|------|------|------|------|------|------|------|------|
+| Attack   | 14 | 14 | 14 | 14 |  14  | _15_ | _15_ | _15_ | _15_ | _15_ | _15_ | _16_ | _16_ | _16_ | _16_ | _16_ |
+| Defense  | 11 | 11 | 11 | 12 |  12  |  12  |  12  |  12  |  12  |  13  |  13  |  13  |  13  |  13  |  13  |  14  |
+| Speed    | 13 | 13 | 13 | 13 |  13  |  13  | _14_ | _14_ | _14_ | _14_ | _14_ | _14_ | _15_ | _15_ | _15_ | _15_ |
+| Special  | 11 | 11 | 11 | 11 | _12_ | _12_ | _12_ | _12_ | _12_ | _12_ | _13_ | _13_ | _13_ | _13_ | _13_ | _13_ |
 
 **Level 23** (learn Thrash)
 
