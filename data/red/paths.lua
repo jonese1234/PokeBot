@@ -57,7 +57,7 @@ local Paths = {
 	-- Pewter City
 	{2, {18,35}, {18,22}, {19,22}, {19,13}, {10,13}, {10,18}, {16,18}, {16,17}},
 	-- Brock
-	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"},{s="speedchange", speed=AFTER_BROCK_SPEED, extra="We have a run going"}, {4,14}},
+	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"}, {s="speedchange", speed=AFTER_BROCK_SPEED, extra="We have a run going"}, {4,14}},
 
 -- 3: BROCK
 
@@ -90,7 +90,7 @@ local Paths = {
 -- 5: MT. MOON
 
 	-- To Cerulean
-	{15, {24,6}, {s="reportMtMoon"}, {s="split"}, {c="trackEncounters",area=nil}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
+	{15, {24,6}, {s="reportMtMoon"}, {s="split"}, {s="speedchange", speed=AFTER_MOON_SPEED, extra="Things are getting serious"}, {c="trackEncounters",area=nil}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
 	-- Enter Cerulean
 	{3, {0,18}, {c="a",a="Cerulean"}, {14,18}, {s="dodgeCerulean"}, {19,18}, {19,17}},
 	-- Cerulean Center
