@@ -4,7 +4,8 @@ RESET_FOR_TIME = false -- Set to true if you're trying to break the record, not 
 BEAST_MODE = false -- WARNING: Do not engage. Will yolo everything, and reset at every opportunity in the quest for 1:47.
 
 INITIAL_SPEED = 750
-AFTER_BROCK_SPEED = 350
+AFTER_BROCK_SPEED = 550
+AFTER_MOON_SPEED = 350
 
 RUNS_FILE = "C:/Users/rjrhy/Desktop/Pokebot/Github work/PokeBotBad/wiki/red/runs.txt" -- Use / insted of \ otherwise it will not work
 
@@ -15,6 +16,7 @@ local PAINT_ON     = true -- Display contextual information while the bot runs
 -- START CODE (hard hats on)
 
 VERSION = "2.4.8"
+CURRENT_SPEED = nil
 
 local Data = require "data.data"
 
@@ -54,6 +56,7 @@ function resetAll()
 	Utils.reset()
 	oldSeconds = 0
 	running = false
+	CURRENT_SPEED = INITIAL_SPEED
 	client.speedmode(INITIAL_SPEED)
 
 	if CUSTOM_SEED then
