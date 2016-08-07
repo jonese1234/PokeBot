@@ -66,7 +66,14 @@ function Strategies.hardReset(reason, message, extra, wait)
 	local seed = Data.run.seed
 	local newmessage = message.." | "..seed
 
-	local f,  err = io.open(RUNS_FILE, "a")
+	local f, err
+
+	if reason~="won" then
+		f, err = io.open(RESET_LOG_FILE, "a")
+	else
+		f, err = io.open(VICTORY_LOG_FILE, "a")
+	end
+
 	if f==nil then
 		print("Couldn't open file: "..err)
 	else
