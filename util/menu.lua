@@ -188,25 +188,27 @@ end
 -- PAUSED
 
 function Menu.hasTextbox()
-	return Memory.value("battle", "menu") == (yellow and 19 or 95)
-end
-
-function Menu.isOpened()
+	-- "game.textbox" resolves to 1 when a menu or a dialog box of any kind is open when not in a battle (except when the menu is being redrawn, irrelevant here)
 	return Memory.value("game", "textbox") == 1
 end
 
-function Menu.hasBeenOpened()
-	local mainMenu = Memory.value("menu", "main")
-	if mainMenu > 7 then
-		return true
-	end
-	if (Menu.isOpened() or Menu.onPokemonSelect()) and Utils.match(mainMenu, {0, 1, 2, 4, 6, 7}) then
-		return true
-	end
+function Menu.canCloseMessage()
+	-- "battle.menu" resolves to 19/95 only if we can close the textbox, not when it's being written.
+	return Memory.value("battle", "menu") == ((yellow and 19) or 95)
+end
+
+-- Check if we're menu'ing (main menu, PC, shop). Can return false positives (if we're talking to a NPC or picking up an item).
+-- 0x1ffb == 160: Start menu is open, we're picking up an item, we're interacting with something or a NPC (only if initiated by us), we're moving (during some animation frames).
+-- 0x1ffd == 153: Start menu is open, we're picking up an item, we're interacting with something (except PC) or a NPC (only if initiated by us).
+-- 0x1ffd == 110: We're using PC, we're entering a building.
+-- Side node: "game.textbox" isn't used because it's 0 during a few frames when returning from the Pokémon selection screen after using an item on them.
+function Menu.isOpened()
+	-- TODO: Check Pokémon Yellow (0x1ffb == 160 is probably ok).
+	return memory.readbyte(0x1ffb) == 160 and (memory.readbyte(0x1ffd) == 153 or memory.readbyte(0x1ffd) == 110)
 end
 
 function Menu.close()
-	if not Menu.hasBeenOpened() then
+	if not Menu.isOpened() then
 		return true
 	end
 	Input.press("B")
@@ -214,7 +216,7 @@ end
 
 function Menu.pause()
 	if Menu.isOpened() then
-		if Menu.hasTextbox() then
+		if Menu.canCloseMessage() then
 			Input.cancel()
 		else
 			local main = Memory.value("menu", "main")
@@ -232,6 +234,12 @@ function Menu.pause()
 				end
 				return false
 			end
+		end
+		-- Triggered after Gionvanni 1st fight and Blaine (where we try to use the menu after a talkative trainer).
+		-- Without it we keep pressing Start and don't skip the dialogue.
+		if Menu.hasTextbox() then
+			Input.cancel()
+			return false
 		end
 		Input.press("Start", 2)
 	end
