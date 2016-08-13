@@ -57,9 +57,9 @@ local Paths = {
 	-- Pewter City
 	{2, {18,35}, {18,22}, {19,22}, {19,13}, {10,13}, {10,18}, {16,18}, {16,17}},
 	-- Brock
-	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"}, {s="speedchange", speed=AFTER_BROCK_SPEED, extra="We have a run going"}, {4,14}},
+	{54, {4,13}, {c="a",a="Brock's Gym"}, {4,8}, {1,8}, {1,4}, {4,4}, {4,2}, {s="talk",dir="Up"}, {s="fightBrock"}, {s="splitBrock"}, {s="changeSpeed", speed=AFTER_BROCK_SPEED, extra="We have a run going"}, {4,14}},
 
-	-- 3: BROCK
+-- 3: BROCK
 
 	-- To Pewter Mart
 	{2, {16,18}, {c="potion",b=true}, {10,18}, {10,13}, {21,13}, {21,18}, {23,18}, {23,17}},
@@ -83,14 +83,14 @@ local Paths = {
 	-- Mt. Moon B2
 	{60, {5,5}, {5,17}, {21,17}},
 	-- Mt. Moon B3
-	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,poke="paras"}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {10,31}, {10,18}, {s="potion",hp=11,yolo=6,chain=true}, {s="evolveNidoking",close=true}, {10,17}, {12,17}, {c="moon2Exp"}, {12,9}, {s="potion",hp=7}, {s="talk",dir="Up"}, {s="fightGrimer"}, {13,9}, {c="moon3Exp"}, {13,7}, {s="dialogue",dir="Up"}, {13,5}, {12,5}, {12,4}, {3,4}, {3,7}, {5,7}},
+	{61, {21,17}, {22,17}, {s="evolveNidoking",early=true,poke="paras"}, {23,17}, {23,14}, {27,14}, {27,16}, {33,16}, {33,14}, {36,14}, {36,24}, {32, 24}, {32,31}, {10,31}, {10,18}, {s="potion",hp=11,yolo=6,chain=true}, {s="evolveNidoking"}, {10,17}, {12,17}, {c="moon2Exp"}, {12,9}, {s="potion",hp=7}, {s="talk",dir="Up"}, {s="fightGrimer"}, {13,9}, {c="moon3Exp"}, {13,7}, {s="dialogue",dir="Up"}, {13,5}, {12,5}, {12,4}, {3,4}, {3,7}, {5,7}},
 	-- Mt. Moon escape
 	{60, {23,3}, {27,3}},
 
 -- 5: MT. MOON
 
 	-- To Cerulean
-	{15, {24,6}, {s="reportMtMoon"}, {s="split"}, {s="speedchange", speed=AFTER_MOON_SPEED, extra="Things are getting serious"}, {c="trackEncounters",area=nil}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
+	{15, {24,6}, {s="reportMtMoon"}, {s="split"}, {s="changeSpeed", speed=AFTER_MOON_SPEED, extra="Things are getting serious"}, {c="trackEncounters",area=nil}, {24,8}, {35,8}, {35,10}, {61,10}, {61,8}, {79,8}, {79,10}, {90,10}},
 	-- Enter Cerulean
 	{3, {0,18}, {c="a",a="Cerulean"}, {14,18}, {s="dodgeCerulean"}, {19,18}, {19,17}},
 	-- Cerulean Center
@@ -106,7 +106,7 @@ local Paths = {
 	-- Rival 2
 	{3, {9,12}, {c="a",a="Cerulean Rival"}, {21,12}, {21,6}, {s="rivalSandAttack"}, {21,-1}},
 	-- Nugget bridge
-	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {s="hornAttackCaterpie"}, {10,32}, {10,29}, {s="potion",hp=12,yolo=10}, {s="talk",dir="Up"}, {11,29}, {11,27}, {s="rareCandyEarly",chain=true}, {s="potion",hp=10,yolo=8,close=true}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash",chain=true}, {s="potion",hp=4,close=true}, {10,23}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash",chain=true}, {s="potionForMankey",close=true}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {s="redbarMankey"}, {10,20}, {10,19}, {s="teachThrash"}, {10,15}, {s="learnThrash"}, {s="swapThrash"}, {s="waitToFight"}, {s="teachThrash"}, {s="split"}, {10,8}, {20,8}},
+	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {s="hornAttackCaterpie"}, {10,32}, {10,29}, {s="potion",hp=12,yolo=10}, {s="talk",dir="Up"}, {11,29}, {11,27}, {s="rareCandyEarly",chain=true}, {s="potion",hp=10,yolo=8}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash",chain=true}, {s="potion",hp=4}, {10,23}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash",chain=true}, {s="potionForMankey"}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {s="redbarMankey"}, {10,20}, {10,19}, {s="teachThrash"}, {10,15}, {s="learnThrash"}, {s="swapThrash"}, {s="waitToFight"}, {s="teachThrash"}, {s="split"}, {10,8}, {20,8}},
 
 -- 6: NUGGET BRIDGE
 
@@ -148,7 +148,7 @@ local Paths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="swap",item=2,dest="potion",chain=true}, {s="potion",hp=25,yolo=19,chain=true}, {s="teach",move="bubblebeam",replace="tackle",close=true}, {37,8}, {s="rivalSandAttack"}, {36,8}, {36,4}},
+	{96, {2,4}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="swap",item=2,dest="potion",chain=true}, {s="potion",hp=25,yolo=19,chain=true}, {s="teach",move="bubblebeam",replace="tackle"}, {37,8}, {s="rivalSandAttack"}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {0,4}, {4,4}, {4,3}, {s="talk",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out
@@ -181,7 +181,7 @@ local Paths = {
 	-- Rock Tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {s="redbarCubone"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis"}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1
@@ -287,7 +287,7 @@ local Paths = {
 	-- Safari 1
 	{220, {15,25}, {s="bicycle"}, {15,16}, {28,16}, {28,11}, {30,11}},
 	-- Safari 2
-	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="tossInSafari"}, {s="item",item="carbos",poke="nidoking",close=true}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="extraFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
+	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="tossInSafari"}, {s="item",item="carbos",poke="nidoking"}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="extraFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
 	-- Safari 3
 	{218, {39,31}, {22,31}, {22,22}, {16,22}, {16,28}, {13,28}, {13,9}, {28,9}, {28,3}, {3,3}, {3,36}},
 	-- Safari 4
@@ -311,7 +311,7 @@ local Paths = {
 	-- Elivator
 	{236, {1,3}, {1,2}, {3,2}, {3,1}, {s="silphElevator"}, {2,1}, {2,4}},
 	-- F10
-	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightSilphMachoke"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="interact",dir="Right"}, {3,15}, {1,15}, {1,13}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="interact",dir="Right"}, {1,16}, {3,16}, {s="swapXSpecials"}, {s="teach",move="surf",poke="squirtle",replace="tail_whip",chain=true}, {s="teach",move="earthquake",replace="thrash",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
+	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightSilphMachoke"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="interact",dir="Right"}, {3,15}, {1,15}, {1,13}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="interact",dir="Right"}, {1,16}, {3,16}, {s="swapXSpecials"}, {s="teach",move="surf",poke="squirtle",replace="tail_whip",chain=true}, {s="teach",move="earthquake",replace="thrash",chain=true}, {s="item",item="carbos",poke="nidoking"}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
 	-- F9
 	{233, {14,1}, {14,3}, {24,3}, {24,16}, {17,16}, {17,15}},
 	-- Warped
@@ -361,7 +361,7 @@ local Paths = {
 	{165, {16,14}, {16,16}, {13,16}, {13,20}, {s="cinnabarCarbos"}, {21,23}},
 	-- B1
 	--TODO menu cancel for RC
-	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="dialogue",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="dialogue",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",all=true,poke="nidoking",close=true}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
+	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking"}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="dialogue",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="dialogue",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="take",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="take",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",all=true,poke="nidoking"}, {5,12}, {s="take",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
 	-- Celadon once again
 	{6, {41,10}, {s="bicycle"}, {41,13}, {36,13}, {36,23}, {25,23}, {25,30}, {35,30}, {35,31}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {35,34}, {5,34}, {5,29}, {12,29}, {12,27}},
 	-- Erika
@@ -421,7 +421,7 @@ local Paths = {
 	-- F3
 	{198, {23,7}, {23,6}, {22,6}, {22,4}, {s="skill",move="strength"}, {22,2}, {23,2}, {23,1}, {7,1}, {7,0}, {6,0}, {6,1}, {7,1}, {7,2}, {3,2}, {3,1}, {2,1}, {2,4}, {1,4}, {1,5}, {2,5}, {2,4}, {4,4}, {4,2}, {7,2}, {7,1}, {20,1}, {20,6}, {17,6}, {17,4}, {9,4}, {9,10}, {5,10}, {5,8}, {1,8}, {1,15}, {11,15}, {11,16}, {20,16}, {20,15}, {23,15}},
 	-- F2
-	{194, {22,16}, {s="waitToPause"}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei",chain=true}, {s="skill",move="strength"}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
+	{194, {22,16}, {s="item",item="super_repel",chain=true}, {s="potionBeforeLorelei",chain=true}, {s="skill",move="strength"}, {s="bicycle"}, {22,17}, {24,17}, {24,16}, {11,16}, {s="push",dir="Left",x=0x02D5,y=0x02D4}, {21,16}, {21,14}, {25,14}},
 	-- F3
 	{198, {27,15}, {27,8}, {26,8}},
 	-- F2 Exit
@@ -436,11 +436,11 @@ local Paths = {
 -- 17: LORELEI
 
 	-- Lorelei
-	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {4,2}, {s="talk",dir="Right"}, {s="lorelei"}, {s="split"}, {4,0}},
+	{245, {s="changeSpeed", speed=E4_SPEED, extra="Enjoy the show"}, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {4,2}, {s="talk",dir="Right"}, {s="lorelei"}, {s="split"}, {4,0}},
 	-- Bruno
 	{246, {4,5}, {c="a",a="Bruno"}, {s="item",item="elixer",poke="nidoking"}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
 	-- Agatha
-	{247, {4,5}, {c="a",a="Agatha"}, {s="potion",hp=113,full=true}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
+	{247, {4,5}, {c="a",a="Agatha"}, {s="potion",hp=113,full=true}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether"}, {4,0}},
 	-- Lance
 	{113, {6,11}, {c="a",a="Lance"}, {6,2}, {s="lance"}, {s="split"}, {5,2}, {5,1}, {s="prepareForBlue"}, {5,-1}},
 	-- Blue
