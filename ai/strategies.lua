@@ -66,7 +66,14 @@ function Strategies.hardReset(reason, message, extra, wait)
 	local seed = Data.run.seed
 	local newmessage = message.." | "..seed
 
-	local f,  err = io.open(RUNS_FILE, "a")
+	local f, err
+
+	if reason ~= "won" then
+		f, err = io.open(RESET_LOG, "a")
+	else
+		f, err = io.open(VICTORY_LOG, "a")
+	end
+
 	if f==nil then
 		print("Couldn't open file: "..err)
 	else
@@ -363,8 +370,8 @@ function Strategies.completedMenuFor(data)
 end
 
 function Strategies.closeMenuFor(data)
-	if data.chain or (not status.menuOpened and not data.close) then
-		if Menu.onPokemonSelect() or Menu.hasTextbox() then
+	if data.chain then
+		if Menu.onPokemonSelect() or Menu.canCloseMessage() then
 			Input.press("B")
 			return false
 		end
@@ -381,7 +388,6 @@ function Strategies.useItem(data)
 		return Strategies.closeMenuFor(data)
 	end
 	if Menu.pause() then
-		status.menuOpened = true
 		Inventory.use(data.item, data.poke)
 	end
 end
@@ -812,7 +818,6 @@ Strategies.functions = {
 					if Menu.pause() then
 						status.didPotion = true
 						Inventory.use(toPotion)
-						status.menuOpened = true
 					end
 					return false
 				end
@@ -864,9 +869,7 @@ Strategies.functions = {
 				else
 					replacement = 0
 				end
-				if Inventory.teach(itemName, teachTo, replacement) then
-					status.menuOpened = true
-				else
+				if not Inventory.teach(itemName, teachTo, replacement) then
 					Menu.pause()
 				end
 			end
@@ -879,19 +882,18 @@ Strategies.functions = {
 	skill = function(data)
 		if completedSkillFor(data) then
 			if Data.yellow then
-				if not Menu.hasTextbox() then
+				-- TODO: should probably call Menu.hasTextbox() too
+				if not Menu.canCloseMessage() then
 					return true
 				end
-			else
-				if not Menu.isOpened() then
-					return true
-				end
+			elseif not Menu.hasTextbox() then
+				return true
 			end
 			Input.press("B")
 		elseif not data.dir or Player.face(data.dir) then
 			if Pokemon.use(data.move, Data.yellow) then
 				status.tries = status.tries + 1
-			elseif Data.yellow and Menu.hasTextbox() then
+			elseif Data.yellow and Menu.canCloseMessage() then
 				Textbox.handle()
 			else
 				Menu.pause()
@@ -1077,13 +1079,12 @@ Strategies.functions = {
 		return Strategies.useItem(data)
 	end,
 
-	speedchange = function(data)
-		if data.speed~=CURRENT_SPEED then
- 		client.speedmode(data.speed)		 
-			p(data.extra..", speed changed to "..data.speed.."%")
- 			client.speedmode(data.speed)
- 			CURRENT_SPEED = data.speed
- 		end
+	changeSpeed = function(data)
+		if CURRENT_SPEED ~= data.speed then
+			print(data.extra..", speed changed to "..data.speed.."%")
+			client.speedmode(data.speed)
+			CURRENT_SPEED = data.speed
+		end
 		return true
 	end,
 
@@ -1428,7 +1429,6 @@ Strategies.functions = {
 				end
 			elseif not Inventory.use("moon_stone") then
 				Menu.pause()
-				status.menuOpened = true
 			end
 		end
 	end,
@@ -1657,12 +1657,17 @@ Strategies.functions = {
 				message = "ran too low on potions to adequately heal before Misty D:"
 			elseif healAmount < 60 then
 				message = "is limiting heals to attempt to get closer to red-bar off Misty..."
-			elseif isSpeedTie then
+			end
+			if message then
+				Bridge.chat(message, false, potionCount)
+				message = nil
+			end
+			if isSpeedTie then
 				message = "will need to get lucky with speed ties to beat Misty here..."
 			elseif not outspeeds then
-				message = "will need to get lucky to beat Misty here. We're outsped..."
+				message = "will need to get lucky to beat Misty here. We're outspeed..."
 			elseif not canTwoHit then
-				message = "will need to get lucky with damage ranges to beat Misty here..."
+				message = "will need to get lucky with our damage ranges to beat Misty here..."
 			end
 			if message then
 				Bridge.chat(message, false, potionCount)
@@ -1958,7 +1963,7 @@ Strategies.functions = {
 		if Battle.isActive() then
 			return true
 		end
-		if Menu.hasTextbox() then
+		if Menu.canCloseMessage() then
 			Input.cancel()
 		elseif Menu.pause() then
 			Inventory.use("pokeflute")
@@ -2029,9 +2034,10 @@ Strategies.functions = {
 		end
 	end,
 
+	-- TODO: allow chain, let the other call to item take care of carbos
 	tossInSafari = function()
 		if Inventory.count() <= (Inventory.contains("full_restore") and 18 or 17) then
-			return Strategies.closeMenuFor({close=true})
+			return Menu.close()
 		end
 		if Data.red and Inventory.contains("carbos") then
 			strategyFunctions.item({item="carbos",poke="nidoking",all=true})
@@ -2137,14 +2143,13 @@ Strategies.functions = {
 				return Strategies.useItem(data)
 			end
 			if Memory.value("menu", "main") == 144 and Menu.getCol() == 5 then
-				if Menu.hasTextbox() then
+				if Menu.canCloseMessage() then
 					Input.cancel()
 				else
 					Menu.select(Pokemon.battleMove("horn_drill"), true)
 				end
 			elseif Menu.pause() then
 				Inventory.use(status.item, "nidoking")
-				status.menuOpened = true
 			end
 		end
 	end,
@@ -2260,10 +2265,8 @@ Strategies.functions = {
 					end
 				end
 				Bridge.guessResults("elite4", "victory")
-			elseif status.frames == 500 then
-				Bridge.chat("beat the game in "..status.finishTime.."!")
 			elseif status.frames > 1800 then
-				return Strategies.hardReset("won", "Finished the game in "..Utils.elapsedTime()..", Dont forget to follow the stream!")
+				return Strategies.hardReset("won", "Finished the game in "..status.finishTime)
 			end
 			status.frames = status.frames + 1
 		elseif Memory.value("menu", "shop_current") == 252 then
