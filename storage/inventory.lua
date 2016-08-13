@@ -129,7 +129,7 @@ function Inventory.teach(item, poke, replaceIdx)
 			Input.press("A")
 		elseif column == 15 then
 			Menu.select(0, true)
-		elseif Menu.hasTextbox() then
+		elseif Menu.canCloseMessage() then
 			Input.press("B")
 		else
 			local teachIndex = 0
@@ -156,7 +156,7 @@ function Inventory.useItemOption(item, poke, option)
 	local main = Memory.value("menu", "main")
 	local column = Menu.getCol()
 	if main == 144 then
-		if Menu.hasTextbox() then
+		if Menu.canCloseMessage() then
 			Input.press("B")
 		else
 			Pokemon.select(poke or 0)
