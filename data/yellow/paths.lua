@@ -91,7 +91,7 @@ local YellowPaths = {
 	-- Rival 2
 	{3, {9,12}, {c="a",a="Cerulean Rival"}, {21,12}, {21,6}, {s="rivalSandAttack"}, {21,-1}},
 	-- Nugget bridge
-	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {10,32}, {10,30}, {s="teachThrash",chain=true}, {s="rareCandyEarly",close=true}, {10,29}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,29}, {11,27}, {s="teachThrash"}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash"}, {10,23}, {s="talk",dir="Up"}, {s="learnThrash"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash"}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,20}, {10,16}, {s="teachThrash"}, {10,15}, {s="swapThrash"}, {s="waitToFight"}, {s="split"}, {10,8}, {s="acquireCharmander"}, {20,8}},
+	{35, {11,35}, {c="a",a="Nugget Bridge"}, {11,32}, {s="talk",dir="Up"}, {10,32}, {10,30}, {s="teachThrash",chain=true}, {s="rareCandyEarly"}, {10,29}, {s="talk",dir="Up"}, {s="swapThrash"}, {11,29}, {11,27}, {s="teachThrash"}, {11,26}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,26}, {10,24}, {s="teachThrash"}, {10,23}, {s="talk",dir="Up"}, {s="learnThrash"}, {s="swapThrash"}, {11,23}, {11,21}, {s="teachThrash"}, {11,20}, {s="talk",dir="Up"}, {s="swapThrash"}, {10,20}, {10,16}, {s="teachThrash"}, {10,15}, {s="swapThrash"}, {s="waitToFight"}, {s="split"}, {10,8}, {s="acquireCharmander"}, {20,8}},
 
 -- 6: NUGGET BRIDGE
 
@@ -137,7 +137,7 @@ local YellowPaths = {
 	-- First deck
 	{95, {27,0}, {27,1}, {26,1}, {26,7}, {2,7}, {2,6}},
 	-- Rival 3
-	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=14,yolo=8,chain=true}, {s="teach",move="bubblebeam",replace="leer",close=true}, {37,8}, {36,8}, {36,4}},
+	{96, {2,4}, {c="thrash",disable=true}, {2,11}, {3,11}, {3,12}, {37,12}, {37,9}, {s="potion",hp=14,yolo=8,chain=true}, {s="teach",move="bubblebeam",replace="leer"}, {37,8}, {36,8}, {36,4}},
 	-- Old man Cut
 	{101, {0,7}, {c="thrash",disable=false}, {0,4}, {4,4}, {4,3}, {s="interact",dir="Up"}, {4,5}, {0,5}, {0,7}},
 	-- Second deck out
@@ -177,7 +177,7 @@ local YellowPaths = {
 	-- Rock tunnel
 	{82, {15,3}, {c="a",a="Rock Tunnel"}, {c="potion",b=false}, {15,6}, {23,6}, {23,7}, {s="talk",dir="Down"}, {22,7}, {22,10}, {37,10}, {37,3}},
 	-- B1
-	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis",close=true}, {37,3}, {27,3}},
+	{232, {33,25}, {33,30}, {27,30}, {s="talk",dir="Left"}, {27,31}, {14,31}, {14,29}, {s="potion",hp=6,yolo=0}, {s="talk",dir="Up"}, {s="announceOddish"}, {17,29}, {17,24}, {25,24}, {25,16}, {37,16}, {37,11}, {s="item",item="repel",chain=true}, {s="healParalysis"}, {37,3}, {27,3}},
 	-- B2
 	{82, {5,3}, {5,9}, {11,9}, {11,14}, {17,14}, {17,11}},
 	-- B1
@@ -276,7 +276,7 @@ local YellowPaths = {
 	-- Elivator
 	{236, {1,3}, {1,2}, {3,2}, {3,1}, {s="silphElevator"}, {2,1}, {2,4}},
 	-- F10
-	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightX",x="accuracy"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="take",dir="Right"}, {3,15}, {1,15}, {1,13}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="take",dir="Right"}, {1,16}, {3,16}, {s="swap",item="carbos",dest="cut",chain=true}, {s="teach",move="earthquake",replace="rock_slide",chain=true}, {s="useSilphCarbos",close=true}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
+	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightX",x="accuracy"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="take",dir="Right"}, {3,15}, {1,15}, {1,13}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="take",dir="Right"}, {1,16}, {3,16}, {s="swap",item="carbos",dest="cut",chain=true}, {s="teach",move="earthquake",replace="rock_slide",chain=true}, {s="useSilphCarbos"}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
 	-- F9
 	{233, {14,1}, {14,3}, {24,3}, {24,16}, {17,16}, {17,15}},
 	-- Warped
@@ -428,9 +428,9 @@ local YellowPaths = {
 	-- Lorelei
 	{245, {4,5}, {c="a",a="Lorelei"}, {c="potion",b=false}, {4,2}, {s="talk",dir="Right"}, {s="guess",game="elite4",enabled=false}, {s="lorelei"}, {s="split"}, {4,0}},
 	-- Bruno
-	{246, {4,5}, {c="a",a="Bruno"}, {s="swap",item="x_special",dest="bicycle",chain=true}, {s="potionBeforeBruno",chain=true}, {s="item",item="elixer",poke="nidoking",close=true}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
+	{246, {4,5}, {c="a",a="Bruno"}, {s="swap",item="x_special",dest="bicycle",chain=true}, {s="potionBeforeBruno",chain=true}, {s="item",item="elixer",poke="nidoking"}, {4,2}, {s="talk",dir="Right"}, {s="bruno"}, {s="split"}, {4,0}},
 	-- Agatha
-	{247, {4,5}, {c="a",a="Agatha"}, {s="potionBeforeAgatha"}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether",close=true}, {4,0}},
+	{247, {4,5}, {c="a",a="Agatha"}, {s="potionBeforeAgatha"}, {4,2}, {s="talk",dir="Right"}, {s="agatha"}, {s="split"}, {4,1}, {s="prepareForLance"}, {s="ether"}, {4,0}},
 	-- Lance
 	{113, {6,10}, {c="a",a="Lance"}, {6,2}, {s="lance"}, {s="split"}, {5,2}, {5,1}, {s="prepareForBlue"}, {5,-1}},
 	-- Gary
