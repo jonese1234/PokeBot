@@ -290,7 +290,7 @@ local paths = {
 	-- Safari 1
 	{220, {15,25}, {s="bicycle"}, {15,16}, {28,16}, {28,11}, {30,11}},
 	-- Safari 2
-	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="centerSkipFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
+	{217, {0,23}, {4,23}, {4,24}, {20,24}, {20,20}, {s="safariCarbos"}, {12,20}, {12,22}, {11,22}, {10,22}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking"}, {9,22}, {9,8}, {12,8}, {12,6}, {17,6}, {17,8}, {20,8}, {s="centerSkipFullRestore"}, {20,3}, {7,3}, {7,5}, {-1,5}},
 	-- Safari 3
 	{218, {39,31}, {22,31}, {22,22}, {16,22}, {16,28}, {13,28}, {13,9}, {28,9}, {28,3}, {3,3}, {3,36}},
 	-- Safari 4
@@ -314,7 +314,7 @@ local paths = {
 	-- Elivator
 	{236, {1,3}, {1,2}, {3,2}, {3,1}, {s="silphElevator"}, {2,1}, {2,4}},
 	-- F10
-	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightSilphMachoke"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="interact",dir="Right"}, {3,15}, {1,15}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="interact",dir="Right"}, {1,16}, {3,16}, {s="teach",move="surf",poke="squirtle",replace="tail_whip",chain=true}, {s="teach",move="earthquake",replace="thrash",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
+	{234, {12,1}, {12,3}, {4,3}, {4,9}, {s="fightSilphMachoke"}, {6,9}, {6,11}, {s="silphCarbos"}, {6,16}, {3,16}, {3,14}, {s="interact",dir="Right"}, {3,15}, {1,15}, {s="item",item="carbos",poke="nidoking",full=true}, {1,12}, {s="interact",dir="Right"}, {1,16}, {3,16}, {s="teach",move="surf",poke="squirtle",replace="tail_whip",chain=true}, {s="teach",move="earthquake",replace="thrash",chain=true}, {s="item",item="carbos",poke="nidoking"}, {6,16}, {6,9}, {4,9}, {4,1}, {8,1}, {8,0}},
 	-- F9
 	{233, {14,1}, {14,3}, {24,3}, {24,16}, {17,16}, {17,15}},
 	-- Warped
@@ -338,7 +338,7 @@ local paths = {
 	{7, {19,28}, {s="a",a="Koga's Gym"}, {5,28}, {5,27}},
 	-- Koga
 	-- TODO save turn frames?
-	{157, {4,17}, {9,17}, {9,9}, {7,9}, {s="interact",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp="KogaHypno",yolo=18,chain=true}, {s="earthquakeElixer",min=2,close=true}, {1,3}, {2,3}, {2,5}, {1,5}, {c="potion",b=false}, {1,7}, {s="fightHypno"}, {1,9}, {2,9}, {s="earthquakeElixer",min=4}, {4,9}, {s="interact",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
+	{157, {4,17}, {9,17}, {9,9}, {7,9}, {s="interact",dir="Up"}, {9,9}, {9,1}, {1,1}, {1,2}, {s="potion",hp="KogaHypno",yolo=18,chain=true}, {s="earthquakeElixer",min=2}, {1,3}, {2,3}, {2,5}, {1,5}, {c="potion",b=false}, {1,7}, {s="fightHypno"}, {1,9}, {2,9}, {s="earthquakeElixer",min=4}, {4,9}, {s="interact",dir="Down"}, {s="fightKoga"}, {s="split"}, {1,9}, {1,5}, {2,5}, {2,3}, {1,3}, {1,1}, {9,1}, {9,16}, {5,16}, {5,18}},
 
 -- 12: KOGA
 
@@ -363,7 +363,7 @@ local paths = {
 	-- F1 drop
 	{165, {16,14}, {16,15}, {13,15}, {13,20}, {s="cinnabarCarbos"}, {21,23}},
 	-- B1
-	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking",close=true}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="interact",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="interact",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",amount=2,poke="nidoking",close=true}, {5,12}, {s="interact",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
+	{216, {23,22}, {23,15}, {21,15}, {s="item",item="super_repel",chain=true}, {s="item",item="carbos",poke="nidoking"}, {17,15}, {17,19}, {18,19}, {18,23}, {17,23}, {17,26}, {18,26}, {s="confirm",dir="Up"}, {14,26}, {14,22}, {12,22}, {12,15}, {24,15}, {24,18}, {26,18}, {26,6}, {24,6}, {24,4}, {20,4}, {s="confirm",dir="Up"}, {24,4}, {24,6}, {12,6}, {12,2}, {11,2}, {s="interact",dir="Left"}, {12,2}, {12,7}, {4,7}, {4,9}, {2,9}, {s="interact",dir="Left"}, {5,9}, {5,10}, {s="teach",move="strength",poke="squirtle",replace="tackle",chain=true}, {s="item",item="rare_candy",amount=2,poke="nidoking"}, {5,12}, {s="interact",dir="Down"}, {5,12}, {s="skill",move="dig",map=216}},
 	-- Celadon once again
 	{6, {41,10}, {s="bicycle"}, {41,13}, {36,13}, {36,23}, {25,23}, {25,30}, {35,30}, {35,31}, {s="skill",move="cut",dir="Down",done=0x0D4D}, {35,34}, {5,34}, {5,29}, {12,29}, {12,27}},
 	-- Erika
