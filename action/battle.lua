@@ -309,7 +309,7 @@ function Battle.redeployNidoking()
 	Control.ignoreMiss = true
 	if Menu.onPokemonSelect() then
 		Pokemon.select("nidoking")
-	elseif Menu.hasTextbox() and Menu.getCol() == 1 then
+	elseif Menu.canCloseMessage() and Menu.getCol() == 1 then
 		Input.press("A")
 	else
 		local forced
