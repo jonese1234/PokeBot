@@ -302,7 +302,7 @@ strategyFunctions.catchNidoran = function()
 		status.path = nil
 		if Memory.value("menu", "text_input") == 240 then
 			Textbox.name()
-		elseif Menu.hasTextbox() then
+		elseif Menu.canCloseMessage() then
 			if catchableNidoran then
 				Input.press("A")
 			else
@@ -498,7 +498,7 @@ strategyFunctions.fightBrock = function()
 			Inventory.use("potion", "squirtle", true)
 		else
 			local bideTurns = Memory.value("battle", "opponent_bide")
-			if Menu.hasTextbox() or Menu.getCol() == 1 then
+			if Menu.canCloseMessage() or Menu.getCol() == 1 then
 				Input.press("A")
 			elseif bideTurns > 0 then
 				local onixHP = Memory.double("battle", "opponent_hp")
@@ -560,15 +560,6 @@ end
 strategyFunctions.splitBrock = function()
 	Strategies.setYolo("brock")
 	strategyFunctions.split()
-	local newmessage = (Data.run.seed..", ")
-	f, err = io.open(BrockSeeds, "a")
-	f:write(newmessage.."\n")
-	f:close()
-	local attDV, defDV, spdDV, sclDV = Pokemon.getDVs("nidoran")
-	local DVWrite = ("DVs: Att: "..attDV.." Def: "..defDV.." Spd: "..spdDV.." Spc: "..sclDV)
-	f, err = io.open(DVFile, "a")
-	f:write(DVWrite.."\n")
-	f:close()
 	return true
 end
 
@@ -817,7 +808,7 @@ strategyFunctions.potionForMankey = function(data)
 		end
 	end
 
-	return strategyFunctions.potion({hp=healForDefense, yolo=yoloHP, chain=data.chain, close=data.close})
+	return strategyFunctions.potion({hp=healForDefense, yolo=yoloHP, chain=data.chain})
 end
 
 strategyFunctions.redbarMankey = function()
@@ -1379,7 +1370,6 @@ strategyFunctions.rareCandyGiovanni = function()
 		if Inventory.count("rare_candy") > 1 then
 			if Menu.pause() then
 				Inventory.use("rare_candy")
-				status.menuOpened = true
 			end
 			return false
 		end
@@ -1447,7 +1437,7 @@ strategyFunctions.potionBeforeHypno = function()
 		return false
 	end
 
-	return strategyFunctions.potion({hp=healTarget, yolo=yoloHP, close=true})
+	return strategyFunctions.potion({hp=healTarget, yolo=yoloHP})
 end
 
 strategyFunctions.fightHypno = function()
@@ -1674,7 +1664,7 @@ strategyFunctions.depositPokemon = function()
 			Player.interact("Up")
 		else
 			local pc = Memory.value("menu", "size")
-			if not Menu.hasTextbox() and (pc == 2 or pc == 4) then
+			if not Menu.canCloseMessage() and (pc == 2 or pc == 4) then
 				local menuColumn = Menu.getCol()
 				if menuColumn == 10 then
 					Input.press("A")
