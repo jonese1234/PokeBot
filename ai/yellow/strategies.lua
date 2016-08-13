@@ -429,7 +429,7 @@ strategyFunctions.catchNidoran = function()
 		end
 		if Memory.value("menu", "text_input") == 240 then
 			Textbox.name()
-		elseif Menu.canCloseMessage() then
+		elseif Menu.hasTextbox() then
 			Input.press(catchableNidoran and "A" or "B")
 		else
 			Battle.handle()
@@ -1190,7 +1190,7 @@ strategyFunctions.depositPokemon = function()
 		end
 	elseif Menu.isOpened() then
 		local menuSize = Memory.value("menu", "size")
-		if not Menu.canCloseMessage() then
+		if not Menu.hasTextbox() then
 			if menuSize == 5 then
 				Menu.select(1)
 				return false
