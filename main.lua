@@ -11,7 +11,8 @@ E4_SPEED = 200
 RESET_LOG = "./wiki/red/resets.txt"
 VICTORY_LOG = "./wiki/red/victories.txt"
 
-local CUSTOM_SEED  = nil -- Set to a known seed to replay it, or leave nil for random runs
+local SeedList = require "util.seedlist"
+local CUSTOM_SEED  = true -- Set in util/seedlist
 local NIDORAN_NAME = "A" -- Set this to the single character to name Nidoran (note, to replay a seed, it MUST match!)
 local PAINT_ON     = true -- Display contextual information while the bot runs
 
@@ -63,15 +64,18 @@ function resetAll()
   	client.speedmode(INITIAL_SPEED)
 
 	if CUSTOM_SEED then
-		Data.run.seed = CUSTOM_SEED
-		Strategies.replay = true
-		p("RUNNING WITH A FIXED SEED ("..NIDORAN_NAME.." "..Data.run.seed.."), every run will play out identically!", true)
-	else
-		Data.run.seed = os.time()
-		print("PokeBot v"..VERSION..": "..(BEAST_MODE and "BEAST MODE seed" or "Seed:").." "..Data.run.seed)
-	end
+        Data.run.seed = SeedList.GetNextSeed()
+    end
+    if Data.run.seed then
+        Strategies.replay = true
+        p("RUNNING WITH A SEED PLAYLIST. CURRENT SEED : ("..NIDORAN_NAME.." "..Data.run.seed..")", true)
+    else
+        Data.run.seed = os.time()
+        print("PokeBot v"..VERSION..": "..(BEAST_MODE and "BEAST MODE seed" or "Seed:").." "..Data.run.seed)
+    end
 	math.randomseed(Data.run.seed)
 end
+
 
 
 -- EXECUTE
